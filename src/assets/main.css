@@ -3,7 +3,7 @@
 #app {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0; /* 保持上、右、下的间距 */
   font-weight: normal;
 }
 
@@ -28,8 +28,11 @@ a,
   }
 
   #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
+    display: flex; /* 使用 flexbox 代替 grid */
+    padding-left: 0; /* 左侧不留空白 */
+    padding-right: 2rem; /* 右侧保留空白 */
+    padding-top: 0;
+    padding-bottom: 0;
+    max-width: 100%; /* 确保 #app 占满可用空间 */
   }
 }
