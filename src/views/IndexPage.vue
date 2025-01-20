@@ -4,6 +4,7 @@
     <!-- <BannerComp />
     <FooterComp />
     <ToolComp /> -->
+
   </div>
   <div class="feature-container">
     <div class="feature-item" v-for="(item, index) in features" :key="index">
@@ -18,7 +19,7 @@
   </div>
 </template>
 <script>
-// import FooterComp from '@/components/FooterComp.vue'
+//import FooterComp from '@/components/FooterComp.vue'
 import { defineComponent, provide } from 'vue'
 import HeaderComp from '@/components/HeaderComp.vue'
 // import ToolComp from '@/components/ToolComp.vue';
@@ -28,7 +29,7 @@ export default defineComponent({
   components: {
     HeaderComp,
     // BannerComp,
-    // FooterComp,
+    //FooterComp,
     // ToolComp
   },
 

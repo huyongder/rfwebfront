@@ -1,9 +1,8 @@
-<template>
+<!-- <template>
   <footer class="footer">
     <div class="footer-content">
       <div class="address-group">
-        <p><strong>集团六安总部地址：</strong> 安徽省六安市磨子潭路顺达大市场二号楼4-5楼</p>
-        <p><strong>集团合肥总部地址：</strong> 安徽省合肥市长江西路乐客来商业广场1-3层</p>
+        <p>集团六安总部地址：安徽省六安市磨子潭路顺达大市场二号楼4-5楼 集团合肥总部地址：安徽省合肥市长江西路乐客来商业广场1-3层</p>
       </div>
       <div class="store-group">
         <p><strong>直营门店地址：</strong></p>
@@ -60,5 +59,67 @@ ul li {
 
 .links a:hover {
   text-decoration: underline;
+}
+</style> -->
+
+
+
+
+
+
+
+
+
+
+
+<template>
+  <div class="footer">
+    <div class="footer-address">
+      <p><strong>集团总部地址：</strong>安徽省六安市磨子潭路顺达大市场二号楼4-5楼</p>
+      <p><strong>直营门店地址：</strong>六安市312国道与文蔚路交叉口 居然之家商场</p>
+      <p>六安市佛子岭路 红星美凯龙商场一店</p>
+      <p>六安市迎宾大道 红星美凯龙商场二店</p>
+    </div>
+
+    <div class="footer-copy">
+      <p>荣锋建材家居装饰集团品牌部 &copy; 版权所有</p>
+      <p><a href="https://beian.miit.gov.cn">皖ICP备2021007561号-1</a></p>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'FooterComponent'
+}
+</script>
+
+<style scoped>
+.footer {
+  background-color: #ffffff;
+  text-align: center;
+  padding: 20px;
+}
+
+.footer-links a {
+  color: #cc0000;
+  text-decoration: none;
+  margin: 0 5px;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+.footer-address p {
+  font-family: '微软雅黑', sans-serif;
+  font-size: 14px;
+  color: #000000;
+}
+
+.footer-copy p {
+  font-family: '微软雅黑', sans-serif;
+  font-size: 14px;
+  color: #000000;
 }
 </style>

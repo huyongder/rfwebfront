@@ -28,16 +28,16 @@
 </template>
 
 <script>
-import { defineComponent, inject } from 'vue';
+import { defineComponent, inject, provide } from 'vue'
 
-export default  defineComponent({
+export default defineComponent({
   name: 'HeaderComp',
   setup() {
-      const navLists = inject('navLists');
-      return { navLists };
-  }
-
-});
+    const navLists = inject('navLists')
+    provide('navLists', navLists)
+    return { navLists }
+  },
+})
 </script>
 
 <style scoped>
