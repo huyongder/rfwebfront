@@ -45,8 +45,8 @@ import OverviewNav from '@/components/NavComp/OverviewNav.vue'
   display: flex;
   flex-direction: column;
   min-height: 100vh; /* 设置页面最小高度为视窗高度 */
-  max-width: 100vh;
   margin: 0 auto;
+  padding: 0 20%; /* 左右各留20%的空白 */
 }
 
 /* 主内容区域，自动撑开剩余空间 */

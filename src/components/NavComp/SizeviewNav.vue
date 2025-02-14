@@ -16,18 +16,17 @@ export default {
     return {
       navLists: [
         {
-          title: '集团概况',
-          subTitle: 'GROUP OVERVIEW',
-          link: '/about/overview',
+          title: '集团规模',
+          subTitle: 'GROUP SIZE',
+          link: '/about/size',
           width: 156.25,
           subMenu: [
-            { title: '最新动态', link: '/about/news' },
-            { title: '企业简介', link: '/about/company' },
-            { title: '企业优势', link: '/about/advantages' },
-            { title: '企业文化', link: '/about/culture' },
-            { title: '集团架构', link: '/about/structure' },
-            { title: '资质证书', link: '/about/certificates' },
-            { title: '集团荣誉', link: '/about/honors' },
+            { title: '集团总部', link: '/about/headquarters' },
+            { title: '集团分公司', link: '/about/branches' },
+            { title: '代理品牌', link: '/about/brands' },
+            { title: '直营门店', link: '/about/stores' },
+            { title: '保障团队', link: '/about/team' },
+            { title: '设计中心', link: '/about/DesignCenter' },
           ],
         },
         // 其他导航项可以继续添加在这里

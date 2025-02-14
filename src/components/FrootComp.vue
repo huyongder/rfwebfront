@@ -62,16 +62,6 @@ ul li {
 }
 </style> -->
 
-
-
-
-
-
-
-
-
-
-
 <template>
   <div class="footer">
     <div class="footer-address">
@@ -90,7 +80,7 @@ ul li {
 
 <script>
 export default {
-  name: 'FooterComponent'
+  name: 'FooterComponent',
 }
 </script>
 
@@ -99,6 +89,29 @@ export default {
   background-color: #ffffff;
   text-align: center;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.footer-address {
+  margin-bottom: 10px;
+}
+
+.footer-address p {
+  font-family: '微软雅黑', sans-serif;
+  font-size: 14px;
+  color: #000000;
+}
+
+.footer-copy {
+  margin-top: 10px;
+}
+
+.footer-copy p {
+  font-family: '微软雅黑', sans-serif;
+  font-size: 14px;
+  color: #000000;
 }
 
 .footer-links a {
@@ -109,17 +122,5 @@ export default {
 
 .footer-links a:hover {
   text-decoration: underline;
-}
-
-.footer-address p {
-  font-family: '微软雅黑', sans-serif;
-  font-size: 14px;
-  color: #000000;
-}
-
-.footer-copy p {
-  font-family: '微软雅黑', sans-serif;
-  font-size: 14px;
-  color: #000000;
 }
 </style>
