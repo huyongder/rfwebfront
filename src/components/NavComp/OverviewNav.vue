@@ -56,6 +56,11 @@ export default {
   background-color: red;
   color: white;
   padding: 10px;
+  width: 1250px; /* 设置宽度 */
+  height: 50px; /* 设置高度 */
+  display: flex;
+  align-items: center; /* 垂直居中 */
+  box-sizing: border-box; /* 确保 padding 不增加额外宽度 */
 }
 
 .navbar ul {
@@ -66,7 +71,7 @@ export default {
   flex-wrap: wrap; /* 允许换行 */
 }
 
-.navbar li {
+.nav-item {
   margin-right: 20px;
   margin-bottom: 10px; /* 添加底部间距以便换行时有间隔 */
 }
@@ -75,9 +80,13 @@ export default {
   color: white;
   text-decoration: none;
   font-size: 16px;
-  padding: 5px 10px;
+  padding: 5px 30px; /* 左右内边距为 30px */
   border-radius: 5px;
   transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box; /* 确保 padding 不增加额外宽度 */
 }
 
 .nav-link:hover {
