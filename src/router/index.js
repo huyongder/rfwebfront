@@ -8,6 +8,12 @@ import structurePage from '@/views/OverView/structurePage.vue'
 import certificatesPage from '@/views/OverView/certificatesPage.vue'
 import honorsPage from '@/views/OverView/honorsPage.vue'
 import headquartersPage from '@/views/SizeView/headquartersPage.vue'
+import branchesPage from '@/views/SizeView/branchesPage.vue'
+import jinzhaiPage from '@/views/SizeView/branches/jinzhaiPage.vue'
+import shouxianPage from '@/views/SizeView/branches/shouxianPage.vue'
+import huoshanPage from '@/views/SizeView/branches/huoshanPage.vue'
+import huoqiuPage from '@/views/SizeView/branches/huoqiuPage.vue'
+import shuchengPage from '@/views/SizeView/branches/shuchengPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -58,6 +64,39 @@ const router = createRouter({
       name: 'headquarters',
       component: headquartersPage,
     },
+    {
+      path: '/about/branches',
+      name: 'brances',
+      component: branchesPage,
+    },
+
+
+    //branches
+    {
+      path: '/about/branches/jinzhai',
+      name: 'jinzhai',
+      component: jinzhaiPage,
+    },
+    {
+      path: '/about/branches/shouxian',
+      name: 'shouxian',
+      component: shouxianPage,
+    },
+    {
+      path: '/about/branches/huoshan',
+      name: 'huoshan',
+      component: huoshanPage,
+    },
+    {
+      path: '/about/branches/huoqiu',
+      name: 'huoqiu',
+      component: huoqiuPage,
+    },
+    {
+      path: '/about/branches/shucheng',
+      name: 'shucheng',
+      component: shuchengPage,
+    }
   ],
 })
 
