@@ -14,6 +14,10 @@ import shouxianPage from '@/views/SizeView/branches/shouxianPage.vue'
 import huoshanPage from '@/views/SizeView/branches/huoshanPage.vue'
 import huoqiuPage from '@/views/SizeView/branches/huoqiuPage.vue'
 import shuchengPage from '@/views/SizeView/branches/shuchengPage.vue'
+import yejiPage from '@/views/SizeView/branches/yejiPage.vue'
+import brandsPage from '@/views/SizeView/brandsPage.vue'
+import teamPage from '@/views/SizeView/teamPage.vue'
+import DesignCenterPage from '@/views/SizeView/DesignCenterPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -96,6 +100,27 @@ const router = createRouter({
       path: '/about/branches/shucheng',
       name: 'shucheng',
       component: shuchengPage,
+    },
+    {
+      path: '/about/branches/yeji',
+      name: 'yeji',
+      component: yejiPage,
+    },
+
+    {
+      path: '/about/brands',
+      name: 'brands',
+      component: brandsPage,
+    },
+    {
+      path: '/about/team',
+      name: 'team',
+      component: teamPage,
+    },
+    {
+      path: '/about/designCenter',
+      name: 'designCenter',
+      component: DesignCenterPage,
     }
   ],
 })

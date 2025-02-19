@@ -1,3 +1,11 @@
+<!--
+ * @Descripttion: 集团规模标签栏
+ * @Author: huimeng
+ * @Date: 2025-02-14 10:03:47
+ * @LastEditors: huimeng
+ * @LastEditTime: 2025-02-19 08:21:42
+-->
+
 <template>
   <nav class="navbar">
     <ul>
