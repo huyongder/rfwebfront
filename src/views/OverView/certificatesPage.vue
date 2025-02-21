@@ -67,7 +67,7 @@ export default {
 .core-advantages {
   font-family: '微软雅黑', sans-serif;
   line-height: 1.6;
-  padding: 24px 20%;
+  padding: 0 20%;
 }
 
 .vertical-images {

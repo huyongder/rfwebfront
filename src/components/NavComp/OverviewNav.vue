@@ -1,8 +1,13 @@
 <template>
   <nav class="navbar">
     <ul>
-      <li v-for="(item, index) in flattenedNavLists" :key="index">
-        <a :href="item.link" class="nav-link">
+      <li v-for="(item, index) in flattenedNavLists" :key="index" class="nav-item">
+        <a
+          class="nav-link"
+          :class="{ 'main-title': item.isMain }"
+          :href="item.link || 'javascript:void(0)'"
+          :style="item.isMain ? 'pointer-events: none;' : ''"
+        >
           {{ item.title }}
         </a>
       </li>
@@ -18,8 +23,6 @@ export default {
         {
           title: '集团概况',
           subTitle: 'GROUP OVERVIEW',
-          link: '/about/overview',
-          width: 156.25,
           subMenu: [
             { title: '最新动态', link: '/about/news' },
             { title: '企业简介', link: '/about/company' },
@@ -30,7 +33,6 @@ export default {
             { title: '集团荣誉', link: '/about/honors' },
           ],
         },
-        // 其他导航项可以继续添加在这里
       ],
     }
   },
@@ -38,10 +40,11 @@ export default {
     flattenedNavLists() {
       const flattened = []
       this.navLists.forEach((item) => {
-        flattened.push({ title: item.title, link: item.link })
+        // 让主标题的 link 为空，避免 undefined 导致错误
+        flattened.push({ title: item.title, link: '', isMain: true })
         if (item.subMenu) {
           item.subMenu.forEach((subItem) => {
-            flattened.push(subItem)
+            flattened.push({ ...subItem, isMain: false }) // 确保子菜单的 link 正常
           })
         }
       })
@@ -55,12 +58,12 @@ export default {
 .navbar {
   background-color: red;
   color: white;
-  padding: 10px;
-  width: 1250px; /* 设置宽度 */
-  height: 50px; /* 设置高度 */
+  padding: 0 10px; /* 左右留白 */
+  width: 1250px;
+  height: 50px; /* 设定固定高度 */
   display: flex;
-  align-items: center; /* 垂直居中 */
-  box-sizing: border-box; /* 确保 padding 不增加额外宽度 */
+  align-items: center;
+  box-sizing: border-box;
 }
 
 .navbar ul {
@@ -68,28 +71,50 @@ export default {
   padding: 0;
   margin: 0;
   display: flex;
-  flex-wrap: wrap; /* 允许换行 */
+  align-items: center;
 }
 
 .nav-item {
   margin-right: 20px;
-  margin-bottom: 10px; /* 添加底部间距以便换行时有间隔 */
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
 
 .nav-link {
   color: white;
   text-decoration: none;
   font-size: 16px;
-  padding: 5px 30px; /* 左右内边距为 30px */
+  padding: 0 30px;
+  height: 50px;
+  line-height: 50px;
   border-radius: 5px;
   transition: background-color 0.3s;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-sizing: border-box; /* 确保 padding 不增加额外宽度 */
+  box-sizing: border-box;
+}
+
+/* 主标题“集团概况” */
+.main-title {
+  font-size: 20px;
+  font-weight: bold;
+  height: 50px;
+  line-height: 50px;
+}
+
+/* 禁止鼠标悬停时主标题变色 */
+.main-title:hover {
+  background-color: transparent !important;
 }
 
 .nav-link:hover {
   background-color: #cc0000;
+}
+
+/* 禁止主标题“集团概况”可点击 */
+.main-title {
+  pointer-events: none;
 }
 </style>

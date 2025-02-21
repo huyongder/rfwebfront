@@ -18,6 +18,12 @@ import yejiPage from '@/views/SizeView/branches/yejiPage.vue'
 import brandsPage from '@/views/SizeView/brandsPage.vue'
 import teamPage from '@/views/SizeView/teamPage.vue'
 import DesignCenterPage from '@/views/SizeView/DesignCenterPage.vue'
+import competitionsPage from '@/views/DesignCaseView/competitionsPage.vue'
+import cctvPage from '@/views/BrandView/cctvPage.vue'
+import adsView from '@/views/BrandView/adsPage.vue'
+import event2019Page from '@/views/BrandView/2019eventPage.vue'
+import event2020Page from '@/views/BrandView/2020eventPage.vue'
+import event2022Page from '@/views/BrandView/2022eventPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -121,6 +127,38 @@ const router = createRouter({
       path: '/about/designCenter',
       name: 'designCenter',
       component: DesignCenterPage,
+    },
+    {
+      path: '/design/competitions',
+      name: 'competitions',
+      component: competitionsPage,
+    },
+
+    //brandView
+    {
+      path: '/brand/cctv',
+      name: 'cctv',
+      component: cctvPage,
+    },
+    {
+      path: '/brand/ads',
+      name: 'ads',
+      component: adsView,
+    },
+    {
+      path: '/brand/2019-event',
+      name: '2019event',
+      component: event2019Page,
+    },
+    {
+      path:'/brand/2020-event',
+      name: '2020event',
+      component: event2020Page
+    },
+    {
+      path: '/brand/2022-event',
+      name: '2021event',
+      component: event2022Page
     }
   ],
 })

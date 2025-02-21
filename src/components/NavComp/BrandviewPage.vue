@@ -1,11 +1,10 @@
 <!--
- * @Descripttion: 集团规模标签栏
+ * @Descripttion: 品牌传播
  * @Author: huimeng
- * @Date: 2025-02-14 10:03:47
+ * @Date: 2025-02-20 08:46:59
  * @LastEditors: huimeng
- * @LastEditTime: 2025-02-19 15:46:48
+ * @LastEditTime: 2025-02-20 08:47:24
 -->
-
 <template>
   <nav class="navbar">
     <ul>
@@ -29,15 +28,15 @@ export default {
     return {
       navLists: [
         {
-          title: '集团规模',
-          subTitle: 'GROUP SIZE',
+          title: '品牌传播',
+          subTitle: 'Brand Spreading',
           subMenu: [
-            { title: '集团总部', link: '/about/headquarters' },
-            { title: '集团分公司', link: '/about/branches' },
-            { title: '代理品牌', link: '/about/brands' },
-            { title: '直营门店', link: '/about/stores' },
-            { title: '保障团队', link: '/about/team' },
-            { title: '设计中心', link: '/about/DesignCenter' },
+            { title: '强势登录央视', link: '/brand/cctv' },
+            { title: '硬广投放', link: '/brand/ads' },
+            { title: '2019集团盛典', link: '/brand/2019-event' },
+            { title: '2020集团盛典', link: '/brand/2020-event' },
+            { title: '2022集团盛典', link: '/brand/2022-event' },
+            { title: '2023集团盛典', link: '/brand/2023-event' },
           ],
         },
       ],

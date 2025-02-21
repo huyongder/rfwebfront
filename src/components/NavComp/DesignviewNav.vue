@@ -1,9 +1,9 @@
 <!--
- * @Descripttion: 集团规模标签栏
+ * @Descripttion: 设计案例导航栏
  * @Author: huimeng
- * @Date: 2025-02-14 10:03:47
+ * @Date: 2025-02-19 16:18:09
  * @LastEditors: huimeng
- * @LastEditTime: 2025-02-19 15:46:48
+ * @LastEditTime: 2025-02-19 16:19:35
 -->
 
 <template>
@@ -29,16 +29,14 @@ export default {
     return {
       navLists: [
         {
-          title: '集团规模',
-          subTitle: 'GROUP SIZE',
-          subMenu: [
-            { title: '集团总部', link: '/about/headquarters' },
-            { title: '集团分公司', link: '/about/branches' },
-            { title: '代理品牌', link: '/about/brands' },
-            { title: '直营门店', link: '/about/stores' },
-            { title: '保障团队', link: '/about/team' },
-            { title: '设计中心', link: '/about/DesignCenter' },
-          ],
+            title: '设计案例',
+            subTitle: 'Design case',
+            subMenu: [
+              { title: '优秀案例', link: '/design/excellent-cases' },
+              { title: '工地实拍', link: '/design/site-photos' },
+              { title: '设计大咖', link: '/design/designers' },
+              { title: '设计大赛', link: '/design/competitions' },
+            ],
         },
       ],
     }
