@@ -24,6 +24,12 @@ import adsView from '@/views/BrandView/adsPage.vue'
 import event2019Page from '@/views/BrandView/2019eventPage.vue'
 import event2020Page from '@/views/BrandView/2020eventPage.vue'
 import event2022Page from '@/views/BrandView/2022eventPage.vue'
+import event2023Page from '@/views/BrandView/2023eventPage.vue'
+import bossPage from '@/views/careersView/bossPage.vue'
+import branchesPage_recruit from '@/views/careersView/branchesPage_recruit.vue'
+import headquartersPage_recruit from '@/views/careersView/headquartersPage_recruit.vue'
+import complaintsPage from '@/views/SuggestionView/complaintsPage.vue'
+import afterSalesPage from '@/views/SuggestionView/after-salesPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -157,8 +163,38 @@ const router = createRouter({
     },
     {
       path: '/brand/2022-event',
-      name: '2021event',
+      name: '2022event',
       component: event2022Page
+    },
+    {
+      path: '/brand/2023-event',
+      name: '2023event',
+      component: event2023Page
+    },
+    {
+      path: '/careers/boss',
+      name: 'boss',
+      component: bossPage
+    },
+    {
+      path: '/careers/branches',
+      name: 'branches',
+      component: branchesPage_recruit
+    },
+    {
+      path: '/careers/headquarters',
+      name: 'headquarters',
+      component: headquartersPage_recruit
+    },
+    {
+      path: '/contact/complaints',
+      name: 'competitions',
+      component: complaintsPage
+    },
+    {
+      path: '/contact/after-sales',
+      name: 'afterSales',
+      component: afterSalesPage
     }
   ],
 })

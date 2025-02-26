@@ -7,7 +7,7 @@
 -->
 
 <script lang="ts">
-import BrandviewPage from '@/components/NavComp/BrandviewPage.vue'
+import BrandviewPage from '@/components/NavComp/BrandviewNav.vue'
 export default {
   name: 'adsView',
   components: {
@@ -23,11 +23,11 @@ export default {
       为让更多的客户能够熟悉荣锋、了解荣锋，从而能够及时享受到荣锋一站式家装带来的巨大实惠，从而节省不必要的开支，荣锋装饰长期投放电视台、户外高炮、广告位、橱窗、跨路桥、出租车、公交车等各类硬广。
     </p>
     <div class="imgs">
-      <img src="/src/public/brand/ads/ads1.jpg" alt="" class="img"/>
-      <img src="/src/public/brand/ads/ads2.jpg" alt="" class="img"/>
-      <img src="/src/public/brand/ads/ads3.jpg" alt="" class="img"/>
-      <img src="/src/public/brand/ads/ads4.jpg" alt="" class="img"/>
-      <img src="/src/public/brand/ads/ads5.jpg" alt="" class="img"/>
+      <img src="/src/public/brand/ads/ads1.jpg" alt="" class="img" />
+      <img src="/src/public/brand/ads/ads2.jpg" alt="" class="img" />
+      <img src="/src/public/brand/ads/ads3.jpg" alt="" class="img" />
+      <img src="/src/public/brand/ads/ads4.jpg" alt="" class="img" />
+      <img src="/src/public/brand/ads/ads5.jpg" alt="" class="img" />
     </div>
   </div>
 </template>
@@ -43,7 +43,7 @@ export default {
   display: grid;
   justify-content: center;
 }
-.img{
+.img {
   width: 1200px;
 }
 </style>

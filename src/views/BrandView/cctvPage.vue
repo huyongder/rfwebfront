@@ -6,7 +6,7 @@
  * @LastEditTime: 2025-02-20 09:44:02
 -->
 <script lang="ts">
-import BrandviewPage from '@/components/NavComp/BrandviewPage.vue'
+import BrandviewPage from '@/components/NavComp/BrandviewNav.vue'
 export default {
   name: 'cctvPage',
   components: {

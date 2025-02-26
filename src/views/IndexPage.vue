@@ -44,13 +44,11 @@ export default defineComponent({
         title: '网站首页',
         subTitle: 'HOME',
         link: '/',
-        width: 156.25,
       },
       {
         title: '集团概况',
         subTitle: 'GROUP OVERVIEW',
         link: '/about/overview',
-        width: 156.25,
         subMenu: [
           { title: '最新动态', link: '/about/news' },
           { title: '企业简介', link: '/about/company' },
@@ -65,7 +63,6 @@ export default defineComponent({
         title: '集团规模',
         subTitle: 'Group size',
         link: '/about/size',
-        width: 156.25,
         subMenu: [
           { title: '集团总部', link: '/about/headquarters' },
           { title: '集团分公司', link: '/about/branches' },
@@ -79,7 +76,6 @@ export default defineComponent({
         title: '设计案例',
         subTitle: 'Design case',
         link: '/design/cases',
-        width: 156.25,
         subMenu: [
           { title: '优秀案例', link: '/design/excellent-cases' },
           { title: '工地实拍', link: '/design/site-photos' },
@@ -91,7 +87,6 @@ export default defineComponent({
         title: '品牌传播',
         subTitle: 'Brand Spreading',
         link: '/brand/spreading',
-        width: 156.25,
         subMenu: [
           { title: '强势登录央视', link: '/brand/cctv' },
           { title: '硬广投放', link: '/brand/ads' },
@@ -105,7 +100,6 @@ export default defineComponent({
         title: '招贤纳士',
         subTitle: 'Talents Wanted',
         link: '/careers',
-        width: 156.25,
         subMenu: [
           { title: 'BOSS直聘', link: '/careers/boss' },
           { title: '总部招聘', link: '/careers/headquarters' },
@@ -116,7 +110,6 @@ export default defineComponent({
         title: '投诉与建议',
         subTitle: 'Suggestions',
         link: '/contact/suggestions',
-        width: 156.25,
         subMenu: [
           { title: '投诉中心', link: '/contact/complaints' },
           { title: '售后监督', link: '/contact/after-sales' },
@@ -126,7 +119,6 @@ export default defineComponent({
         title: '联系我们',
         subTitle: 'CONTACT US',
         link: '/contact',
-        width: 156.25,
       },
     ]
     provide('navLists', NavLists)

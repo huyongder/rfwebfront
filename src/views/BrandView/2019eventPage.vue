@@ -3,15 +3,16 @@
  * @Author: huimeng
  * @Date: 2025-02-20 10:24:59
  * @LastEditors: huimeng
- * @LastEditTime: 2025-02-20 16:55:31
+ * @LastEditTime: 2025-02-25 10:36:27
 -->
 
 <script lang="ts">
-import BrandviewPage from '@/components/NavComp/BrandviewPage.vue'
+import BrandviewPage from '@/components/NavComp/BrandviewNav.vue'
 export default {
-  name: 'adsView',
-  components: {
-    BrandviewPage,
+  name: '2019eventPage',
+  components: { BrandviewPage },
+  data() {
+    return {}
   },
 }
 </script>
