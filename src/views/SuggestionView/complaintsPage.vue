@@ -3,7 +3,7 @@
  * @Author: huimeng
  * @Date: 2025-02-26 08:23:28
  * @LastEditors: huimeng
- * @LastEditTime: 2025-02-26 09:53:40
+ * @LastEditTime: 2025-02-27 10:07:59
 -->
 
 <template>
@@ -103,7 +103,7 @@ export default {
       images: [],
       description: '',
     })
-    const isFormDirty = ref(false)  // 用来检查表单是否被修改
+    const isFormDirty = ref(false) // 用来检查表单是否被修改
 
     // 手机号验证规则
     const validatePhone = (rule, value, callback) => {
@@ -149,7 +149,7 @@ export default {
         if (response.data.success) {
           ElMessage.success('提交成功！我们将尽快联系您')
           formRef.value.resetFields()
-          isFormDirty.value = false  // 表单已提交，设置为未修改状态
+          isFormDirty.value = false // 表单已提交，设置为未修改状态
         }
       } catch (error) {
         console.error('提交失败：', error)
@@ -165,7 +165,7 @@ export default {
     const handleBeforeUnload = (event) => {
       if (isFormDirty.value) {
         event.preventDefault()
-        event.returnValue = ''  // 在某些浏览器中需要这个
+        event.returnValue = '' // 在某些浏览器中需要这个
       }
     }
 
