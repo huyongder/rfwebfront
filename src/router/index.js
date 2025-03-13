@@ -30,7 +30,9 @@ import branchesPage_recruit from '@/views/careersView/branchesPage_recruit.vue'
 import headquartersPage_recruit from '@/views/careersView/headquartersPage_recruit.vue'
 import complaintsPage from '@/views/SuggestionView/complaintsPage.vue'
 import afterSalesPage from '@/views/SuggestionView/after-salesPage.vue'
-
+import PageViewer from '@/components/PageViewer.vue'
+import RichTextEditor from '@/components/RichTextEditor.vue'
+import testSide from '@/components/NavComp/testSide.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -195,6 +197,25 @@ const router = createRouter({
       path: '/contact/after-sales',
       name: 'afterSales',
       component: afterSalesPage
+    },
+    {
+      path: "/page/:id",
+      component: PageViewer,
+    },
+    {
+      path: '/editor', // 访问路径
+      name: 'Editor',
+      component: RichTextEditor,
+    },
+    {
+      path: "/edit/:id",
+      name: "EditorWithId",
+      component: RichTextEditor,
+    },
+    {
+      path: "/testSide",
+      name: "testSide",
+      component: testSide,
     }
   ],
 })

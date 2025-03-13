@@ -12,11 +12,16 @@
   },
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
-    "axios": "^1.7.9",
+    "axios": "^1.8.2",
     "element-plus": "^2.9.5",
+    "quill": "^2.0.3",
+    "qweather-icons": "^1.6.0",
+    "swiper": "^11.2.5",
     "vant": "^4.9.15",
     "vue": "^3.5.13",
-    "vue-router": "^4.5.0"
+    "vue-quill-editor": "^3.0.6",
+    "vue-router": "^4.5.0",
+    "vue-svg-icon": "^1.2.9"
   },
   "devDependencies": {
     "@eslint/js": "^9.14.0",

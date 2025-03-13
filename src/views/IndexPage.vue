@@ -1,27 +1,60 @@
 <template>
+  <div class="index-page">
+    <div class="welcome-page">
+      <p class="welcome-text">六安装饰装修公司——荣锋装饰集团欢迎您！</p>
+    </div>
+
+    <div class="compact-layout">
+      <!-- 集团标志区块 -->
+      <div class="brand-block">
+        <img
+          src="/src/static/index/logo2.png"
+          @click="$router.push('/')"
+          alt="集团标志"
+          class="compact-logo"
+        />
+      </div>
+
+      <!-- 代理信息区块 -->
+      <div class="agent-info">
+        <img src="/src/static/index/logo3.png" alt="集团信息" class="agent-logo" />
+      </div>
+
+      <!-- 服务热线区块 -->
+      <div class="hotline-block">
+        <img src="/src/static/index/redPhone.png" class="hotline-icon" alt="热线图标" />
+        <div class="hotline-text">
+          <p class="hotline-title">全国服务热线</p>
+          <p class="hotline-number">400-606-8788</p>
+        </div>
+      </div>
+
+      <!-- 公众号区块 -->
+      <div class="qr-block">
+        <img src="/src/static/index/qr.png" alt="公众号" class="compact-qr" />
+        <p class="qr-text">扫码关注公众号</p>
+      </div>
+    </div>
+
+    <div class="index-largePhoto">
+      <img src="/src/static/index/largePhoto.jpg" alt="largePhoto" />
+    </div>
+  </div>
   <div>
-    <HeaderComp />
+    <!-- <HeaderComp /> -->
     <!-- <BannerComp />
     <FooterComp />
     <ToolComp /> -->
-
   </div>
-  <div class="feature-container">
-    <div class="feature-item" v-for="(item, index) in features" :key="index">
-      <div class="icon-container">
-        <img :src="item.icon" alt="icon" class="icon" />
-      </div>
-      <div class="text-container">
-        <h3 class="title">{{ item.title }}</h3>
-        <p class="subtitle">{{ item.subtitle }}</p>
-      </div>
-    </div>
-  </div>
+  <HeaderComp />
+  <CarouselComp />
 </template>
+
 <script>
 //import FooterComp from '@/components/FooterComp.vue'
 import { defineComponent, provide } from 'vue'
 import HeaderComp from '@/components/HeaderComp.vue'
+import CarouselComp from '@/components/carouselComp.vue'
 // import ToolComp from '@/components/ToolComp.vue';
 // import BannerComp from '@/components/BannerComp.vue'
 
@@ -31,6 +64,7 @@ export default defineComponent({
     // BannerComp,
     //FooterComp,
     // ToolComp
+    CarouselComp
   },
 
   // 初始执行，类似onLoad
@@ -126,30 +160,7 @@ export default defineComponent({
   },
   // 数据管理
   data() {
-    return {
-      features: [
-        {
-          // icon: '@/assets/home-icon.png',  // Replace with actual icon paths
-          title: '一站式品质家装',
-          subtitle: '建材家居全品类代理',
-        },
-        {
-          // icon: '@/assets/diamond-icon.png',  // Replace with actual icon paths
-          title: '工地绝不外包',
-          subtitle: '绝对零瑕疵 预算等于费用',
-        },
-        {
-          // icon: '@/assets/team-icon.png',  // Replace with actual icon paths
-          title: '资深设计师团队',
-          subtitle: '有一种设计为你而生',
-        },
-        {
-          // icon: '@/assets/case-icon.png',  // Replace with actual icon paths
-          title: '丰富家装案例呈现',
-          subtitle: '我选择荣尚建材家居',
-        },
-      ],
-    }
+    return {}
   },
   // 方法管理
   methods: {},
@@ -157,44 +168,135 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.feature-container {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  flex-wrap: wrap;
-  margin: 20px 0;
-}
-
-.feature-item {
-  text-align: center;
-  margin: 10px;
-  width: 20%;
-  min-width: 180px;
-}
-
-.icon-container {
-  margin-bottom: 10px;
-}
-
-.icon {
-  width: 50px;
-  height: 50px;
-}
-
-.text-container {
+/* 主容器 */
+.index-page {
+  width: 100vw; /* 强制视窗宽度 */
   display: flex;
   flex-direction: column;
+}
+
+/* 通用子容器样式 */
+.welcome-page,
+.index-logo,
+.index-largePhoto {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0; /* 安全内边距 */
+}
+
+/* 欢迎栏 */
+.welcome-page {
+  height: 34px;
+  background-color: #00000014;
+  display: flex;
   align-items: center;
 }
 
-.title {
-  font-size: 16px;
-  font-weight: bold;
-  color: #333;
+.welcome-text {
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: 300px;
 }
 
-.subtitle {
-  font-size: 14px;
+.compact-layout {
+  width: 70%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 10px 0;
+}
+
+.agent-logo {
+  margin: 0 auto;
+}
+
+/* 整体横向布局 */
+.hotline-block {
+  display: flex;
+  align-items: center; /* 垂直居中 */
+  gap: 10px; /* 图片和文字间距 */
+  margin-left: 80px;
+}
+
+/* 图片样式 */
+.hotline-icon {
+  width: 40px; /* 按需调整图片尺寸 */
+  height: 40px;
+}
+
+/* 文字垂直排列 */
+.hotline-text {
+  display: flex;
+  flex-direction: column; /* 关键：垂直排列 */
+  gap: 4px; /* 两行文字间距 */
+}
+/* 取消文字元素的 padding */
+.hotline-title,
+.hotline-number {
+  padding: 0; /* 清除默认或继承的 padding */
+  margin: 0; /* 可选：清除默认的 margin */
+}
+
+/* 文字样式*/
+.hotline-title {
+  font-size: 18px;
   color: #666;
+}
+.hotline-number {
+  font-size: 18px;
+  font-weight: bold;
+  color: #fa0505;
+}
+
+.qr-block {
+  display: flex;
+  flex-direction: column;
+  margin-left: 50px;
+  gap: 0;
+  display: block;
+  align-items: center;
+}
+.compact-qr {
+  width: 68px;
+  height: 68px;
+  padding: 4px;
+}
+.qr-text {
+  font-size: 12px;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+/* 大图容器 */
+.index-largePhoto {
+  display: grid; /* 网格布局更稳定 */
+  place-items: center;
+}
+
+.hotline-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 120px;
+  padding: 20px;
+  background: #fff;
+}
+.hotline-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 25px;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.index-largePhoto img {
+  max-width: 100%; /* 限制不超过容器 */
+  height: auto;
+  object-fit: none; /* 禁用任何变形处理 */
+  display: block; /* 消除图片基线间隙 */
 }
 </style>
