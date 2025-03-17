@@ -33,6 +33,7 @@ import afterSalesPage from '@/views/SuggestionView/after-salesPage.vue'
 import PageViewer from '@/components/PageViewer.vue'
 import RichTextEditor from '@/components/RichTextEditor.vue'
 import testSide from '@/components/NavComp/testSide.vue'
+import LoginPage from '@/views/login/LoginPage.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -216,6 +217,11 @@ const router = createRouter({
       path: "/testSide",
       name: "testSide",
       component: testSide,
+    },
+    {
+      path: "/login",
+      name: "login",
+      component: LoginPage,
     }
   ],
 })
