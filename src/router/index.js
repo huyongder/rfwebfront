@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import IndexPageVue from '@/views/IndexPage.vue'
 import newsPageVue from '@/views/OverView/newsPage.vue'
+import NewsDetail from '@/views/OverView/NewsDetail.vue'
 import companyPageVue from '@/views/OverView/companyPage.vue'
 import advantagesPage from '@/views/OverView/advantagesPage.vue'
 import culturePage from '@/views/OverView/culturePage.vue'
@@ -46,6 +47,14 @@ const router = createRouter({
       path: '/about/news',
       name: 'news',
       component: newsPageVue,
+    },
+    {
+      path: '/about/news/:id',
+      name: 'NewsDetail',
+      component: NewsDetail,
+      props: route => ({
+        id: parseInt(route.params.id) // 转换为数字类型[3](@ref)
+      }),
     },
 
     {

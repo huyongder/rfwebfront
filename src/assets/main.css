@@ -1,23 +1,23 @@
 /* 保证页面结构和高度 */
+/* 保持原有布局结构 */
 html,
 body {
   margin: 0;
   padding: 0;
-  height: 100%; /* 保证页面最小高度为视窗高度 */
+  height: 100vh; /* 保持视窗高度 */
   display: flex;
-  flex-direction: column; /* 页面分为头部、内容、页脚 */
-  overflow-x: hidden
+  flex-direction: column;
+  overflow-x: hidden;
 }
 
-/* 应用容器 */
 #app {
-  flex: 1; /* 内容区域动态扩展 */
+  flex: 1;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0;
-  font-weight: normal;
+  position: relative;
+  /* 新增关键属性 */
+  min-height: calc(100vh - [header_height]); /* 替换[header_height]为头部实际高度 */
 }
-
 /* 链接样式 */
 a,
 .green {
@@ -37,7 +37,7 @@ a,
 @media (min-width: 1024px) {
   #app {
     max-width: 100%;
-    padding-right: 2rem;
+    padding-right: 0;
   }
 }
 

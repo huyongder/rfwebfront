@@ -35,7 +35,7 @@
         <p class="qr-text">扫码关注公众号</p>
       </div>
     </div>
-
+    <!--  -->
     <div class="index-largePhoto">
       <img src="/src/static/index/largePhoto.jpg" alt="largePhoto" />
     </div>
@@ -95,7 +95,7 @@
             src="/src/public/index/RF.mp4"
             controls
             class="EnterprisePromoVideo"
-            poster="/src/public/fm.png"
+            poster="http://localhost:8080/uploads/newsPhotos/4cdbf846-2f95-4eaf-a59e-1270b0e9a592.jpg"
           >
             您的浏览器不支持视频播放
           </video>
@@ -242,9 +242,12 @@ export default defineComponent({
 <style scoped>
 /* 主容器 */
 .index-page {
-  width: 100vw; /* 强制视窗宽度 */
+  width: 100%; 
   display: flex;
   flex-direction: column;
+  overflow-x: hidden; /* 防止子元素导致整体溢出 */
+  margin: 0;
+  padding: 0;
 }
 
 /* 通用子容器样式 */
@@ -254,6 +257,8 @@ export default defineComponent({
   width: 100%;
   box-sizing: border-box;
   padding: 0; /* 安全内边距 */
+  overflow: hidden;
+  margin: 0;
 }
 
 /* 欢迎栏 */
@@ -344,8 +349,13 @@ export default defineComponent({
 }
 /* 大图容器 */
 .index-largePhoto {
-  display: grid; /* 网格布局更稳定 */
+  width: 100%;
+  max-width: 100%; /* 新增：确保容器不超出视口 */
+  overflow: hidden; /* 新增：隐藏溢出内容 */
+  box-sizing: border-box; /* 确保padding和border不增加宽度 */
+  display: grid;
   place-items: center;
+  margin: 0; /* 清除可能存在的默认margin */
 }
 
 .hotline-container {
@@ -368,7 +378,6 @@ export default defineComponent({
 .index-largePhoto img {
   max-width: 100%; /* 限制不超过容器 */
   height: auto;
-  object-fit: none; /* 禁用任何变形处理 */
   display: block; /* 消除图片基线间隙 */
 }
 

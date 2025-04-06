@@ -14,11 +14,14 @@ import ElementPlus from 'element-plus'
 import { Swipe, SwipeItem } from 'vant'
 import 'element-plus/dist/index.css'
 import 'qweather-icons/font/qweather-icons.css'
+import { createPinia } from 'pinia'
 
 const app = createApp(App)
+const pinia = createPinia()
 
 app.use(ElementPlus)
 app.use(router)
 app.use(Swipe)
 app.use(SwipeItem)
+app.use(pinia)
 app.mount('#app')

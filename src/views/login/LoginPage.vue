@@ -3,7 +3,7 @@
  * @Author: huimeng
  * @Date: 2025-03-13 15:47:35
  * @LastEditors: huimeng
- * @LastEditTime: 2025-03-13 16:21:48
+ * @LastEditTime: 2025-04-05 13:39:28
 -->
 <template>
   <el-form :model="loginForm" :rules="rules" ref="loginForm" class="login-container">
@@ -17,7 +17,7 @@
     <el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
   </el-form>
 </template>
-
+.
 <script>
 import axios from 'axios'
 export default {
@@ -35,10 +35,10 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           axios
-            .post('/api/login', this.loginForm)
+            .post('/auth/login', this.loginForm)
             .then((res) => {
               localStorage.setItem('token', res.data.token) // 存储JWT[1](@ref)
-              this.$router.push('/home') // 跳转到主页[3](@ref)
+              // this.$router.push('/home') // 跳转到主页[3](@ref)
             })
             .catch(() => this.$message.error('登录失败'))
         }

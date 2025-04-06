@@ -1,126 +1,431 @@
-<!-- <template>
-  <footer class="footer">
-    <div class="footer-content">
-      <div class="address-group">
-        <p>集团六安总部地址：安徽省六安市磨子潭路顺达大市场二号楼4-5楼 集团合肥总部地址：安徽省合肥市长江西路乐客来商业广场1-3层</p>
-      </div>
-      <div class="store-group">
-        <p><strong>直营门店地址：</strong></p>
-        <ul>
-          <li>六安市312国道与文蔚路交叉口 金三角家居生活广场(原居然之家商城)</li>
-          <li>六安市佛子岭路 红星美凯龙商场一店</li>
-          <li>六安市迎宾大道 红星美凯龙商场二店</li>
-        </ul>
-      </div>
-      <div class="copyright">
-        <p>Copyright © 2021-2024 荣锋建材家居装饰集团品牌部 版权所有 皖ICP备2021007561号-1</p>
-      </div>
-      <div class="links">
-        <p><strong>友情链接：</strong><a href="https://www.laijinanzhizhi.com">六安金安区红十字会</a></p>
-      </div>
-    </div>
-  </footer>
-</template>
-
-<script setup>
-// 如果有需要的 script 逻辑可以在这里添加
-</script>
-
-<style scoped>
-.footer {
-  background-color: #f8f8f8;
-  padding: 20px;
-  font-size: 14px;
-  color: #333;
-  text-align: center;
-}
-
-.footer-content {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.address-group, .store-group {
-  margin-bottom: 10px;
-}
-
-ul {
-  padding-left: 20px;
-}
-
-ul li {
-  list-style-type: disc;
-}
-
-.links a {
-  color: #1e90ff;
-  text-decoration: none;
-}
-
-.links a:hover {
-  text-decoration: underline;
-}
-</style> -->
-
 <template>
-  <div class="footer">
-    <div class="footer-address">
-      <p><strong>集团总部地址：</strong>安徽省六安市磨子潭路顺达大市场二号楼4-5楼</p>
-      <p><strong>直营门店地址：</strong>六安市312国道与文蔚路交叉口 居然之家商场</p>
-      <p>六安市佛子岭路 红星美凯龙商场一店</p>
-      <p>六安市迎宾大道 红星美凯龙商场二店</p>
+  <div class="main-container">
+    <OverviewNav />
+
+    <div class="content-wrapper">
+      <div class="breadcrumb-bar">
+        <el-breadcrumb separator-class="el-icon-arrow-right">
+          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+          <el-breadcrumb-item>集团动态</el-breadcrumb-item>
+        </el-breadcrumb>
+      </div>
+
+      <div class="news-list-container">
+        <div
+          v-for="(item, index) in newsList"
+          :key="item.id"
+          class="news-item"
+          @mouseenter="hoverIndex = index"
+          @mouseleave="hoverIndex = -1"
+        >
+          <el-card shadow="never" class="flat-card">
+            <div class="card-inner">
+              <!-- 封面图容器 -->
+              <div
+                class="image-wrapper"
+                :class="{'image-hover': hoverIndex === index}"
+              >
+                <el-image
+                  :src="item.coverImage"
+                  class="news-cover"
+                  fit="cover"
+                  :preview-src-list="[item.coverImage]"
+                >
+                  <template #error>
+                    <div class="image-fallback">
+                      <i class="el-icon-picture-outline"></i>
+                    </div>
+                  </template>
+                </el-image>
+              </div>
+
+              <!-- 修改的内容区域 -->
+              <div class="content-main">
+                <div class="title-section">
+                  <!-- 新增的日期容器 -->
+                  <div class="date-top">
+                    <div
+                      class="date-wrapper"
+                      :class="{'date-hover': hoverIndex === index}"
+                    >
+                      <span class="year-month">{{ formatYearMonth(item.createTime) }}</span>
+                      <span class="day-red">{{ formatDay(item.createTime) }}</span>
+                    </div>
+                  </div>
+
+                  <div class="title-header">
+                    <h3
+                      class="news-title"
+                      :class="{'title-hover': hoverIndex === index}"
+                    >
+                      {{ item.title }}
+                    </h3>
+                    <div class="meta-info">
+                      <el-button
+                        type="text"
+                        class="detail-btn"
+                        :class="{'btn-hover': hoverIndex === index}"
+                        @click="handleDetail(item.id)"
+                      >
+                        查看详情 <i class="el-icon-arrow-right"></i>
+                      </el-button>
+                    </div>
+                  </div>
+                  <div class="title-divider"></div>
+                </div>
+
+                <div class="news-summary">{{ item.summary }}</div>
+              </div>
+            </div>
+          </el-card>
+        </div>
+      </div>
+
+      <!-- 分页组件 -->
+      <div class="pagination-container">
+        <el-pagination
+          background
+          :page-size="pageSize"
+          :current-page="currentPage"
+          :total="total"
+          layout="prev, pager, next"
+          @current-change="handlePageChange"
+        />
+      </div>
     </div>
 
-    <div class="footer-copy">
-      <p>荣锋建材家居装饰集团品牌部 &copy; 版权所有</p>
-      <p><a href="https://beian.miit.gov.cn">皖ICP备2021007561号-1</a></p>
-    </div>
+    <FooterComp />
   </div>
 </template>
 
 <script>
-export default {
-  name: 'FooterComponent',
-}
-</script>
+import { defineComponent, ref, onMounted } from 'vue'
+import { ElMessage } from 'element-plus'
+import axios from '@/utils/request'
+import FooterComp from '@/components/FooterComp.vue'
+import OverviewNav from '@/components/NavComp/OverviewNav.vue'
 
+export default defineComponent({
+  name: 'NewsPage',
+  components: {
+    OverviewNav,
+    FooterComp
+  },
+  setup() {
+    const newsList = ref([])
+    const total = ref(0)
+    const currentPage = ref(1)
+    const pageSize = ref(10)
+    const hoverIndex = ref(-1)
+
+    // 日期格式化方法
+    const formatYearMonth = (dateString) => {
+      if (!dateString) return ''
+      const date = new Date(dateString)
+      return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`
+    }
+
+    const formatDay = (dateString) => {
+      if (!dateString) return ''
+      const date = new Date(dateString)
+      return date.getDate().toString().padStart(2, '0')
+    }
+
+    const fetchData = async () => {
+      try {
+        const { data: response } = await axios.get('/news/public/list', {
+          params: {
+            pageNum: currentPage.value,
+            pageSize: pageSize.value
+          }
+        });
+
+        if (response.code === 200) {
+          newsList.value = response.data.records || [];
+          total.value = response.data.total || 0;
+          if (total.value === 0 && newsList.value.length > 0) {
+            console.warn('后端返回total为0但存在数据，建议检查接口');
+            total.value = newsList.value.length;
+          }
+        } else {
+          ElMessage.error(response.msg || '数据加载失败');
+        }
+      } catch (error) {
+        ElMessage.error('请求异常，请检查网络');
+        console.error('API错误详情:', error);
+      }
+    }
+
+    const handlePageChange = (newPage) => {
+      currentPage.value = newPage;
+      fetchData();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    const handleDetail = (id) => {
+      console.log('查看详情:', id)
+    }
+
+    onMounted(() => {
+      fetchData()
+    })
+
+    return {
+      newsList,
+      total,
+      currentPage,
+      pageSize,
+      hoverIndex,
+      formatYearMonth,
+      formatDay,
+      handlePageChange,
+      handleDetail
+    }
+  }
+})
+</script>
 <style scoped>
-.footer {
-  background-color: #ffffff;
-  text-align: center;
-  padding: 20px;
+/* 完整样式 */
+.main-container {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background: #f8f8f8;
+}
+
+.content-wrapper {
+  flex: 1;
+  max-width: 1225px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+.breadcrumb-bar {
+  margin: 20px 0 30px;
+}
+
+:deep(.el-breadcrumb__inner) {
+  color: #666 !important;
+  font-size: 15px !important;
+  font-weight: normal !important;
+}
+
+.news-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.news-item {
+  width: 1225px;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease;
+}
+
+.news-item:hover {
+  transform: translateY(-3px);
+}
+
+.flat-card {
+  border-radius: 0;
+  border: none;
+  background: #fff;
+}
+
+.card-inner {
+  display: flex;
+  height: 145px;
+  padding: 0;
+}
+
+/* 图片样式 */
+.image-wrapper {
+  flex: 0 0 300px;
+  height: 145px;
+  position: relative;
+  overflow: hidden;
+}
+
+.news-cover {
+  width: 300px;
+  height: 145px;
+  object-fit: cover;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.image-hover .news-cover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.image-fallback {
+  width: 100%;
+  height: 100%;
+  background: #f0f0f0;
+  display: flex;
   align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #ccc;
 }
 
-.footer-address {
-  margin-bottom: 10px;
+/* 内容区域 */
+.content-main {
+  flex: 1;
+  padding: 18px 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 145px;
 }
 
-.footer-address p {
-  font-family: '微软雅黑', sans-serif;
+.title-section {
+  position: relative;
+  padding-top: 24px; /* 新增 */
+}
+
+/* 新增日期定位样式 */
+.date-top {
+  position: absolute;
+  top: -6px;
+  right: 0;
+  z-index: 1;
+  background: white;
+  padding: 0 5px;
+}
+
+.date-wrapper {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.date-hover {
+  color: #c7000b !important;
+}
+
+.year-month {
   font-size: 14px;
-  color: #000000;
+  color: #666;
 }
 
-.footer-copy {
-  margin-top: 10px;
+.day-red {
+  font-size: 18px;
+  color: #c7000b;
 }
 
-.footer-copy p {
-  font-family: '微软雅黑', sans-serif;
-  font-size: 14px;
-  color: #000000;
+.title-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 4px; /* 调整 */
 }
 
-.footer-links a {
-  color: #cc0000;
-  text-decoration: none;
-  margin: 0 5px;
+.news-title {
+  font-size: 24px;
+  color: #333;
+  margin: 0;
+  flex: 1;
+  max-width: 85%;
+  transition: color 0.3s ease;
 }
 
-.footer-links a:hover {
-  text-decoration: underline;
+.title-hover {
+  color: #c7000b !important;
+}
+
+.title-divider {
+  border-bottom: 1px dashed #ddd;
+  width: 100%;
+  margin: 12px 0 8px; /* 调整 */
+}
+
+.news-summary {
+  color: #666;
+  font-size: 12px;
+  line-height: 1.8;
+  margin: 6px 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  min-height: 36px;
+}
+
+/* 按钮样式 */
+.detail-btn {
+  color: #333 !important;
+  padding: 0;
+  margin-left: 15px;
+  transition: all 0.3s ease;
+}
+
+.btn-hover {
+  color: #c7000b !important;
+}
+
+.btn-hover .el-icon-arrow-right {
+  transform: translateX(3px);
+  transition: transform 0.2s ease;
+}
+
+/* 分页样式 */
+.pagination-container {
+  margin-top: 40px;
+  text-align: center;
+  padding: 15px;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+:deep(.el-pagination.is-background .el-pager li) {
+  margin: 0 3px !important;
+  min-width: 32px;
+  height: 32px;
+  line-height: 32px;
+}
+
+:deep(.el-pagination.is-background .el-pager li.active) {
+  background-color: #c7000b !important;
+  color: #fff !important;
+  border-color: #c7000b !important;
+}
+
+/* 新增响应式调整 */
+@media (max-width: 768px) {
+  .news-item {
+    width: 100%;
+  }
+
+  .card-inner {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .image-wrapper {
+    flex: none;
+    width: 100%;
+    height: 200px;
+  }
+
+  .news-cover {
+    width: 100%;
+    height: 200px;
+  }
+
+  .content-main {
+    min-height: auto;
+    padding: 15px;
+  }
+
+  .date-top {
+    position: static;
+    background: transparent;
+    padding: 0;
+    margin-bottom: 8px;
+  }
 }
 </style>

@@ -3,12 +3,12 @@
  * @Author: huimeng
  * @Date: 2025-03-14 15:07:39
  * @LastEditors: huimeng
- * @LastEditTime: 2025-03-14 15:16:36
+ * @LastEditTime: 2025-04-05 09:40:13
  */
 import axios from 'axios'
 
 const service = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: 'http://localhost:8080/',
   timeout: 5000,
 })
 

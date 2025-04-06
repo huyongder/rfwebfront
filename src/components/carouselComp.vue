@@ -61,6 +61,9 @@ export default {
       swiperInstance.value = new Swiper('.swiper-container', {
         modules: [Navigation, Autoplay],
         loop: true,
+        slidesPerView: 1,
+        centeredSlides: true,
+        spaceBetween: 0,
         autoplay: {
           delay: 3000,
           disableOnInteraction: false,
@@ -110,12 +113,15 @@ export default {
   width: 100vw;
   height: 450px;
   overflow: hidden;
-  z-index: auto !important; /* 确保不创建新层叠上下文 */
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .loading, .empty {
-  text-align: center;
-  padding: 2rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   font-size: 1.2rem;
   color: #666;
 }
@@ -123,16 +129,31 @@ export default {
 .swiper-container {
   width: 100%;
   height: 100%;
+  max-width: 100vw;
+  overflow: hidden;
+}
+
+.swiper-wrapper {
+  display: flex;
+  width: auto !important;
+}
+
+.swiper-slide { 
+  width: 100vw !important;
+  height: 100%;
+  flex-shrink: 0;
+  position: relative;
 }
 
 .carousel-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  background: #f0f0f0;
+  object-position: center;
+  display: block;
+  pointer-events: none;
 }
 
-/* 自定义导航按钮 */
 .custom-prev,
 .custom-next {
   position: absolute;
@@ -151,20 +172,15 @@ export default {
   color: #333;
   transition: all 0.3s;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-
-.custom-prev:hover,
-.custom-next:hover {
-  background: rgba(255,255,255,1);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  margin: 0 10px;
 }
 
 .custom-prev {
-  left: 20px;
+  left: 0;
 }
 
 .custom-next {
-  right: 20px;
+  right: 0;
 }
 
 @media (max-width: 768px) {
@@ -177,6 +193,7 @@ export default {
     width: 30px;
     height: 30px;
     font-size: 18px;
+    margin: 0 5px;
   }
 }
 </style>
