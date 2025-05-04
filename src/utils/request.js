@@ -3,36 +3,45 @@
  * @Author: huimeng
  * @Date: 2025-03-14 15:07:39
  * @LastEditors: huimeng
- * @LastEditTime: 2025-04-05 09:40:13
+ * @LastEditTime: 2025-04-07 16:35:03
  */
 import axios from 'axios'
+import { useAuthStore } from '@/stores/auth'
+import { nextTick } from 'vue'
+import router from '@/router'
 
+// 创建 axios 实例
 const service = axios.create({
-  baseURL: 'http://localhost:8080/',
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/', // 使用环境变量
   timeout: 5000,
 })
 
-// 请求拦截器：自动添加令牌
+// 请求拦截器（通过全局访问 store）
 service.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('jwt_token')
-    if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`
+    const store = useAuthStore()
+    if (store.token) {
+      config.headers.Authorization = `Bearer ${store.token}`
     }
     return config
   },
-  (error) => {
-    return Promise.reject(error)
-  },
+  (error) => Promise.reject(error),
 )
 
-// 响应拦截器：处理401错误
+// 响应拦截器
 service.interceptors.response.use(
   (response) => response,
-  (error) => {
-    if (error.response.status === 401) {
-      localStorage.removeItem('jwt_token')
-      window.location.href = '/login'
+  async (error) => {
+    if (error.response?.status === 401) {
+      const store = useAuthStore()
+      store.clearToken()
+      // 跳转登录页（需在 Vue 组件中调用）
+      if (import.meta.env.MODE === 'development') {
+        console.error('请检查登录状态或联系管理员')
+      }
+      nextTick(() => {
+        router.push('/login').catch(() => {})
+      })
     }
     return Promise.reject(error)
   },

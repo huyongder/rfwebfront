@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 import IndexPageVue from '@/views/IndexPage.vue'
 import newsPageVue from '@/views/OverView/newsPage.vue'
 import NewsDetail from '@/views/OverView/NewsDetail.vue'
@@ -35,6 +36,8 @@ import PageViewer from '@/components/PageViewer.vue'
 import RichTextEditor from '@/components/RichTextEditor.vue'
 import testSide from '@/components/NavComp/testSide.vue'
 import LoginPage from '@/views/login/LoginPage.vue'
+// import DashboardPage from '@/views/Admin/DashboardPage.vue'
+import designersPage from '@/views/DesignCaseView/designersPage.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -43,6 +46,12 @@ const router = createRouter({
       name: 'index',
       component: IndexPageVue,
     },
+    // {
+    //   path: '/dashboard',
+    //   name: 'dashboard',
+    //   component: DashboardPage,
+    // },
+
     {
       path: '/about/news',
       name: 'news',
@@ -52,8 +61,8 @@ const router = createRouter({
       path: '/about/news/:id',
       name: 'NewsDetail',
       component: NewsDetail,
-      props: route => ({
-        id: parseInt(route.params.id) // 转换为数字类型[3](@ref)
+      props: (route) => ({
+        id: parseInt(route.params.id), // 转换为数字类型[3](@ref)
       }),
     },
 
@@ -97,7 +106,6 @@ const router = createRouter({
       name: 'brances',
       component: branchesPage,
     },
-
 
     //branches
     {
@@ -146,6 +154,7 @@ const router = createRouter({
       name: 'designCenter',
       component: DesignCenterPage,
     },
+
     {
       path: '/design/competitions',
       name: 'competitions',
@@ -169,47 +178,47 @@ const router = createRouter({
       component: event2019Page,
     },
     {
-      path:'/brand/2020-event',
+      path: '/brand/2020-event',
       name: '2020event',
-      component: event2020Page
+      component: event2020Page,
     },
     {
       path: '/brand/2022-event',
       name: '2022event',
-      component: event2022Page
+      component: event2022Page,
     },
     {
       path: '/brand/2023-event',
       name: '2023event',
-      component: event2023Page
+      component: event2023Page,
     },
     {
       path: '/careers/boss',
       name: 'boss',
-      component: bossPage
+      component: bossPage,
     },
     {
       path: '/careers/branches',
       name: 'branches',
-      component: branchesPage_recruit
+      component: branchesPage_recruit,
     },
     {
       path: '/careers/headquarters',
       name: 'headquarters',
-      component: headquartersPage_recruit
+      component: headquartersPage_recruit,
     },
     {
       path: '/contact/complaints',
-      name: 'competitions',
-      component: complaintsPage
+      name: 'complaints',
+      component: complaintsPage,
     },
     {
       path: '/contact/after-sales',
       name: 'afterSales',
-      component: afterSalesPage
+      component: afterSalesPage,
     },
     {
-      path: "/page/:id",
+      path: '/page/:id',
       component: PageViewer,
     },
     {
@@ -218,21 +227,57 @@ const router = createRouter({
       component: RichTextEditor,
     },
     {
-      path: "/edit/:id",
-      name: "EditorWithId",
+      path: '/edit/:id',
+      name: 'EditorWithId',
       component: RichTextEditor,
     },
     {
-      path: "/testSide",
-      name: "testSide",
+      path: '/testSide',
+      name: 'testSide',
       component: testSide,
     },
     {
       path: "/login",
       name: "login",
       component: LoginPage,
-    }
+    },
+    {
+      path: '/design/designers',
+      name: 'designers',
+      component: designersPage,
+    },
   ],
+})
+
+const whiteList = ['/login', '/about/', '/contact', '/brands', '/team', '/']
+// ===== 全局前置守卫 =====
+router.beforeEach((to, from, next) => {
+  const store = useAuthStore() // Pinia 状态管理
+
+  // 1. 白名单内路由直接放行
+  if (whiteList.some(path => to.path.startsWith(path))) {
+    next()
+    return
+  }
+
+  // 2. 需要登录的路由：检查用户是否已登录
+  if (!store.token) {
+    // 未登录则跳转到登录页，并携带重定向路径
+    next({
+      name: 'login',
+      query: { redirect: to.fullPath },
+    })
+    return
+  }
+
+  // 3. 登录后访问其他路由：直接放行
+  next()
+})
+
+// ===== 全局错误处理 =====
+router.onError((error) => {
+  console.error('[路由错误]:', error)
+  // 可扩展：上报错误到监控系统（如 Sentry）
 })
 
 export default router

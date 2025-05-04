@@ -120,6 +120,11 @@
       </div>
     </div>
   </div>
+
+  <CarouselNews />
+  <div>
+    timestamp
+  </div>
 </template>
 
 <script>
@@ -129,6 +134,8 @@ import HeaderComp from '@/components/HeaderComp.vue'
 import CarouselComp from '@/components/carouselComp.vue'
 // import ToolComp from '@/components/ToolComp.vue';
 // import BannerComp from '@/components/BannerComp.vue'
+import CarouselNews from '@/components/CarouselNews.vue'
+
 
 export default defineComponent({
   components: {
@@ -137,6 +144,7 @@ export default defineComponent({
     //FooterComp,
     // ToolComp
     CarouselComp,
+    CarouselNews
   },
 
   // 初始执行，类似onLoad
@@ -242,7 +250,7 @@ export default defineComponent({
 <style scoped>
 /* 主容器 */
 .index-page {
-  width: 100%; 
+  width: 100%;
   display: flex;
   flex-direction: column;
   overflow-x: hidden; /* 防止子元素导致整体溢出 */
