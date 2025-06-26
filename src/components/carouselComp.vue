@@ -47,7 +47,9 @@ export default {
     // 获取图片数据
     const fetchPhotos = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/upload?type=largePhoto')
+        const response = await axios.get('/api/upload',{
+          params: { type: 'largePhoto' },
+        });
         photos.value = response.data
       } catch (error) {
         console.error('获取图片失败:', error)
@@ -138,7 +140,7 @@ export default {
   width: auto !important;
 }
 
-.swiper-slide { 
+.swiper-slide {
   width: 100vw !important;
   height: 100%;
   flex-shrink: 0;
@@ -159,20 +161,28 @@ export default {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 40px;
-  height: 40px;
-  background: rgba(255,255,255,0.9);
+  width: 60px;  /* 增大宽度 */
+  height: 60px; /* 增大高度 */
+  background: transparent !important; /* 背景透明 */
   border-radius: 50%;
   cursor: pointer;
   z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
-  color: #333;
+  font-size: 36px; /* 增大字体 */
+  color: white; /* 改为白色更显眼 */
   transition: all 0.3s;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  margin: 0 10px;
+  box-shadow: none; /* 移除阴影 */
+  margin: 0 20px; /* 增加外边距 */
+  border: none; /* 移除边框 */
+  opacity: 0.8; /* 半透明效果 */
+}
+
+.custom-prev:hover,
+.custom-next:hover {
+  opacity: 1; /* 悬停时完全不透明 */
+  background: rgba(255,255,255,0.1) !important; /* 悬停时轻微背景 */
 }
 
 .custom-prev {
@@ -190,10 +200,10 @@ export default {
 
   .custom-prev,
   .custom-next {
-    width: 30px;
-    height: 30px;
-    font-size: 18px;
-    margin: 0 5px;
+    width: 40px; /* 移动端也相应增大 */
+    height: 40px;
+    font-size: 24px;
+    margin: 0 10px;
   }
 }
 </style>

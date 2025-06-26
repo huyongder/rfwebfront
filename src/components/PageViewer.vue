@@ -3,7 +3,7 @@
  * @Author: huimeng
  * @Date: 2025-03-03 16:38:27
  * @LastEditors: huimeng
- * @LastEditTime: 2025-03-03 17:00:43
+ * @LastEditTime: 2025-05-26 14:29:25
 -->
 <template>
   <div class="page-viewer">
@@ -27,7 +27,7 @@ export default {
   methods: {
     async fetchPage() {
       try {
-        const response = await fetch(`http://localhost:8080/api/pages/get?id=${this.pageId}`)
+        const response = await fetch(`/api/pages/get?id=${this.pageId}`)
         const result = await response.json()
         this.content = result.content
       } catch (error) {

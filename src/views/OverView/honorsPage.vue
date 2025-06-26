@@ -1,6 +1,7 @@
 <template>
+  <HeaderBanner />
+  <OverviewNav />
   <div class="core-advantages">
-    <OverviewNav />
     <div class="vertical-images">
       <img
         v-for="(src, index) in imageSources"
@@ -10,10 +11,13 @@
       />
     </div>
   </div>
+  <FooterComp />
 </template>
 
 <script setup lang="ts">
 import OverviewNav from '@/components/NavComp/OverviewNav.vue'
+import HeaderBanner from '@/components/HeaderBanner.vue';
+import FooterComp from '@/components/FooterComp.vue';
 
 const imageSources = [
   '/src/public/honorsPhotos/honor1.jpg',

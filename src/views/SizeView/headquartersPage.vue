@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import SizeviewNav from '@/components/NavComp/SizeviewNav.vue'
+import HeaderBanner from '@/components/HeaderBanner.vue';
+import FooterComp from '@/components/FooterComp.vue';
 
 const imageSources = [
   '/src/public/about/headquartersPage/luan1.png',
@@ -20,6 +22,7 @@ const imageSources = [
 </script>
 
 <template>
+  <HeaderBanner/>
   <SizeviewNav />
   <br />
   <br />
@@ -35,6 +38,7 @@ const imageSources = [
       class="image"
     />
   </div>
+  <FooterComp />
 </template>
 
 <style scoped>

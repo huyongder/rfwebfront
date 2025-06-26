@@ -3,14 +3,18 @@
  * @Author: huimeng
  * @Date: 2025-02-17 08:26:53
  * @LastEditors: huimeng
- * @LastEditTime: 2025-02-18 08:33:41
+ * @LastEditTime: 2025-05-26 10:41:15
 -->
 <script lang="ts">
 import SizeviewNav from '@/components/NavComp/SizeviewNav.vue'
+import HeaderBanner from '@/components/HeaderBanner.vue';
+import FooterComp from '@/components/FooterComp.vue';
 export default {
   name: 'BrancesPage',
   components: {
     SizeviewNav,
+    HeaderBanner,
+    FooterComp,
   },
 
   data() {
@@ -71,6 +75,7 @@ export default {
 </script>
 
 <template>
+  <HeaderBanner />
   <SizeviewNav />
   <br />
   <div class="container">
@@ -94,6 +99,7 @@ export default {
       </div>
     </a>
   </div>
+  <FooterComp />
 </template>
 
 <style scoped>
@@ -111,7 +117,8 @@ export default {
   font-size: 28px;
   font-weight: bold;
   color: #333;
-  margin: 0; /* 去掉默认的外边距 */
+  margin-left : 350px;
+  margin-bottom: 0px;
 }
 
 .current-location {
@@ -121,6 +128,8 @@ export default {
 
 .location-text {
   color: #999;
+  margin-right: 350px;
+  margin-bottom: 0;
 }
 
 .link {
@@ -141,6 +150,7 @@ export default {
   padding: 20px;
   max-width: 15;
   max-width: 1250px;
+  margin: 0 auto; /* 水平居中 */
 }
 
 .gallery-item {

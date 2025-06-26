@@ -31,7 +31,6 @@
 </template>
 
 <script>
-/* 保持原有逻辑不变 */
 import { defineComponent, inject } from 'vue'
 
 export default defineComponent({
@@ -108,7 +107,8 @@ ul, li {
   top: 100%;
   left: 50%;                   /* 居中关键属性 */
   transform: translateX(-50%); /* 居中关键属性 */
-  width: 156px;               /* 与导航项同宽 */
+  width: 150px;               /* 与导航项同宽 */
+  min-width: 130px;
   background: #00000029;
   backdrop-filter: blur(8px);
   border-radius: 4px;
@@ -128,7 +128,7 @@ ul, li {
 /* 子菜单项 */
 .sub-menu-item {
   transition: all 0.25s ease;
-  margin: 2px 8px;
+  margin: 2px 5px;
   border-radius: 3px;
 }
 
@@ -139,7 +139,7 @@ ul, li {
 
 .sub-menu-link {
   display: block;
-  padding: 10px 20px;
+  padding: 5px 10px;
   color: rgba(255, 255, 255, 0.95);
   font-size: 14px;
   font-weight: 500;

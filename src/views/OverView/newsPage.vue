@@ -1,5 +1,6 @@
 <template>
   <div class="main-container">
+    <HeaderBanner />
     <OverviewNav />
 
     <div class="content-wrapper">
@@ -93,6 +94,7 @@
       </div>
     </div>
   </div>
+  <FooterComp />
 </template>
 
 <script>
@@ -100,11 +102,15 @@ import { defineComponent, ref, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import axios from '@/utils/request'
 import OverviewNav from '@/components/NavComp/OverviewNav.vue'
+import HeaderBanner from '@/components/HeaderBanner.vue'
+import FooterComp from '@/components/FooterComp.vue'
 
 export default defineComponent({
   name: 'NewsPage',
   components: {
     OverviewNav,
+    HeaderBanner,
+    FooterComp,
   },
   setup() {
     const newsList = ref([])

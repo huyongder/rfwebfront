@@ -35,9 +35,10 @@ import afterSalesPage from '@/views/SuggestionView/after-salesPage.vue'
 import PageViewer from '@/components/PageViewer.vue'
 import RichTextEditor from '@/components/RichTextEditor.vue'
 import testSide from '@/components/NavComp/testSide.vue'
-import LoginPage from '@/views/login/LoginPage.vue'
-// import DashboardPage from '@/views/Admin/DashboardPage.vue'
+import LoginPage from '@/views/Login/LoginPage.vue'
+import DashboardPage from '@/views/Login/Dashboard/DashboardPage.vue'
 import designersPage from '@/views/DesignCaseView/designersPage.vue'
+import CarouselNewsPage from '@/components/CarouselNews.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -46,12 +47,17 @@ const router = createRouter({
       name: 'index',
       component: IndexPageVue,
     },
-    // {
-    //   path: '/dashboard',
-    //   name: 'dashboard',
-    //   component: DashboardPage,
-    // },
+    {
+      path: '/test',
+      name: 'test',
+      component: CarouselNewsPage,
 
+    },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: DashboardPage,
+    },
     {
       path: '/about/news',
       name: 'news',
@@ -203,8 +209,8 @@ const router = createRouter({
       component: branchesPage_recruit,
     },
     {
-      path: '/careers/headquarters',
-      name: 'headquarters',
+      path: '/careers/headquarters_recruit',
+      name: 'headquarters_recruit',
       component: headquartersPage_recruit,
     },
     {
@@ -246,10 +252,32 @@ const router = createRouter({
       name: 'designers',
       component: designersPage,
     },
+
+    //-----------------------管理界面路由--------------------------
+
+
+    /*{
+      path: '/auth/news',
+      component: () => import('@/views/News/index.vue'),
+      meta: { title: '新闻管理', icon: 'Document' },
+      children: [
+        {
+          path: 'edit',
+          component: () => import('@/views/News/Edit.vue'),
+          meta: { title: '编辑新闻' }
+        },
+        {
+          path: 'list',
+          component: () => import('@/views/News/List.vue'),
+          meta: { title: '新闻列表' }
+        }
+      ]
+
+    }*/
   ],
 })
 
-const whiteList = ['/login', '/about/', '/contact', '/brands', '/team', '/']
+const whiteList = ['/login', '/about/', '/contact', '/brands', '/team',"/"]
 // ===== 全局前置守卫 =====
 router.beforeEach((to, from, next) => {
   const store = useAuthStore() // Pinia 状态管理
@@ -277,7 +305,6 @@ router.beforeEach((to, from, next) => {
 // ===== 全局错误处理 =====
 router.onError((error) => {
   console.error('[路由错误]:', error)
-  // 可扩展：上报错误到监控系统（如 Sentry）
 })
 
 export default router

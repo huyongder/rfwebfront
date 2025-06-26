@@ -1,14 +1,19 @@
 <script lang="ts">
 import SizeviewNav from '@/components/NavComp/SizeviewNav.vue'
+import HeaderBanner from '@/components/HeaderBanner.vue'
+import FooterComp from '@/components/FooterComp.vue';
 
 export default {
   components: {
     SizeviewNav,
+    HeaderBanner,
+    FooterComp
   },
 }
 </script>
 
 <template>
+  <HeaderBanner />
   <SizeviewNav />
   <br />
   <div class="title">舒城公司</div>
@@ -22,6 +27,7 @@ export default {
     <router-link to="/about/branches/yeji" class="nav-link">下一篇：叶集分公司</router-link>
     <router-link to="/about/branches" class="nav-link">返回上一级</router-link>
   </div>
+  <FooterComp />
 </template>
 
 <style scoped>
@@ -36,9 +42,10 @@ export default {
   text-align: left; /* 内容左对齐 */
   transform: translateX(-10%); /* 微调居中位置 */
 }
-.shucheng{
+.shucheng {
   width: fit-content;
-  margin: 0 20%;
+  display: block;
+  margin: 0 auto;
 }
 
 .navigation {
@@ -47,7 +54,7 @@ export default {
   align-items: flex-start;
   padding: 10px;
   width: fit-content;
-  margin-left: 20px;
+  margin-left: 350px;
 }
 .nav-p {
   color: #000;

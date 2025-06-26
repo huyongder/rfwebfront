@@ -3,7 +3,7 @@
  * @Author: huimeng
  * @Date: 2025-03-03 16:36:50
  * @LastEditors: huimeng
- * @LastEditTime: 2025-03-08 08:39:14
+ * @LastEditTime: 2025-05-26 14:29:45
 -->
 
 <template>
@@ -186,7 +186,7 @@ export default {
 
           try {
             const response = await axios.post(
-              'http://localhost:8080/api/upload/newsimage',
+              '/api/upload/newsimage',
               formData,
             )
 

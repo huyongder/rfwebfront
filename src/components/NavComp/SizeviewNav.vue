@@ -3,24 +3,25 @@
  * @Author: huimeng
  * @Date: 2025-02-14 10:03:47
  * @LastEditors: huimeng
- * @LastEditTime: 2025-02-19 15:46:48
+ * @LastEditTime: 2025-05-25 17:31:13
 -->
-
 <template>
-  <nav class="navbar">
-    <ul>
-      <li v-for="(item, index) in flattenedNavLists" :key="index" class="nav-item">
-        <a
-          class="nav-link"
-          :class="{ 'main-title': item.isMain }"
-          :href="item.link || 'javascript:void(0)'"
-          :style="item.isMain ? 'pointer-events: none;' : ''"
-        >
-          {{ item.title }}
-        </a>
-      </li>
-    </ul>
-  </nav>
+  <div class="nav-container">
+    <nav class="navbar">
+      <ul>
+        <li v-for="(item, index) in flattenedNavLists" :key="index" class="nav-item">
+          <a
+            class="nav-link"
+            :class="{ 'main-title': item.isMain }"
+            :href="item.link || 'javascript:void(0)'"
+            :style="item.isMain ? 'pointer-events: none;' : ''"
+          >
+            {{ item.title }}
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
 </template>
 
 <script>
@@ -62,11 +63,16 @@ export default {
 </script>
 
 <style scoped>
+.nav-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  background-color: red;
+}
+
 .navbar {
   background-color: red;
   color: white;
-  padding: 0 10px; /* 左右留白 */
-  width: 1250px;
   height: 50px; /* 设定固定高度 */
   display: flex;
   align-items: center;
@@ -79,10 +85,10 @@ export default {
   margin: 0;
   display: flex;
   align-items: center;
+  height: 100%;
 }
 
 .nav-item {
-  margin-right: 20px;
   display: flex;
   align-items: center;
   height: 100%;
@@ -93,7 +99,7 @@ export default {
   text-decoration: none;
   font-size: 16px;
   padding: 0 30px;
-  height: 50px;
+  height: 100%;
   line-height: 50px;
   border-radius: 5px;
   transition: background-color 0.3s;
@@ -103,12 +109,10 @@ export default {
   box-sizing: border-box;
 }
 
-/* 主标题“集团规模” */
+/* 主标题"集团规模" */
 .main-title {
   font-size: 20px;
   font-weight: bold;
-  height: 50px;
-  line-height: 50px;
   pointer-events: none; /* 禁止主标题可点击 */
 }
 
@@ -119,5 +123,34 @@ export default {
 
 .nav-link:hover {
   background-color: #cc0000;
+}
+
+/* 响应式设计 */
+@media (max-width: 1250px) {
+  .navbar {
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 0 10px;
+  }
+  
+  .navbar::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .nav-link {
+    padding: 0 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-link {
+    padding: 0 15px;
+    font-size: 14px;
+  }
+  
+  .main-title {
+    font-size: 18px;
+  }
 }
 </style>

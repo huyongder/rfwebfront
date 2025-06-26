@@ -1,6 +1,7 @@
 <template>
+  <HeaderBanner />
+  <OverviewNav />
   <div class="core-advantages">
-    <OverviewNav />
     <h1>荣锋集团十三大核心优势</h1>
 
     <div class="section">
@@ -78,15 +79,21 @@
       </p>
     </div>
   </div>
+  <FooterComp />
 </template>
 
 <script>
 import OverviewNav from '@/components/NavComp/OverviewNav.vue';
+import HeaderBanner from '@/components/HeaderBanner.vue';
+import FooterComp from '@/components/FooterComp.vue';
 
 export default {
   name: 'CoreAdvantages',
   components: {
-    OverviewNav
+    OverviewNav,
+    HeaderBanner,
+    FooterComp
+
   }
 }
 </script>

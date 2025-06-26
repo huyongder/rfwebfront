@@ -1,3 +1,10 @@
+<!--
+ * @Descripttion: 底部页脚
+ * @Author: huimeng
+ * @Date: 2025-01-15 10:12:15
+ * @LastEditors: huimeng
+ * @LastEditTime: 2025-05-25 16:17:34
+-->
 <template>
   <footer class="footer">
     <div class="footer-content">
@@ -20,7 +27,7 @@
       <!-- 第三行：版权信息 -->
       <div class="footer-row">
         <p>
-          Copyright © 2021-2024 荣锋建材家居装饰集团品牌部 版权所有
+          Copyright © 2021-2025 荣锋建材家居装饰集团品牌部 版权所有
           <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank"
             >皖ICP备2021007561号-1</a
           >
@@ -28,9 +35,7 @@
       </div>
       <!-- 第四行：友情链接 -->
       <div class="footer-row">
-        <p>
-          <strong>友情链接：</strong><a href="http://www.jahszh.com/">六安金安区红十字会</a>
-        </p>
+        <p><strong>友情链接：</strong><a href="http://www.jahszh.com/">六安金安区红十字会</a></p>
       </div>
     </div>
   </footer>
@@ -42,9 +47,6 @@
 
 <style scoped>
 .footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
   width: 100%;
   background-color: #f8f8f8;
   padding: 10px 0;

@@ -3,52 +3,8 @@
  * @Author: huimeng
  * @Date: 2025-03-13 15:47:35
  * @LastEditors: huimeng
- * @LastEditTime: 2025-04-07 15:55:25
+ * @LastEditTime: 2025-05-28 13:46:34
 -->
-<!-- <template>
-  <el-form :model="form" :rules="rules" ref="formRef" class="login-container">
-    <h3>系统登录</h3>
-    <el-form-item prop="username">
-      <el-input v-model="form.username" placeholder="用户名"></el-input>
-    </el-form-item>
-    <el-form-item prop="password">
-      <el-input type="password" v-model="form.password" placeholder="密码"></el-input>
-    </el-form-item>
-    <el-button type="primary" @click="handleSubmit">登录</el-button>
-    <div v-if="errorMsg" class="error-msg">{{ errorMsg }}</div>
-  </el-form>
-</template>
-
-<script setup>
-import { ref } from 'vue'
-import { useAuthStore } from '@/stores/auth'
-import { useRouter } from 'vue-router'
-
-const authStore = useAuthStore()
-const router = useRouter()
-const form = ref({ username: '', password: '' })
-const formRef = ref(null)
-const errorMsg = ref('')
-
-// 登录逻辑
-const handleSubmit = async () => {
-  try {
-    await authStore.login(form.value) // 调用 store 的登录方法
-    router.push('/about/news') // 登录成功跳转
-  } catch (error) {
-    console.error('登录失败:', error)
-    errorMsg.value = '用户名或密码错误'
-  }
-}
-</script>
-
-<style scoped>
-.error-msg {
-  color: #ff4d4d;
-  margin-top: 10px;
-}
-</style> -->
-
 <template>
   <el-form
     :model="form"

@@ -3,7 +3,7 @@
  * @Author: huimeng
  * @Date: 2025-03-14 15:07:39
  * @LastEditors: huimeng
- * @LastEditTime: 2025-04-07 16:35:03
+ * @LastEditTime: 2025-05-26 14:23:40
  */
 import axios from 'axios'
 import { useAuthStore } from '@/stores/auth'
@@ -12,7 +12,7 @@ import router from '@/router'
 
 // 创建 axios 实例
 const service = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/', // 使用环境变量
+  baseURL: import.meta.env.VITE_API_BASE_URL, // 使用环境变量
   timeout: 5000,
 })
 

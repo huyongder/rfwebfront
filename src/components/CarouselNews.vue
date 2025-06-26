@@ -1,30 +1,50 @@
 <template>
-  <div class="news-container">
+  <div class="carousel-container">
     <!-- 加载状态 -->
-    <div v-if="loading" class="loading">正在加载最新新闻...</div>
+    <div v-if="loading" class="loading">数据加载中...</div>
 
-    <!-- 错误状态 -->
-    <div v-else-if="error" class="error">
-      <span>加载失败，请重试</span>
-      <button @click="fetchNews">重试</button>
-    </div>
+    <!-- 主内容区域 -->
+    <div v-else class="carousel-wrapper"
+         @mouseenter="pauseAutoPlay"
+         @mouseleave="resumeAutoPlay">
 
-    <!-- 新闻列表 -->
-    <div v-else class="news-grid">
-      <div
-        v-for="(item, index) in displayedNews"
-        :key="item.id"
-        class="news-card"
-        :class="{ 'first-item': index === 0 }"
-      >
-        <img :src="item.imageUrl" :alt="item.title" class="news-image">
-        <div class="news-content">
-          <h3 class="news-title">{{ item.title }}</h3>
-          <p class="news-summary">{{ item.summary }}</p>
-          <div class="news-meta">
-            <span class="publish-time">{{ formatTime(item.publishTime) }}</span>
-            <span class="view-count">阅读({{ item.viewCount }})</span>
+      <!-- 左侧图片 -->
+      <div class="left-panel">
+        <div class="image-container">
+          <img :src="currentItem.coverImage"
+               class="carousel-image"
+               @error="handleImageError">
+          <div class="image-overlay">
+            <h2>{{ currentItem.title }}</h2>
+            <div class="date-badge">
+              <span class="day">{{ formatDay(currentItem.createTime) }}</span>
+              <span class="month-year">{{ formatMonthYear(currentItem.createTime) }}</span>
+            </div>
           </div>
+        </div>
+      </div>
+
+      <!-- 右侧轮播内容 -->
+      <div class="right-panel">
+        <div class="news-list">
+          <router-link
+            v-for="(item, index) in newsData"
+            :key="item.id"
+            :to="`/about/news/${item.id}`"
+            :class="['news-item', { active: isActive(index) }]"
+            @mouseenter="setActive(index)"
+            @click.prevent>
+            <div class="item-content">
+              <div class="date-badge">
+                <span class="day">{{ formatDay(item.createTime) }}</span>
+                <span class="month-year">{{ formatMonthYear(item.createTime) }}</span>
+              </div>
+              <div class="text-content">
+                <h4>{{ item.title }}</h4>
+                <p class="summary">{{ item.summary }}</p>
+              </div>
+            </div>
+          </router-link>
         </div>
       </div>
     </div>
@@ -32,145 +52,310 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import axios from 'axios'
 
-const newsList = ref([])
-const loading = ref(false)
-const error = ref(false)
+// 响应式状态
+const loading = ref(true)
+const currentIndex = ref(0)
+const autoPlayTimer = ref(null)
+const newsData = ref([])
 
 // 获取新闻数据
-const fetchNews = async () => {
-  loading.value = true
-  error.value = false
+const fetchNewsData = async () => {
   try {
-    const res = await axios.get('/api/news/public/list', {
-      params: {
-        pageNum: 1,
-        pageSize: 5,  // 固定获取前5条
-        orderBy: 'publishTime',
-        order: 'desc'
+    const response = await axios.get('/api/news/public/list')
+    // 获取最新的5条数据并按创建时间排序
+    newsData.value = response.data.data.records
+      .sort((a, b) => new Date(b.createTime) - new Date(a.createTime))
+      .slice(0, 5)
+    loading.value = false
+  } catch (error) {
+    console.error('获取新闻数据失败:', error)
+    // 使用模拟数据作为后备
+    newsData.value = [
+      {
+        id: 1,
+        title: '人工智能技术新突破',
+        summary: '科学家宣布在自然语言处理领域取得重大进展',
+        coverImage: 'https://picsum.photos/720/440?random=1',
+        createTime: '2023-10-01T10:00:00'
+      },
+      {
+        id: 2,
+        title: '气候变化国际会议召开',
+        summary: '全球领导人齐聚讨论碳排放控制方案',
+        coverImage: 'https://picsum.photos/720/440?random=2',
+        createTime: '2023-10-02T14:30:00'
+      },
+      {
+        id: 3,
+        title: '新型疫苗研发成功',
+        summary: '可预防多种冠状病毒变种',
+        coverImage: 'https://picsum.photos/720/440?random=3',
+        createTime: '2023-10-03T09:15:00'
+      },
+      {
+        id: 4,
+        title: '量子计算机新纪录',
+        summary: '中国团队实现1000量子比特纠缠',
+        coverImage: 'https://picsum.photos/720/440?random=4',
+        createTime: '2023-10-04T16:45:00'
+      },
+      {
+        id: 5,
+        title: '教育改革方案发布',
+        summary: '义务教育阶段将新增人工智能课程',
+        coverImage: 'https://picsum.photos/720/440?random=5',
+        createTime: '2023-10-05T11:20:00'
       }
-    })
-
-    if (res.data.code === 200) {
-      // 确保数据格式正确
-      const validData = Array.isArray(res.data.data.records)
-        ? res.data.data.records
-        : []
-
-      // 仅保留前5条
-      newsList.value = validData.slice(0, 5)
-    } else {
-      throw new Error(res.data.msg)
-    }
-  } catch (err) {
-    console.error('获取新闻失败:', err)
-    error.value = true
-  } finally {
+    ]
     loading.value = false
   }
 }
 
-// 时间格式化
-const formatTime = (timestamp) => {
-  const date = new Date(timestamp)
-  return date.toLocaleDateString('zh-CN', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit'
-  })
+// 当前显示项
+const currentItem = computed(() => {
+  return newsData.value[currentIndex.value] || {}
+})
+
+// 当前激活项判断
+const isActive = (index) => {
+  return index === currentIndex.value
 }
+
+// 设置当前激活项
+const setActive = (index) => {
+  currentIndex.value = index
+}
+
+// 日期格式化
+const formatDay = (dateString) => {
+  const date = new Date(dateString)
+  return date.getDate().toString().padStart(2, '0')
+}
+
+const formatMonthYear = (dateString) => {
+  const date = new Date(dateString)
+  const month = (date.getMonth() + 1).toString().padStart(2, '0')
+  const year = date.getFullYear().toString()
+  return `${month}.${year}`
+}
+
+// 图片加载失败处理
+const handleImageError = e => {
+  e.target.src = 'https://picsum.photos/720/440?blur=1'
+  e.target.classList.add('error-image')
+}
+
+// 轮播控制
+const nextSlide = () => {
+  currentIndex.value = (currentIndex.value + 1) % newsData.value.length
+}
+
+// 自动播放控制
+const startAutoPlay = () => {
+  autoPlayTimer.value = setInterval(nextSlide, 3000)
+}
+
+const pauseAutoPlay = () => clearInterval(autoPlayTimer.value)
+const resumeAutoPlay = () => startAutoPlay()
 
 // 生命周期
 onMounted(() => {
-  fetchNews()
+  fetchNewsData().then(() => {
+    startAutoPlay()
+  })
 })
+onBeforeUnmount(pauseAutoPlay)
 </script>
 
 <style scoped>
-.news-container {
-  max-width: 1200px;
-  margin: 2rem auto;
-  padding: 0 1rem;
-}
-
-.loading, .error {
-  text-align: center;
-  padding: 2rem;
-  color: #666;
-}
-
-.news-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin-top: 2rem;
-}
-
-.news-card {
-  background: #fff;
-  border-radius: 12px;
+.carousel-container {
+  width: 1260px;
+  height: 440px;
+  margin: 20px auto;
+  position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  background: #fff;
+}
+
+.carousel-wrapper {
+  display: flex;
+  height: 100%;
+}
+
+/* 左侧图片区域 */
+.left-panel {
+  width: 55%;
+  height: 100%;
+  position: relative;
+}
+
+.image-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.carousel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   transition: transform 0.3s ease;
 }
 
-.news-card:hover {
-  transform: translateY(-4px);
+.error-image {
+  filter: grayscale(100%);
 }
 
-.news-image {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
+.image-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.7));
+  color: white;
 }
 
-.news-content {
-  padding: 1.5rem;
+.image-overlay h2 {
+  font-size: 20px;
+  margin-bottom: 15px;
+  line-height: 1.4;
+  transition: all 0.3s ease;
 }
 
-.news-title {
-  font-size: 1.5rem;
-  margin: 0 0 1rem;
-  color: #c7000a;
-  font-weight: 600;
+/* 右侧内容区域 */
+.right-panel {
+  width: 45%;
+  height: 100%;
+  padding: 0;
+  background: #fff;
+  overflow: hidden;
 }
 
-.news-summary {
-  font-size: 1rem;
-  color: #666;
-  line-height: 1.6;
-  margin-bottom: 1rem;
-}
-
-.news-meta {
+.news-list {
+  height: 100%;
   display: flex;
-  gap: 1rem;
-  color: #999;
-  font-size: 0.9rem;
+  flex-direction: column;
 }
 
-/* 首条特殊样式 */
-.first-item {
-  grid-column: span 2;
-  height: 420px;
-}
+.news-item {
+  height: 20%;
+  display: block;
+  position: relative;
+  padding: 12px 20px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: inherit;
 
-.first-item .news-content {
-  padding: 2rem;
-}
-
-/* 响应式调整 */
-@media (max-width: 768px) {
-  .news-grid {
-    grid-template-columns: 1fr;
+  &:hover {
+    background: #f9f9f9;
+    transform: translateX(5px);
   }
 
-  .first-item {
-    grid-column: 1;
+  &.active {
+    background: #f5f5f5;
+    box-shadow: inset 4px 0 0 #e74c3c;
+    transform: translateX(0) scale(1.02);
+
+    .date-badge {
+      background: #e74c3c;
+      color: white;
+      transform: scale(1.1);
+      box-shadow: 0 3px 8px rgba(231, 76, 60, 0.3);
+    }
+
+    .text-content h4 {
+      color: #e74c3c;
+      font-weight: bold;
+    }
+
+    .summary {
+      opacity: 0.8;
+    }
   }
+}
+
+.item-content {
+  display: flex;
+  width: 100%;
+  gap: 15px;
+  height: 100%;
+  align-items: center;
+}
+
+.text-content {
+  flex: 1;
+  overflow: hidden;
+}
+
+.text-content h4 {
+  font-size: 15px;
+  color: #333;
+  line-height: 1.5;
+  margin: 0 0 5px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.summary {
+  font-size: 12px;
+  color: #666;
+  line-height: 1.4;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: opacity 0.3s ease;
+}
+
+.date-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  min-width: 50px;
+  background: white;
+  color: #e74c3c;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  border: 1px solid #e74c3c;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.date-badge .day {
+  font-size: 22px;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.date-badge .month-year {
+  font-size: 11px;
+  opacity: 0.9;
+  margin-top: 2px;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 18px;
+  color: #666;
 }
 </style>

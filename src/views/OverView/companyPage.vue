@@ -1,10 +1,20 @@
+<!--
+ * @Descripttion: 
+ * @Author: huimeng
+ * @Date: 2025-01-17 14:12:20
+ * @LastEditors: huimeng
+ * @LastEditTime: 2025-05-25 16:53:32
+-->
 <script setup lang="ts">
 import OverviewNav from '@/components/NavComp/OverviewNav.vue'
+import FooterComp from '@/components/FooterComp.vue'
+import HeaderBanner from '@/components/HeaderBanner.vue';
 </script>
 
 <template>
+  <HeaderBanner />
+  <OverviewNav />
   <div class="company-container">
-    <OverviewNav />
     <div class="company-page">
       <p>
         集团由董事长王显锋先生于1995年在安徽省金寨县创立，2007年进军六安市，后更名为荣锋装饰集团，并于2021年进军合肥市场。荣锋装饰集团是建材家居全品类代理/装饰设计/监理施工一体化运营服务企业，集团旗下厂家一级代理圣象地板、索菲亚全屋定制、欧派橱柜/衣柜、美标卫浴、东鹏瓷砖、顾家家居、惠达卫浴，亚细亚瓷砖、欧普照明、海尔厨电/集成灶、米兰窗帘/软装、华鹤木门、法狮龙全屋集成吊顶、樱雪厨电/集成灶、好太太晾衣机、尚高卫浴、莫干山实木定制/木门、立邦漆、德国高勒管道、西门子开关、日丰管等50个一线建材、家居、厨电品牌。<br />
@@ -17,26 +27,7 @@ import OverviewNav from '@/components/NavComp/OverviewNav.vue'
       <img src="@/static/overView/companyPhotos/jsanjiao.png" alt="jsanjiao" />
     </div>
   </div>
-  <hr class="divider" />
-  <footer class="footer">
-    <div class="footer-content">
-      <div class="address-group">
-        <p>
-          集团六安总部地址：安徽省六安市磨子潭路顺达大市场二号楼4-5楼
-          集团合肥总部地址：安徽省合肥市长江西路乐客来商业广场1-3层
-        </p>
-      </div>
-      <div class="store-group">
-        <p>
-          直营门店地址：六安市312国道与文蔚路交叉口 金三角家居生活广场(原居然之家商城)
-          六安市佛子岭路 红星美凯龙商场一店 六安市迎宾大道 红星美凯龙商场二店
-        </p>
-      </div>
-      <div class="copyright">
-        <p>Copyright © 2021-2024 荣锋建材家居装饰集团品牌部 版权所有 皖ICP备2021007561号-1</p>
-      </div>
-    </div>
-  </footer>
+  <FooterComp />
 </template>
 
 <style scoped>

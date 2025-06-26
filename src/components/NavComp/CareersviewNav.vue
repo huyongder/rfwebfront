@@ -87,7 +87,7 @@ export default {
 .nav-link {
   color: white;
   text-decoration: none;
-  font-size: 16px;
+  font-size: 14px;
   padding: 0 30px;
   height: 50px;
   line-height: 50px;

@@ -40,12 +40,6 @@
       <img src="/src/static/index/largePhoto.jpg" alt="largePhoto" />
     </div>
   </div>
-  <div>
-    <!-- <HeaderComp /> -->
-    <!-- <BannerComp />
-    <FooterComp />
-    <ToolComp /> -->
-  </div>
   <HeaderComp />
   <CarouselComp />
   <div class="full-width-bg">
@@ -121,30 +115,39 @@
     </div>
   </div>
 
-  <CarouselNews />
-  <div>
-    timestamp
+  <nav class="news-section-header">
+    <!-- 左侧文字区 -->
+    <div class="news-section-header__title-group">
+      <h2 class="news-section-header__main-title">集团动态</h2>
+      <span class="news-section-header__subtitle">掌握最新集团动态，带您走进荣锋集团</span>
+    </div>
+
+    <!-- 右侧操作区 -->
+    <router-link to="/about/news" class="news-section-header__action-link"> 查看更多+ </router-link>
+  </nav>
+
+  <div class="news-section">
+    <div class="news-wrapper">
+      <CarouselNews />
+    </div>
   </div>
+
+  <FooterComp />
 </template>
 
 <script>
-//import FooterComp from '@/components/FooterComp.vue'
-import { defineComponent, provide } from 'vue'
+import { defineComponent} from 'vue'
 import HeaderComp from '@/components/HeaderComp.vue'
 import CarouselComp from '@/components/carouselComp.vue'
-// import ToolComp from '@/components/ToolComp.vue';
-// import BannerComp from '@/components/BannerComp.vue'
 import CarouselNews from '@/components/CarouselNews.vue'
-
+import FooterComp from '@/components/FooterComp.vue'
 
 export default defineComponent({
   components: {
     HeaderComp,
-    // BannerComp,
-    //FooterComp,
-    // ToolComp
     CarouselComp,
-    CarouselNews
+    CarouselNews,
+    FooterComp,
   },
 
   // 初始执行，类似onLoad
@@ -152,91 +155,7 @@ export default defineComponent({
     console.log('IndexPage.vue 已开始执行。')
   },
   setup() {
-    // 定义导航项数据，包括每个菜单项及其子菜单
-    const NavLists = [
-      {
-        title: '网站首页',
-        subTitle: 'HOME',
-        link: '/',
-      },
-      {
-        title: '集团概况',
-        subTitle: 'GROUP OVERVIEW',
-        link: '/about/overview',
-        subMenu: [
-          { title: '最新动态', link: '/about/news' },
-          { title: '企业简介', link: '/about/company' },
-          { title: '企业优势', link: '/about/advantages' },
-          { title: '企业文化', link: '/about/culture' },
-          { title: '集团架构', link: '/about/structure' },
-          { title: '资质证书', link: '/about/certificates' },
-          { title: '集团荣誉', link: '/about/honors' },
-        ],
-      },
-      {
-        title: '集团规模',
-        subTitle: 'Group size',
-        link: '/about/size',
-        subMenu: [
-          { title: '集团总部', link: '/about/headquarters' },
-          { title: '集团分公司', link: '/about/branches' },
-          { title: '代理品牌', link: '/about/brands' },
-          { title: '直营门店', link: '/about/stores' },
-          { title: '保障团队', link: '/about/team' },
-          { title: '设计中心', link: '/about/design-center' },
-        ],
-      },
-      {
-        title: '设计案例',
-        subTitle: 'Design case',
-        link: '/design/cases',
-        subMenu: [
-          { title: '优秀案例', link: '/design/excellent-cases' },
-          { title: '工地实拍', link: '/design/site-photos' },
-          { title: '设计大咖', link: '/design/designers' },
-          { title: '设计大赛', link: '/design/competitions' },
-        ],
-      },
-      {
-        title: '品牌传播',
-        subTitle: 'Brand Spreading',
-        link: '/brand/spreading',
-        subMenu: [
-          { title: '强势登录央视', link: '/brand/cctv' },
-          { title: '硬广投放', link: '/brand/ads' },
-          { title: '2019集团盛典', link: '/brand/2019-event' },
-          { title: '2020集团盛典', link: '/brand/2020-event' },
-          { title: '2022集团盛典', link: '/brand/2022-event' },
-          { title: '2023集团盛典', link: '/brand/2023-event' },
-        ],
-      },
-      {
-        title: '招贤纳士',
-        subTitle: 'Talents Wanted',
-        link: '/careers',
-        subMenu: [
-          { title: 'BOSS直聘', link: '/careers/boss' },
-          { title: '总部招聘', link: '/careers/headquarters' },
-          { title: '分公司招聘', link: '/careers/branches' },
-        ],
-      },
-      {
-        title: '投诉与建议',
-        subTitle: 'Suggestions',
-        link: '/contact/suggestions',
-        subMenu: [
-          { title: '投诉中心', link: '/contact/complaints' },
-          { title: '售后监督', link: '/contact/after-sales' },
-        ],
-      },
-      {
-        title: '联系我们',
-        subTitle: 'CONTACT US',
-        link: '/contact',
-      },
-    ]
-    provide('navLists', NavLists)
-    return { NavLists }
+    return{}
   },
   // 数据管理
   data() {
@@ -549,6 +468,69 @@ export default defineComponent({
 
 .ExtendedLink:hover {
   color: #ff0000 !important; /* 悬停时颜色保持红色 */
+}
+
+.news-section-header {
+  --red-accent: #ff0000;
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  padding: 24px 50px;
+  background: #ffffff;
+}
+
+/* 标题组样式 */
+.news-section-header__title-group {
+  position: relative;
+  padding-left: 20px; /* 红条位置 */
+  flex-grow: 1;
+}
+
+/* 红色分隔线（伪元素实现） */
+.news-section-header__title-group::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 3px;
+  bottom: 3px;
+  width: 3px;
+  background: var(--red-accent);
+  border-radius: 1.5px;
+}
+
+/* 主标题样式 */
+.news-section-header__main-title {
+  font-size: 25px;
+  font-weight: 700;
+  color: #000;
+  margin: 0;
+  display: inline-block;
+  line-height: 1.3;
+}
+
+/* 副标题样式 */
+.news-section-header__subtitle {
+  font-size: 14px;
+  color: #666;
+  margin-left: 12px;
+  vertical-align: bottom;
+}
+
+/* 操作链接样式 */
+.news-section-header__action-link {
+  color: var(--red-accent);
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: opacity 0.3s;
+  padding: 8px 12px;
+  margin-left: 32px;
+}
+
+.news-section-header__action-link:hover {
+  opacity: 0.8;
+  text-decoration: underline;
 }
 
 /* 响应式设计 */

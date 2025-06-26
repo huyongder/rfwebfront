@@ -1,18 +1,20 @@
 <template>
-  <nav class="navbar">
-    <ul>
-      <li v-for="(item, index) in flattenedNavLists" :key="index" class="nav-item">
-        <a
-          class="nav-link"
-          :class="{ 'main-title': item.isMain }"
-          :href="item.link || 'javascript:void(0)'"
-          :style="item.isMain ? 'pointer-events: none;' : ''"
-        >
-          {{ item.title }}
-        </a>
-      </li>
-    </ul>
-  </nav>
+  <div class="nav-container">  
+    <nav class="navbar">
+      <ul>
+        <li v-for="(item, index) in flattenedNavLists" :key="index" class="nav-item">
+          <a
+            class="nav-link"
+            :class="{ 'main-title': item.isMain }"
+            :href="item.link || 'javascript:void(0)'"
+            :style="item.isMain ? 'pointer-events: none;' : ''"
+          >
+            {{ item.title }}
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
 </template>
 
 <script>
@@ -40,11 +42,10 @@ export default {
     flattenedNavLists() {
       const flattened = []
       this.navLists.forEach((item) => {
-        // 让主标题的 link 为空，避免 undefined 导致错误
         flattened.push({ title: item.title, link: '', isMain: true })
         if (item.subMenu) {
           item.subMenu.forEach((subItem) => {
-            flattened.push({ ...subItem, isMain: false }) // 确保子菜单的 link 正常
+            flattened.push({ ...subItem, isMain: false })
           })
         }
       })
@@ -55,12 +56,20 @@ export default {
 </script>
 
 <style scoped>
+/* 新增的外层容器样式 */
+.nav-container {
+  width: 100%;
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  background-color: red; /* 保持背景色一致 */
+}
+
 .navbar {
   background-color: red;
   color: white;
-  padding: 0 10px; /* 左右留白 */
-  width: 1250px;
-  height: 50px; /* 设定固定高度 */
+  padding: 0 10px;
+  width: 1250px; /* 保持您设定的固定宽度 */
+  height: 50px;
   display: flex;
   align-items: center;
   box-sizing: border-box;
@@ -96,7 +105,6 @@ export default {
   box-sizing: border-box;
 }
 
-/* 主标题“集团概况” */
 .main-title {
   font-size: 20px;
   font-weight: bold;
@@ -104,7 +112,6 @@ export default {
   line-height: 50px;
 }
 
-/* 禁止鼠标悬停时主标题变色 */
 .main-title:hover {
   background-color: transparent !important;
 }
@@ -113,7 +120,6 @@ export default {
   background-color: #cc0000;
 }
 
-/* 禁止主标题“集团概况”可点击 */
 .main-title {
   pointer-events: none;
 }

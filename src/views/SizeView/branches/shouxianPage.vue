@@ -3,19 +3,24 @@
  * @Author: huimeng
  * @Date: 2025-02-18 08:22:56
  * @LastEditors: huimeng
- * @LastEditTime: 2025-02-18 08:30:43
+ * @LastEditTime: 2025-05-26 10:55:28
 -->
 <script lang="ts">
 import SizeviewNav from '@/components/NavComp/SizeviewNav.vue'
+import HeaderBanner from '@/components/HeaderBanner.vue';
+import FooterComp from '@/components/FooterComp.vue';
 
 export default {
   components: {
     SizeviewNav,
+    HeaderBanner,
+    FooterComp
   },
 }
 </script>
 
 <template>
+  <HeaderBanner  />
   <SizeviewNav />
   <br />
   <div class="title">寿县分公司</div>
@@ -29,6 +34,7 @@ export default {
     <router-link to="/about/branches/huoshan" class="nav-link">下一篇：霍山分公司</router-link>
     <router-link to="/about/branches" class="nav-link">返回上一级</router-link>
   </div>
+  <FooterComp />
 </template>
 
 <style scoped>
@@ -45,7 +51,8 @@ export default {
 }
 .shouxian {
   width: fit-content;
-  margin: 0 20%;
+  display: block;
+  margin: 0 auto;
 }
 
 .navigation {
@@ -54,7 +61,7 @@ export default {
   align-items: flex-start;
   padding: 10px;
   width: fit-content;
-  margin-left: 20px;
+  margin-left: 350px;
 }
 .nav-p {
   color: #000;
