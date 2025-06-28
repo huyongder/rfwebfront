@@ -8,15 +8,20 @@
 
 <script lang="ts">
 import BrandviewPage from '@/components/NavComp/BrandviewNav.vue'
+import HeaderBanner from '@/components/HeaderBanner.vue';
+import FooterComp from '@/components/FooterComp.vue';
 export default {
   name: 'adsView',
   components: {
     BrandviewPage,
+    HeaderBanner,
+    FooterComp,
   },
 }
 </script>
 
 <template>
+  <HeaderBanner />
   <BrandviewPage />
   <div class="continer">
     <p class="text">
@@ -30,6 +35,7 @@ export default {
       <img src="/src/public/brand/ads/ads5.jpg" alt="" class="img" />
     </div>
   </div>
+  <FooterComp />
 </template>
 
 <style scoped>
@@ -38,6 +44,8 @@ export default {
   font-size: 16px;
   color: #333;
   text-indent: 3em;
+  display: flex;
+  margin: 0 auto;
 }
 .imgs {
   display: grid;

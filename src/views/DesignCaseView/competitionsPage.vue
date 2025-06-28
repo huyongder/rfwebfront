@@ -8,11 +8,20 @@
 
 <script lang="ts">
 import DesignviewNav from '@/components/NavComp/DesignviewNav.vue'
+import HeaderBanner from '@/components/HeaderBanner.vue'
+import FooterComp from '@/components/FooterComp.vue'
 
-export default { components: { DesignviewNav } }
+
+export default {
+  components: {
+  DesignviewNav,
+  HeaderBanner,
+  FooterComp,
+} }
 </script>
 
 <template>
+  <HeaderBanner />
   <DesignviewNav />
   <div>
     <p class="title">“新锐·新视界”——荣锋装饰集团首届设计创意大赛</p>
@@ -94,8 +103,9 @@ export default { components: { DesignviewNav } }
     <p class="text-containe">
       荣锋装饰集团作为一家具有高度社会责任感的企业，持续致力于满足客户所有需求，伴随着客户日益提升的思维方式、生活方式、以及对高品质生活的进一步需要，青年创新设计人才就是赢得商业竞争和推动产业发展的重要战略资源。此次大赛意在激发荣锋装饰集团创意设计群体的创新力与创造力，也让集团优秀的设计师们发现自己的优势和短板，开拓视野、提升自我，服务好每一位客户！
     </p>
-
   </div>
+
+  <FooterComp />
 </template>
 
 <style scoped>

@@ -3,19 +3,24 @@
  * @Author: huimeng
  * @Date: 2025-02-19 08:20:06
  * @LastEditors: huimeng
- * @LastEditTime: 2025-02-19 14:02:52
+ * @LastEditTime: 2025-06-27 13:55:41
 -->
 
 <script lang="ts">
 import SizeviewNav from '@/components/NavComp/SizeviewNav.vue'
+import HeaderBanner from '@/components/HeaderBanner.vue';
+import FooterComp from '@/components/FooterComp.vue';
 export default {
   components: {
     SizeviewNav,
+    HeaderBanner,
+    FooterComp,
   },
 }
 </script>
 
 <template>
+  <HeaderBanner />
   <SizeviewNav />
   <div class="container">
     <h1 class="title">设计中心</h1>
@@ -85,6 +90,7 @@ export default {
     <img src="/src/public/about/DesignCenter/DesignThree6.jpg" alt="DesignThree6" class="team-image" />
 
   </div>
+  <FooterComp />
 </template>
 
 <style scoped>
@@ -95,6 +101,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin: 0 auto;
   border-bottom: 1px solid #e0e0e0;
   padding-bottom: 15px;
 }
@@ -102,6 +109,10 @@ export default {
 .title {
   font-size: 28px;
   font-weight: bold;
+
+
+
+  
   color: #333;
   margin: 0;
 }

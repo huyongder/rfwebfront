@@ -39,6 +39,8 @@ import LoginPage from '@/views/Login/LoginPage.vue'
 import DashboardPage from '@/views/Login/Dashboard/DashboardPage.vue'
 import designersPage from '@/views/DesignCaseView/designersPage.vue'
 import CarouselNewsPage from '@/components/CarouselNews.vue'
+import goodCasePage from '@/views/DesignCaseView/goodCasePage.vue'
+import goodCaseDetailsPage from '@/views/DesignCaseView/goodCaseDetailsPage.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -247,12 +249,23 @@ const router = createRouter({
       name: "login",
       component: LoginPage,
     },
+
+    // designer page
     {
       path: '/design/designers',
       name: 'designers',
       component: designersPage,
     },
-
+    {
+      path: '/design/excellent-cases',
+      name: 'excellent-cases',
+      component: goodCasePage,
+    },
+    {
+      path: '/design/excellent-cases/:id',
+      name: 'goodCaseDetailsPage',
+      component: goodCaseDetailsPage,
+    },
     //-----------------------管理界面路由--------------------------
 
 
@@ -277,7 +290,7 @@ const router = createRouter({
   ],
 })
 
-const whiteList = ['/login', '/about/', '/contact', '/brands', '/team',"/"]
+const whiteList = ['/login', '/about/', '/contact', '/brands', '/team',"/",'/news']
 // ===== 全局前置守卫 =====
 router.beforeEach((to, from, next) => {
   const store = useAuthStore() // Pinia 状态管理

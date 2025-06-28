@@ -3,18 +3,23 @@
  * @Author: huimeng
  * @Date: 2025-02-19 08:17:08
  * @LastEditors: huimeng
- * @LastEditTime: 2025-02-19 09:26:54
+ * @LastEditTime: 2025-06-26 16:55:41
 -->
 <script lang="ts">
 import SizeviewNav from '@/components/NavComp/SizeviewNav.vue'
+import HeaderBanner from '@/components/HeaderBanner.vue';
+import FooterComp from '@/components/FooterComp.vue';
 export default {
   components: {
     SizeviewNav,
+    HeaderBanner,
+    FooterComp,
   },
 }
 </script>
 
 <template>
+  <HeaderBanner />
   <SizeviewNav />
   <div class="container">
     <h1 class="title">保障团队</h1>
@@ -53,6 +58,7 @@ export default {
       class="team-image"
     />
   </div>
+  <FooterComp />
 </template>
 
 <style scoped>
@@ -63,6 +69,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin: 0 auto;
   border-bottom: 1px solid #e0e0e0;
   padding-bottom: 15px;
 }
@@ -88,11 +95,13 @@ export default {
 }
 
 .top {
-  padding: 20px;
+  display: flex;
+  justify-content: center;
   font-size: 13px;
   color: #333;
   line-height: 1.5;
   max-width: 1250px;
+  margin: 0 auto; 
   text-indent: 2em;
 }
 

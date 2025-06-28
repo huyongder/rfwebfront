@@ -3,19 +3,24 @@
  * @Author: huimeng
  * @Date: 2025-02-20 10:25:48
  * @LastEditors: huimeng
- * @LastEditTime: 2025-02-21 15:52:02
+ * @LastEditTime: 2025-06-27 14:57:27
 -->
 
 <script lang="ts">
 import BrandviewPage from '@/components/NavComp/BrandviewNav.vue'
+import HeaderBanner from '@/components/HeaderBanner.vue';
+import FooterComp from '@/components/FooterComp.vue';
 export default {
   components: {
     BrandviewPage,
+    HeaderBanner,
+    FooterComp,
   },
 }
 </script>
 
 <template>
+  <HeaderBanner />
   <BrandviewPage />
   <div class="container1">
     <h1 class="h1">“引以为荣 再创巅锋”荣锋装饰集团16周年年度盛典完美落幕</h1>
@@ -95,12 +100,14 @@ export default {
       一次次可贵的历练和摔打，我们收获的不仅仅是良好的信誉，也熔炼出荣锋装饰集团锐意进取、追求完美、广交朋友、共谋发展的制胜理念。岁与时驰，又是新年，变的是岁月，不变的，是荣锋人的初心。在这里，要真诚地感谢所有认可荣锋装饰集团的客户及社会各界朋友，感谢诸位领导，感谢广大媒体及社会各界朋友的鼎力支持与扶助，感谢全体荣锋家人的辛勤付出，荣锋装饰集团会坚定以“客户第一、员工第二、企业第三”为己任，持续不断地为社会创造价值，为客户创造价值。不忘初心，齐力打造百年荣锋品牌！
     </p>
   </div>
+  <FooterComp />
 </template>
 
 <style scoped>
 .container1 {
   display: grid;
   padding: 0;
+  place-items: center;
 }
 .h1 {
   font-size: 20px;

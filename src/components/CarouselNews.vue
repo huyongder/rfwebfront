@@ -4,16 +4,11 @@
     <div v-if="loading" class="loading">数据加载中...</div>
 
     <!-- 主内容区域 -->
-    <div v-else class="carousel-wrapper"
-         @mouseenter="pauseAutoPlay"
-         @mouseleave="resumeAutoPlay">
-
+    <div v-else class="carousel-wrapper" @mouseenter="pauseAutoPlay" @mouseleave="resumeAutoPlay">
       <!-- 左侧图片 -->
       <div class="left-panel">
         <div class="image-container">
-          <img :src="currentItem.coverImage"
-               class="carousel-image"
-               @error="handleImageError">
+          <img :src="currentItem.coverImage" class="carousel-image" @error="handleImageError" />
           <div class="image-overlay">
             <h2>{{ currentItem.title }}</h2>
             <div class="date-badge">
@@ -33,7 +28,8 @@
             :to="`/about/news/${item.id}`"
             :class="['news-item', { active: isActive(index) }]"
             @mouseenter="setActive(index)"
-            @click.prevent>
+            @click.prevent
+          >
             <div class="item-content">
               <div class="date-badge">
                 <span class="day">{{ formatDay(item.createTime) }}</span>
@@ -76,39 +72,39 @@ const fetchNewsData = async () => {
     newsData.value = [
       {
         id: 1,
-        title: '人工智能技术新突破',
-        summary: '科学家宣布在自然语言处理领域取得重大进展',
+        title: '人工智能技',
+        summary: '科学家宣布在自然语言处理领域取得',
         coverImage: 'https://picsum.photos/720/440?random=1',
-        createTime: '2023-10-01T10:00:00'
+        createTime: '2023-10-01T10:00:00',
       },
       {
         id: 2,
         title: '气候变化国际会议召开',
         summary: '全球领导人齐聚讨论碳排放控制方案',
         coverImage: 'https://picsum.photos/720/440?random=2',
-        createTime: '2023-10-02T14:30:00'
+        createTime: '2023-10-02T14:30:00',
       },
       {
         id: 3,
         title: '新型疫苗研发成功',
         summary: '可预防多种冠状病毒变种',
         coverImage: 'https://picsum.photos/720/440?random=3',
-        createTime: '2023-10-03T09:15:00'
+        createTime: '2023-10-03T09:15:00',
       },
       {
         id: 4,
         title: '量子计算机新纪录',
         summary: '中国团队实现1000量子比特纠缠',
         coverImage: 'https://picsum.photos/720/440?random=4',
-        createTime: '2023-10-04T16:45:00'
+        createTime: '2023-10-04T16:45:00',
       },
       {
         id: 5,
         title: '教育改革方案发布',
         summary: '义务教育阶段将新增人工智能课程',
         coverImage: 'https://picsum.photos/720/440?random=5',
-        createTime: '2023-10-05T11:20:00'
-      }
+        createTime: '2023-10-05T11:20:00',
+      },
     ]
     loading.value = false
   }
@@ -143,7 +139,7 @@ const formatMonthYear = (dateString) => {
 }
 
 // 图片加载失败处理
-const handleImageError = e => {
+const handleImageError = (e) => {
   e.target.src = 'https://picsum.photos/720/440?blur=1'
   e.target.classList.add('error-image')
 }
@@ -178,7 +174,7 @@ onBeforeUnmount(pauseAutoPlay)
   position: relative;
   overflow: hidden;
   border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   background: #fff;
 }
 
@@ -217,7 +213,7 @@ onBeforeUnmount(pauseAutoPlay)
   left: 0;
   right: 0;
   padding: 20px;
-  background: linear-gradient(transparent, rgba(0,0,0,0.7));
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
   color: white;
 }
 
@@ -335,7 +331,7 @@ onBeforeUnmount(pauseAutoPlay)
   font-weight: bold;
   transition: all 0.3s ease;
   border: 1px solid #e74c3c;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .date-badge .day {

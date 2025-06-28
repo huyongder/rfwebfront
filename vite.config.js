@@ -3,7 +3,7 @@
  * @Author: huimeng
  * @Date: 2025-01-14 16:21:37
  * @LastEditors: huimeng
- * @LastEditTime: 2025-04-05 14:09:14
+ * @LastEditTime: 2025-06-26 16:00:35
  */
 import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
@@ -32,7 +32,7 @@ export default defineConfig({
         changeOrigin: true,
         // 不需要重写路径，保持/auth前缀
       },
-      // 代理静态文件请求（根据你的文件存储路径）
+      // 代理静态文件请求
       '/uploads': {
         target: 'http://localhost:8080',
         changeOrigin: true,

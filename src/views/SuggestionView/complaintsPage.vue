@@ -1,12 +1,20 @@
 <!--
+ * @Descripttion:
+ * @Author: huimeng
+ * @Date: 2025-02-26 08:23:28
+ * @LastEditors: huimeng
+ * @LastEditTime: 2025-06-28 09:28:27
+-->
+<!--
  * @Descripttion:投诉与建议
  * @Author: huimeng
  * @Date: 2025-02-26 08:23:28
  * @LastEditors: huimeng
- * @LastEditTime: 2025-02-27 10:07:59
+ * @LastEditTime: 2025-06-28 09:19:50
 -->
 
 <template>
+  <HeaderBanner />
   <SuggestionsNav />
   <div class="suggestions-page">
     <!-- 左侧部分，包含图片 -->
@@ -80,6 +88,7 @@
       </div>
     </div>
   </div>
+  <FooterComp />
 </template>
 
 <script lang="ts">
@@ -88,22 +97,27 @@ import { ref } from 'vue'
 import axios from 'axios'
 import { onBeforeUnmount, onMounted } from 'vue'
 import SuggestionsNav from '@/components/NavComp/SuggestionsNav.vue'
+import HeaderBanner from '@/components/HeaderBanner.vue'
+import FooterComp from '@/components/FooterComp.vue'
 
 export default {
   components: {
     SuggestionsNav,
+    HeaderBanner,
+    FooterComp,
   },
   setup() {
     const formRef = ref(null)
+    // 表单数据
     const form = ref({
       name: '',
       phone: '',
       address: '',
       type: '业主投诉',
-      images: [],
+      images: [], // 存储上传的图片文件
       description: '',
     })
-    const isFormDirty = ref(false) // 用来检查表单是否被修改
+    const isFormDirty = ref(false) // 标记表单是否被修改过
 
     // 手机号验证规则
     const validatePhone = (rule, value, callback) => {
@@ -114,6 +128,7 @@ export default {
       }
     }
 
+    // 表单验证规则
     const rules = {
       name: [{ required: true, message: '姓名不能为空', trigger: 'blur' }],
       phone: [
@@ -124,32 +139,60 @@ export default {
       description: [{ required: true, message: '问题描述不能为空', trigger: 'blur' }],
     }
 
+    // 处理文件变化
     const handleFileChange = (file, fileList) => {
       form.value.images = fileList.slice(-3) // 限制最多3个文件
-      isFormDirty.value = true
+      isFormDirty.value = fileList.length > 0
     }
 
+    // 提交表单
     const submitForm = async () => {
       try {
+        // 先进行表单验证
         await formRef.value.validate()
+
+        // 创建FormData对象用于文件上传
         const formData = new FormData()
-        formData.append('name', form.value.name)
-        formData.append('phone', form.value.phone)
-        formData.append('address', form.value.address)
-        formData.append('type', form.value.type)
-        formData.append('description', form.value.description)
-        form.value.images.forEach((file) => {
-          formData.append('files', file.raw)
-        })
 
+        // 构造投诉DTO对象，对应后端的ComplaintDTO
+        const complaintDTO = {
+          name: form.value.name,
+          phone: form.value.phone,
+          address: form.value.address,
+          type: form.value.type,
+          description: form.value.description,
+        }
+
+        // 将DTO对象转为JSON Blob并添加到FormData
+        // 对应后端的@RequestPart("complaintDTO")
+        formData.append(
+          'complaintDTO',
+          new Blob([JSON.stringify(complaintDTO)], {
+            type: 'application/json',
+          }),
+        )
+
+        // 添加上传的文件
+        // 对应后端的@RequestPart(value = "files", required = false)
+        if (form.value.images && form.value.images.length > 0) {
+          form.value.images.forEach((file) => {
+            formData.append('files', file.raw) // 添加原始文件对象
+          })
+        }
+
+        // 发送请求到后端
         const response = await axios.post('/api/complaints', formData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
+          headers: {
+            'Content-Type': 'multipart/form-data', // 必须设置multipart类型
+          },
         })
 
-        if (response.data.success) {
+        // 处理成功响应
+        if (response.status === 200 || response.data.success == true) {
           ElMessage.success('提交成功！我们将尽快联系您')
-          formRef.value.resetFields()
-          isFormDirty.value = false // 表单已提交，设置为未修改状态
+          formRef.value.resetFields() // 重置表单
+          form.value.images = [] // 清空已上传图片
+          isFormDirty.value = false // 重置表单修改标记
         }
       } catch (error) {
         console.error('提交失败：', error)
@@ -157,18 +200,20 @@ export default {
       }
     }
 
-    // 在页面卸载时，检查表单是否已被修改，若未提交，提醒用户
+    // 页面加载时添加beforeunload事件监听
     onMounted(() => {
       window.addEventListener('beforeunload', handleBeforeUnload)
     })
 
+    // 处理页面关闭前的检查
     const handleBeforeUnload = (event) => {
       if (isFormDirty.value) {
         event.preventDefault()
-        event.returnValue = '' // 在某些浏览器中需要这个
+        event.returnValue = '' // 用于兼容某些浏览器
       }
     }
 
+    // 页面卸载前移除事件监听
     onBeforeUnmount(() => {
       window.removeEventListener('beforeunload', handleBeforeUnload)
     })

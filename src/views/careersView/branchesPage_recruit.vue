@@ -8,19 +8,26 @@
 
 
 <template>
+  <HeaderBanner />
   <CareersviewNav />
   <div class="branches-page">
     <img src="/src/public/careerPhotos/branches.jpg" alt="" />
   </div>
+  <FooterComp />
 </template>
 
 <script lang="ts">
 import CareersviewNav from '@/components/NavComp/CareersviewNav.vue';
+import HeaderBanner from '@/components/HeaderBanner.vue';
+import FooterComp from '@/components/FooterComp.vue';
+
 
 export default {
   name: 'branchesPage',
   components: {
     CareersviewNav,
+    HeaderBanner,
+    FooterComp,
   },
 };
 </script>

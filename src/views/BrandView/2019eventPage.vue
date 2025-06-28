@@ -8,9 +8,15 @@
 
 <script lang="ts">
 import BrandviewPage from '@/components/NavComp/BrandviewNav.vue'
+import HeaderBanner from '@/components/HeaderBanner.vue';
+import FooterComp from '@/components/FooterComp.vue';
 export default {
   name: '2019eventPage',
-  components: { BrandviewPage },
+  components: {
+    BrandviewPage,
+    HeaderBanner,
+    FooterComp
+   },
   data() {
     return {}
   },
@@ -18,12 +24,14 @@ export default {
 </script>
 
 <template>
+  <HeaderBanner />
   <BrandviewPage />
   <div class="continer">
     <div class="imgs">
       <img src="/src/public/brand/2019event.jpg" alt="" class="img" />
     </div>
   </div>
+  <FooterComp />
 </template>
 
 <style scoped>

@@ -7,19 +7,25 @@
 -->
 
 <template>
+  <HeaderBanner />
   <CareersviewNav />
   <div class="headquarters-page">
     <img src="/src/public/careerPhotos/headquarters.jpg" alt="" />
   </div>
+  <FooterComp />
 </template>
 
 <script lang="ts">
 import CareersviewNav from '@/components/NavComp/CareersviewNav.vue'
+import HeaderBanner from '@/components/HeaderBanner.vue';
+import FooterComp from '@/components/FooterComp.vue';
 
 export default {
   name: 'headquartersPage',
   components: {
     CareersviewNav,
+    HeaderBanner,
+    FooterComp,
   },
 }
 </script>
