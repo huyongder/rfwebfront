@@ -89,7 +89,7 @@
             src="/src/public/index/RF.mp4"
             controls
             class="EnterprisePromoVideo"
-            poster="http://localhost:8080/uploads/newsPhotos/4cdbf846-2f95-4eaf-a59e-1270b0e9a592.jpg"
+            poster="http://localhost:8080/uploads/shipin.png"
           >
             您的浏览器不支持视频播放
           </video>

@@ -34,7 +34,7 @@ export default defineComponent({
           { title: '代理品牌', link: '/about/brands' },
           { title: '直营门店', link: '/about/stores' },
           { title: '保障团队', link: '/about/team' },
-          { title: '设计中心', link: '/about/design-center' },
+          { title: '设计中心', link: '/about/DesignCenter' },
         ],
       },
       {
@@ -67,7 +67,7 @@ export default defineComponent({
         link: '/careers/boss',
         subMenu: [
           { title: 'BOSS直聘', link: '/careers/boss' },
-          { title: '总部招聘', link: '/careers/headquarters' },
+          { title: '总部招聘', link: '/careers/headquarters_recruit' },
           { title: '分公司招聘', link: '/careers/branches' },
         ],
       },

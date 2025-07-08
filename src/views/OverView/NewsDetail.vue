@@ -1,13 +1,9 @@
 /**newsDetail 动态渲染出详细界面 */
 <template>
+  <HeaderBanner />
+  <OverviewNav />
   <div class="detail-container">
     <div class="detail-wrapper">
-      <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ name: 'NewsPage' }">集团动态</el-breadcrumb-item>
-        <el-breadcrumb-item>详情</el-breadcrumb-item>
-      </el-breadcrumb>
-
       <el-card class="detail-card">
         <h1 class="detail-title">{{ newsDetail.title }}</h1>
         <div class="meta-info">
@@ -25,14 +21,17 @@
       </el-card>
     </div>
   </div>
+  <FooterComp />
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import axios from '@/utils/request'
 import DOMPurify from 'dompurify'
-// 导入 ElMessage
 import { ElMessage } from 'element-plus'
+import HeaderBanner from '@/components/HeaderBanner.vue'
+import FooterComp from '@/components/FooterComp.vue'
+import OverviewNav from '@/components/NavComp/OverviewNav.vue'
 
 const newsDetail = ref({})
 // 增加加载状态和错误处理
@@ -105,6 +104,10 @@ const formatDate = (timestamp) => {
 </script>
 
 <style scoped>
+.detail-wrapper{
+  display: flex;
+  justify-content: center;
+}
 .quill-content {
   line-height: 1.6;
 
@@ -130,5 +133,6 @@ const formatDate = (timestamp) => {
     display: block;
     margin: 1rem auto;
   }
+
 }
 </style>
