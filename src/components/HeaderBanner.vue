@@ -13,12 +13,12 @@
       </div>
 
       <!-- 代理信息 - 居中 -->
-      <div class="agent-info">
+      <div class="agent-info" v-show="!isMobile">
         <img src="/src/static/index/logo3.png" alt="集团信息" class="agent-logo" />
       </div>
 
       <!-- 右侧内容容器 -->
-      <div class="right-content">
+      <div class="right-content" v-show="!isMobile">
         <!-- 服务热线 -->
         <div class="hotline-block">
           <img src="/src/static/index/redPhone.png" class="hotline-icon" alt="热线图标" />
@@ -29,7 +29,7 @@
         </div>
 
         <!-- 公众号 -->
-        <div class="qr-block">
+        <div class="qr-block" v-show="isMobile">
           <img src="/src/static/index/qr.png" alt="公众号" class="qr-code" />
           <p class="qr-text">扫码关注公众号</p>
         </div>
@@ -45,8 +45,9 @@
 </template>
 
 <script>
-import { defineComponent, inject } from 'vue';
+import { defineComponent, inject, ref, onMounted } from 'vue';
 import HeaderComp from './HeaderComp.vue';
+
 
 
 export default defineComponent({
@@ -56,8 +57,15 @@ export default defineComponent({
 
   setup() {
     const navLists = inject('NavLists', []);
+    const isMobile = ref(false);
+    onMounted(() => {
+      isMobile.value = window.innerWidth <= 768;
+      window.addEventListener('resize', () => {
+        isMobile.value = window.innerWidth <= 768;
+      });
+    });
     console.log('注入的导航数据:', navLists); // 查看控制台输出
-    return { navLists };
+    return { navLists, isMobile };
   },
 });
 
@@ -201,7 +209,8 @@ export default defineComponent({
 .banner-image img {
   width: auto;
   height: auto;
-  display: block;
+  max-height: 300px; /* 限制最大高度 */
+  object-fit: cover; /* 保持比例裁剪 */
 }
 
 /* 移动端适配 */
@@ -211,7 +220,9 @@ export default defineComponent({
   }
 
   .welcome-text {
-    font-size: 10px;
+    font-size: 12px;
+    white-space: nowrap;
+    text-align: center; /* 确保文本居中 */
   }
 
   .main-content {
@@ -282,5 +293,139 @@ export default defineComponent({
     width: 40px;
     height: 40px;
   }
+
+  .right-content {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-left: auto;
+  flex-wrap: wrap; /* 新增：允许换行 */
+  justify-content: flex-end; /* 新增：右对齐 */
+}
+
+/* 修改后的移动端适配 */
+@media (max-width: 992px) { /* 新增中等屏幕适配 */
+  .right-content {
+    gap: 20px;
+  }
+
+  .hotline-title {
+    font-size: 16px;
+  }
+
+  .hotline-number {
+    font-size: 16px;
+  }
+
+  .qr-code {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    flex-wrap: wrap;
+    justify-content: space-between; /* 修改为两端对齐 */
+    padding: 10px 5%; /* 增加左右内边距 */
+  }
+
+  .brand-block {
+    order: 1;
+    margin-bottom: 0; /* 移除底部边距 */
+    flex: 0 0 auto;
+  }
+
+  .agent-info {
+    order: 3;
+    width: 100%;
+    margin: 10px 0;
+    text-align: center;
+    position: static;
+    transform: none;
+  }
+
+  .right-content {
+    order: 2;
+    margin-left: 0;
+    gap: 15px;
+    flex: 0 0 auto; /* 防止缩小 */
+    justify-content: flex-end; /* 保持右对齐 */
+  }
+
+  .hotline-block {
+    gap: 8px;
+    min-width: max-content; /* 新增：防止内容挤压 */
+  }
+
+  .hotline-text {
+    display: flex !important; /* 强制显示 */
+    flex-direction: column;
+  }
+
+  .hotline-title,
+  .hotline-number {
+    font-size: 14px;
+    white-space: nowrap; /* 防止文字换行 */
+  }
+
+  .qr-block {
+    min-width: max-content; /* 新增：防止挤压 */
+  }
+
+  .qr-code {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+@media (max-width: 576px) { /* 新增小屏幕适配 */
+  .right-content {
+    gap: 10px;
+    margin-top: 10px;
+    width: 100%;
+    justify-content: center; /* 小屏幕居中显示 */
+  }
+
+  .hotline-block {
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .hotline-title {
+    font-size: 12px;
+  }
+
+  .hotline-number {
+    font-size: 14px;
+  }
+
+  .qr-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .qr-text {
+    display: block !important; /* 确保始终显示 */
+  }
+}
+
+@media (max-width: 400px) { /* 新增超小屏幕适配 */
+  .right-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hotline-block {
+    flex-direction: row;
+    margin-bottom: 5px;
+  }
+
+  .qr-block {
+    margin-top: 5px;
+  }
+}
 }
 </style>

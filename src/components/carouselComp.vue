@@ -10,8 +10,8 @@
     <div v-else class="swiper-container">
       <div class="swiper-wrapper">
         <div
-          v-for="photo in photos"
-          :key="photo.filename"
+          v-for="(photo, index) in photos"
+          :key="index"
           class="swiper-slide"
         >
           <img
@@ -47,9 +47,9 @@ export default {
     // 获取图片数据
     const fetchPhotos = async () => {
       try {
-        const response = await axios.get('/api/upload',{
+        const response = await axios.get('/api/upload', {
           params: { type: 'largePhoto' },
-        });
+        })
         photos.value = response.data
       } catch (error) {
         console.error('获取图片失败:', error)
@@ -64,7 +64,7 @@ export default {
         modules: [Navigation, Autoplay],
         loop: true,
         slidesPerView: 1,
-        centeredSlides: true,
+        centeredSlides: false, // 关键修改：避免居中导致的偏移
         spaceBetween: 0,
         autoplay: {
           delay: 3000,
@@ -87,10 +87,18 @@ export default {
       }
     }
 
+    // 窗口大小变化时重新计算
+    const handleResize = () => {
+      if (swiperInstance.value) {
+        swiperInstance.value.update()
+      }
+    }
+
     onMounted(async () => {
       await fetchPhotos()
       if (photos.value.length) {
         initSwiper()
+        window.addEventListener('resize', handleResize)
       }
     })
 
@@ -98,6 +106,7 @@ export default {
       if (swiperInstance.value) {
         swiperInstance.value.destroy(true, true)
       }
+      window.removeEventListener('resize', handleResize)
     })
 
     return {
@@ -112,11 +121,11 @@ export default {
 <style scoped>
 .fullscreen-carousel {
   position: relative;
-  width: 100vw;
+  width: 100%;
+  max-width: 100%;
   height: 450px;
   overflow: hidden;
-  left: 50%;
-  transform: translateX(-50%);
+  margin: 0 auto;
 }
 
 .loading, .empty {
@@ -131,29 +140,32 @@ export default {
 .swiper-container {
   width: 100%;
   height: 100%;
-  max-width: 100vw;
   overflow: hidden;
 }
 
 .swiper-wrapper {
   display: flex;
   width: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .swiper-slide {
-  width: 100vw !important;
+  width: 100% !important;
   height: 100%;
   flex-shrink: 0;
   position: relative;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .carousel-image {
   width: 100%;
+  max-width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
   display: block;
-  pointer-events: none;
 }
 
 .custom-prev,
@@ -161,28 +173,28 @@ export default {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 60px;  /* 增大宽度 */
-  height: 60px; /* 增大高度 */
-  background: transparent !important; /* 背景透明 */
+  width: 60px;
+  height: 60px;
+  background: transparent !important;
   border-radius: 50%;
   cursor: pointer;
   z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 36px; /* 增大字体 */
-  color: white; /* 改为白色更显眼 */
+  font-size: 36px;
+  color: white;
   transition: all 0.3s;
-  box-shadow: none; /* 移除阴影 */
-  margin: 0 20px; /* 增加外边距 */
-  border: none; /* 移除边框 */
-  opacity: 0.8; /* 半透明效果 */
+  box-shadow: none;
+  margin: 0 20px;
+  border: none;
+  opacity: 0.8;
 }
 
 .custom-prev:hover,
 .custom-next:hover {
-  opacity: 1; /* 悬停时完全不透明 */
-  background: rgba(255,255,255,0.1) !important; /* 悬停时轻微背景 */
+  opacity: 1;
+  background: rgba(255,255,255,0.1) !important;
 }
 
 .custom-prev {
@@ -200,7 +212,7 @@ export default {
 
   .custom-prev,
   .custom-next {
-    width: 40px; /* 移动端也相应增大 */
+    width: 40px;
     height: 40px;
     font-size: 24px;
     margin: 0 10px;
