@@ -28,7 +28,7 @@
 
             <div class="info-item">
               <span class="info-label">代表作品：</span>
-              <span class="info-value">{{ designer.works && designer.works.length > 0 ? designer.works.join('，') : '暂无作品信息' }}</span>
+              <span class="info-value">{{ designer.works.join('，') || '暂无作品信息' }}</span>
             </div>
 
             <div class="info-item">
@@ -39,7 +39,7 @@
             <div class="info-item">
               <span class="info-label">曾获奖励：</span>
               <div class="info-value">
-                <p v-if="!designer.awards || designer.awards.length === 0">暂无获奖信息</p>
+                <p v-if="designer.awards.length === 0">暂无获奖信息</p>
                 <ul v-else>
                   <li v-for="(award, index) in designer.awards" :key="index">{{ award }}</li>
                 </ul>
@@ -48,6 +48,10 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <div v-else-if="error" class="error">
+      加载出错: {{ error }}
     </div>
 
     <div v-else class="loading">
@@ -59,7 +63,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useRoute} from 'vue-router';
+import { useRoute } from 'vue-router';
 import axios from 'axios';
 import DesignviewNav from '@/components/NavComp/DesignviewNav.vue'
 import HeaderBanner from '@/components/HeaderBanner.vue'
@@ -67,14 +71,36 @@ import FooterComp from '@/components/FooterComp.vue'
 
 const route = useRoute();
 const designer = ref(null);
+const error = ref(null);
+
+function tryParseJSON(str) {
+  if (!str) return [];
+  try {
+    const parsed = JSON.parse(str);
+    if (typeof parsed === 'string') {
+      return tryParseJSON(parsed);
+    }
+    return Array.isArray(parsed) ? parsed : [parsed];
+  } catch (error) {
+    console.error('Error parsing JSON:', error);
+    return [str]; // 如果解析失败，返回包含原始字符串的数组
+  }
+}
 
 onMounted(async () => {
   try {
     const response = await axios.get(`/api/designers/${route.params.id}`);
-    designer.value = response.data.data;
-    console.log('Designer details:', designer.value);
-  } catch (error) {
-    console.error('Error fetching designer details:', error);
+    const rawData = response.data.data;
+
+    designer.value = {
+      ...rawData,
+      works: tryParseJSON(rawData.works),
+      awards: tryParseJSON(rawData.awards)
+    };
+
+  } catch (err) {
+    console.error('Error fetching designer details:', err);
+    error.value = err.message;
   }
 });
 </script>

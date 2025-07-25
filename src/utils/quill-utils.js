@@ -3,88 +3,87 @@
  * @Author: huimeng
  * @Date: 2025-05-28 15:06:10
  * @LastEditors: huimeng
- * @LastEditTime: 2025-06-06 14:00:34
+ * @LastEditTime: 2025-07-11 10:21:54
+ */
+/*
+ * @Descripttion: quill富文本编辑器集成工具（灵活版本）
  */
 import { Quill } from '@vueup/vue-quill'
 import ImageUploader from 'quill-image-uploader'
-import axios from 'axios'
 
 class DynamicQuill {
-  static config = {
-    endpoints: {
-      image: '/api/upload/image',
-      video: '/api/upload/video',
-      file: '/api/upload/file',
-      save: '/api/content/save', // 默认保存接口
-    },
-  }
-
+  /**
+   * 初始化Quill配置
+   * @param {Object} options
+   * @param {Function} options.onImageUpload - 图片上传处理器
+   * @param {Function} options.onVideoUpload - 视频上传处理器
+   * @param {Function} options.onFileUpload - 文件上传处理器
+   * @param {Function} options.onSave - 保存处理器
+   * @param {Array} options.toolbar - 自定义工具栏配置
+   */
   static init(options = {}) {
-    this.config.endpoints = { ...this.config.endpoints, ...options.endpoints }
-
+    // 注册必要的模块
     Quill.register('modules/imageUploader', ImageUploader)
 
     return {
       theme: 'snow',
       modules: {
         toolbar: {
-          container: [
-            ['bold', 'italic'],
-            ['image', 'video', 'file'],
-            [{ type: 'save', label: '保存' }],
-          ],
+          container: options.toolbar || this._getDefaultToolbar(),
           handlers: {
-            image: this._createUploadHandler('image'),
-            video: this._createUploadHandler('video'),
-            file: this._createUploadHandler('file'),
-            save: this.handleSave,
-          },
+            image: () => this._handleMediaUpload('image', options.onImageUpload),
+            video: () => this._handleMediaUpload('video', options.onVideoUpload),
+            file: () => this._handleMediaUpload('file', options.onFileUpload),
+            save: () => options.onSave?.(Quill.root.innerHTML)
+          }
         },
-        imageUploader: { upload: this._universalUpload },
-      },
+        imageUploader: {
+          upload: (file) => options.onImageUpload?.(file)
+        }
+      }
     }
   }
 
-  static _createUploadHandler(type) {
-    return () => {
-      const input = document.createElement('input')
-      input.type = 'file'
-      input.accept = this._getAcceptType(type)
-      input.onchange = (e) => this._handleFileSelect(e, type)
-      input.click()
+  /**
+   * 处理媒体文件上传
+   */
+  static async _handleMediaUpload(type, uploadHandler) {
+    if (!uploadHandler) {
+      console.warn(`未提供${type}上传处理器`)
+      return
     }
-  }
 
-  static async _handleFileSelect(event, type) {
-    const file = event.target.files[0]
-    try {
-      const url = await this._universalUpload(file, type)
-      const quill = Quill.find(document.querySelector('.ql-editor'))
-      const range = quill.getSelection()
-      quill.insertEmbed(range.index, type, url)
-    } catch (error) {
-      console.error(`${type}上传失败:`, error)
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.accept = this._getAcceptType(type)
+    input.onchange = async (e) => {
+      const file = e.target.files[0]
+      if (!file) return
+
+      try {
+        const url = await uploadHandler(file)
+        const quill = Quill.find(document.querySelector('.ql-editor'))
+        const range = quill.getSelection()
+        quill.insertEmbed(range.index, type, url)
+      } catch (error) {
+        console.error(`${type}上传失败:`, error)
+      }
     }
+    input.click()
   }
 
-  static async _universalUpload(file, type) {
-    const formData = new FormData()
-    formData.append('file', file)
-
-    const response = await axios.post(this.config.endpoints[type], formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    })
-
-    return response.data.url // 假设接口返回标准化结构
-  }
-
-  static handleSave() {
-    const content = Quill.root.innerHTML
-    axios.post(this.config.endpoints.save, { content })
+  static _getDefaultToolbar() {
+    return [
+      ['bold', 'italic', 'underline', 'strike'],
+      ['blockquote', 'code-block'],
+      [{ 'header': 1 }, { 'header': 2 }],
+      ['image', 'video', 'file'],
+      [{ type: 'save', label: '保存内容' }]
+    ]
   }
 
   static _getAcceptType(type) {
-    const types = { 
+    const types = {
       image: 'image/*',
       video: 'video/*',
       file: '.doc,.docx,.pdf,.xls,.xlsx',

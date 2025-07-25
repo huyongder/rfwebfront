@@ -6,11 +6,6 @@
     <div class="detail-wrapper">
       <el-card class="detail-card">
         <h1 class="detail-title">{{ newsDetail.title }}</h1>
-        <div class="meta-info">
-          <span class="publish-date">{{ formatDate(newsDetail.createTime) }}</span>
-          <el-tag type="info" size="small">{{ newsDetail.category }}</el-tag>
-        </div>
-
         <el-image
           :src="newsDetail.coverImage"
           class="cover-image"
@@ -83,30 +78,15 @@ const fetchDetail = async () => {
 }
 
 onMounted(fetchDetail)
-
-//日期格式化工具函数
-const formatDate = (timestamp) => {
-  if (!timestamp) return '未知日期'
-
-  // 处理ISO格式时间（如 "2023-10-01T10:00:00"）
-  const date = new Date(timestamp)
-
-  return date
-    .toLocaleDateString('zh-CN', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-    })
-    .replace(/\//g, '-')
-}
 </script>
 
 <style scoped>
 .detail-wrapper{
   display: flex;
   justify-content: center;
+}
+.detail-title{
+  text-align: center;
 }
 .quill-content {
   line-height: 1.6;

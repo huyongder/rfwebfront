@@ -3,7 +3,7 @@
  * @Author: huimeng
  * @Date: 2025-02-25 10:41:41
  * @LastEditors: huimeng
- * @LastEditTime: 2025-07-03 14:33:37
+ * @LastEditTime: 2025-07-16 15:05:21
 -->
 
 <template>
@@ -11,7 +11,6 @@
   <CareersviewNav />
   <div class="boss-page">
     <img src="/src/public/careerPhotos/boss.jpg" alt="" />
-    <img src="http://localhost:8080/uploads/desinger.jpg" alt="" />
   </div>
   <FooterComp />
 </template>

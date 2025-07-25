@@ -3,14 +3,16 @@
  * @Author: huimeng
  * @Date: 2025-06-28 15:52:38
  * @LastEditors: huimeng
- * @LastEditTime: 2025-07-03 09:27:20
+ * @LastEditTime: 2025-07-16 09:18:40
 -->
 <template>
   <HeaderBanner />
   <DesignviewNav />
   <div class="good-case-details">
     <h1 class="title">{{ caseData.title }}</h1>
-    <div class="content" v-html="caseData.content"></div>
+    <div class="content-container">
+      <div class="content" v-html="caseData.content"></div>
+    </div>
   </div>
   <FooterComp />
 </template>
@@ -67,9 +69,27 @@ export default {
 .title {
   font-size: large;
   text-align: center;
+  margin-bottom: 20px;
 }
+
+.content-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 .content {
-  margin-top: 30px;
+  max-width: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.content :deep(*) {
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
 }
 
 .actions {

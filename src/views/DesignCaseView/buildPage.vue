@@ -5,7 +5,7 @@
     <h1>工地实拍</h1>
     <div class="build-grid">
       <div
-        v-for="item in buildList"
+        v-for="item in reversedBuildList"
         :key="item.id"
         class="build-item"
         @mouseenter="hoverItem(item.id)"
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 import DesignviewNav from '@/components/NavComp/DesignviewNav.vue'
@@ -93,9 +93,14 @@ export default {
       }
     };
 
+    const reversedBuildList = computed(() => {
+      return [...buildList.value].reverse();
+    });
+
     onMounted(() => {
       fetchBuildList();
     });
+
 
     return {
       buildList,
@@ -106,7 +111,8 @@ export default {
       unhoverItem,
       goToDetail,
       prevPage,
-      nextPage
+      nextPage,
+      reversedBuildList
     };
   }
 };

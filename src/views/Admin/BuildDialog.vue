@@ -31,7 +31,7 @@
       <table>
         <thead>
           <tr>
-            <th>ID</th>
+            <th>序号</th>
             <th>标题</th>
             <th>封面图片</th>
             <th>视频路径</th>
@@ -39,31 +39,35 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in builds" :key="item.id">
-            <td>{{ item.id }}</td>
+          <tr v-for="(item, index) in reversedBuilds" :key="item.id">
+            <td>{{index + 1 }}</td>
             <td>
               <input v-if="item.id === editingId" v-model="editingBuild.title" type="text">
               <span v-else>{{ item.title }}</span>
             </td>
             <td>
-              <img v-if="!item.id === editingId" :src="item.coverImage" alt="封面" style="width: 50px; height: 50px;">
+              <img v-if="item.id !== editingId" :src="item.coverImage" alt="封面" style="width: 50px; height: 50px;">
               <div v-else>
-                <input type="file" @change="handleEditImageUpload">
-                <button @click="uploadEditImage">更新图片</button>
+                <img :src="editingBuild.coverImage" alt="当前封面" style="width: 50px; height: 50px; margin-right: 10px;">
+                <input type="file" @change="handleEditImageUpload" accept="image/*">
               </div>
             </td>
             <td>
               <span v-if="item.id !== editingId">{{ item.videoPath }}</span>
               <div v-else>
-                <input type="file" @change="handleEditVideoUpload">
-                <button @click="uploadEditVideo">更新视频</button>
+                <span style="margin-right: 10px;">{{ editingBuild.videoPath }}</span>
+                <input type="file" @change="handleEditVideoUpload" accept="video/*">
               </div>
             </td>
             <td>
-              <button v-if="item.id !== editingId" @click="startEdit(item)">编辑</button>
-              <button v-else @click="saveEdit">保存</button>
-              <button v-if="item.id !== editingId" @click="deleteBuild(item.id)">删除</button>
-              <button v-else @click="cancelEdit">取消</button>
+              <template v-if="item.id !== editingId">
+                <button @click="startEdit(item)">编辑</button>
+                <button @click="deleteBuild(item.id)">删除</button>
+              </template>
+              <template v-else>
+                <button @click="saveEdit">保存</button>
+                <button @click="cancelEdit">取消</button>
+              </template>
             </td>
           </tr>
         </tbody>
@@ -73,7 +77,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 
 export default {
@@ -92,6 +96,11 @@ export default {
     const editingBuild = ref({});
     const editImageFile = ref(null);
     const editVideoFile = ref(null);
+
+    // 计算属性：逆序排列的工地列表
+    const reversedBuilds = computed(() => {
+      return [...builds.value].reverse();
+    });
 
     const fetchBuilds = async () => {
       try {
@@ -132,10 +141,10 @@ export default {
     const uploadVideo = async () => {
       const formData = new FormData();
       formData.append('file', videoFile.value);
-      formData.append('type', 'buildVideo');
+      formData.append('type', 'buildVideos');
 
       try {
-        const response = await axios.post('/api/upload', formData);
+        const response = await axios.post('/api/build/upload', formData);
         videoUrl.value = response.data.url;
         newBuild.value.videoPath = response.data.url;
       } catch (error) {
@@ -148,6 +157,7 @@ export default {
         await axios.post('/api/build/add', newBuild.value);
         fetchBuilds();
         resetForm();
+        alert('添加成功');
       } catch (error) {
         console.error('添加工地失败:', error);
       }
@@ -168,6 +178,8 @@ export default {
     const startEdit = (item) => {
       editingId.value = item.id;
       editingBuild.value = { ...item };
+      editImageFile.value = null;
+      editVideoFile.value = null;
     };
 
     const handleEditImageUpload = (event) => {
@@ -178,39 +190,35 @@ export default {
       editVideoFile.value = event.target.files[0];
     };
 
-    const uploadEditImage = async () => {
-      const formData = new FormData();
-      formData.append('file', editImageFile.value);
-      formData.append('type', 'buildPhoto');
-
-      try {
-        const response = await axios.post('/api/upload', formData);
-        editingBuild.value.coverImage = response.data.url;
-      } catch (error) {
-        console.error('图片上传失败:', error);
-      }
-    };
-
-    const uploadEditVideo = async () => {
-      const formData = new FormData();
-      formData.append('file', editVideoFile.value);
-      formData.append('type', 'buildVideo');
-
-      try {
-        const response = await axios.post('/api/upload', formData);
-        editingBuild.value.videoPath = response.data.url;
-      } catch (error) {
-        console.error('视频上传失败:', error);
-      }
-    };
-
     const saveEdit = async () => {
       try {
+        // 如果有新的图片上传，先上传图片
+        if (editImageFile.value) {
+          const imageFormData = new FormData();
+          imageFormData.append('file', editImageFile.value);
+          imageFormData.append('type', 'buildPhoto');
+          const imageResponse = await axios.post('/api/upload', imageFormData);
+          editingBuild.value.coverImage = imageResponse.data.url;
+        }
+
+        // 如果有新的视频上传，先上传视频
+        if (editVideoFile.value) {
+          const videoFormData = new FormData();
+          videoFormData.append('file', editVideoFile.value);
+          videoFormData.append('type', 'buildVideo');
+          const videoResponse = await axios.post('/api/build/upload', videoFormData);
+          editingBuild.value.videoPath = videoResponse.data.url;
+        }
+
+        // 更新工地信息
         await axios.post('/api/build/update', editingBuild.value);
+
         fetchBuilds();
         cancelEdit();
+        alert('更新成功');
       } catch (error) {
         console.error('更新工地失败:', error);
+        alert('更新失败: ' + error.message);
       }
     };
 
@@ -222,11 +230,15 @@ export default {
     };
 
     const deleteBuild = async (id) => {
-      try {
-        await axios.delete(`/api/build/delete/${id}`);
-        fetchBuilds();
-      } catch (error) {
-        console.error('删除工地失败:', error);
+      if (confirm('确定要删除这个工地吗？')) {
+        try {
+          await axios.delete(`/api/build/delete/${id}`);
+          fetchBuilds();
+          alert('删除成功');
+        } catch (error) {
+          console.error('删除工地失败:', error);
+          alert('删除失败: ' + error.message);
+        }
       }
     };
 
@@ -243,6 +255,7 @@ export default {
       videoUrl,
       editingId,
       editingBuild,
+      reversedBuilds,
       handleImageUpload,
       handleVideoUpload,
       uploadImage,
@@ -251,8 +264,6 @@ export default {
       startEdit,
       handleEditImageUpload,
       handleEditVideoUpload,
-      uploadEditImage,
-      uploadEditVideo,
       saveEdit,
       cancelEdit,
       deleteBuild
@@ -305,5 +316,9 @@ button {
   padding: 5px 10px;
   margin-right: 5px;
   cursor: pointer;
+}
+
+input[type="file"] {
+  margin-top: 5px;
 }
 </style>

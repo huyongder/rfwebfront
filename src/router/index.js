@@ -3,7 +3,7 @@
  * @Author: huimeng
  * @Date: 2025-01-14 16:21:37
  * @LastEditors: huimeng
- * @LastEditTime: 2025-07-02 14:23:38
+ * @LastEditTime: 2025-07-25 15:56:21
  */
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
@@ -54,6 +54,8 @@ import buildDetailPage from '@/views/DesignCaseView/buildDetailPage.vue'
 import contactPage from '@/views/Contact/contactPage.vue'
 import storesPage from '@/views/SizeView/storesPage.vue'
 import storesDetailPage from '@/views/SizeView/storesDetailPage.vue'
+import AdminLayout from '@/components/Layout/AdminLayout.vue'
+import DashboardDialog from '@/views/Admin/DashboardDialog.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -310,28 +312,93 @@ const router = createRouter({
 
     //-----------------------管理界面路由--------------------------
 
-    /*{
-      path: '/auth/news',
-      component: () => import('@/views/News/index.vue'),
-      meta: { title: '新闻管理', icon: 'Document' },
+    {
+      path: '/admin',
+      component: AdminLayout,
       children: [
         {
-          path: 'edit',
-          component: () => import('@/views/News/Edit.vue'),
-          meta: { title: '编辑新闻' }
+          path: '',
+          name: 'AdminDashboard',
+          component: DashboardDialog,
+          meta: { title: '展示页' },
         },
         {
-          path: 'list',
-          component: () => import('@/views/News/List.vue'),
-          meta: { title: '新闻列表' }
-        }
-      ]
-
-    }*/
+          path: 'largePhoto',
+          name: 'LargePhotoDialog',
+          component: () => import('@/views/Admin/LargePhotoDialog.vue'),
+          meta: { title: '首页大图管理' },
+        },
+        {
+          path: 'manNews',
+          name: 'NewsDialog',
+          component: () => import('@/views/Admin/NewsDialog.vue'),
+          meta: { title: '新闻页管理' },
+        },
+        {
+          path: 'manstores',
+          name: 'StoreDialog',
+          component: () => import('@/views/Admin/StoreDialog.vue'),
+          meta: { title: '直营门店管理' },
+        },
+        {
+          path: 'manDesigners',
+          name: 'DesignersDialog',
+          component: () => import('@/views/Admin/DesignerDialog.vue'),
+          meta: { title: '设计师管理' },
+        },
+        {
+          path: 'manBuild',
+          name: 'BuildDialog',
+          component: () => import('@/views/Admin/BuildDialog.vue'),
+          meta: { title: '工地实拍管理' },
+        },
+        {
+          path: 'manGoodCase',
+          name: 'GoodCaseDialog',
+          component: () => import('@/views/Admin/GoodCaseDialog.vue'),
+          meta: { title: '优秀案例管理' },
+        },
+        {
+          path: 'manComplaint',
+          name: 'ComplaintDialog',
+          component: () => import('@/views/Admin/ComplaintDialog.vue'),
+          meta: { title: '投诉建议管理' },
+        },
+        {
+          path: 'mandepartment',
+          name: 'DepartmentDialog',
+          component: () => import('@/views/Admin/DepartmentDialog.vue'),
+          meta: { title: '部门管理' },
+        },
+        {
+          path: 'manReward',
+          name: 'RewardDialog',
+          component: () => import('@/views/Admin/RewardDialog.vue'),
+          meta: { title: '奖惩管理' },
+        },
+        {
+          path: 'manSelectReward',
+          name: 'SelectReward',
+          component: () => import('@/views/Admin/SelectReward.vue'),
+          meta: { title: '奖惩查询' },
+        },
+      ],
+    },
   ],
 })
 
-const whiteList = ['/login', '/about/', '/contact', '/brands', '/team', '/', '/news', '/contact','/about/stores','/about/designers']
+const whiteList = [
+  '/login',
+  '/about/',
+  '/contact',
+  '/brands',
+  '/team',
+  '/',
+  '/news',
+  '/contact',
+  '/about/stores',
+  '/about/designers',
+]
 // ===== 全局前置守卫 =====
 router.beforeEach((to, from, next) => {
   const store = useAuthStore() // Pinia 状态管理

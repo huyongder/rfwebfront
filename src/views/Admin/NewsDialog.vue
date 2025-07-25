@@ -1,45 +1,41 @@
 <!--
- * @Descripttion:直营门店管理
+ * @Descripttion:
  * @Author: huimeng
- * @Date: 2025-05-26 14:55:01
+ * @Date: 2025-07-11 10:11:10
  * @LastEditors: huimeng
- * @LastEditTime: 2025-07-22 09:06:36
+ * @LastEditTime: 2025-07-16 15:10:52
 -->
 <template>
-  <div class="store-management-container">
-    <div class="store-management">
-      <h1>直营门店管理</h1>
+  <div class="news-management-container">
+    <div class="news-management">
+      <h1>新闻管理</h1>
 
-      <!-- 门店列表 -->
-      <div class="store-list-container">
-        <div class="store-actions">
+      <!-- 新闻列表 -->
+      <div class="news-list-container">
+        <div class="news-actions">
           <button @click="deleteSelected" class="delete-button">删除选中</button>
-          <button @click="openEditDialog(null)" class="add-button">新增门店</button>
+          <button @click="openEditDialog(null)" class="add-button">新增新闻</button>
         </div>
 
         <div class="table-container">
           <table>
             <thead>
               <tr>
-                <th class="checkbox-col">
-                  <input type="checkbox" v-model="selectAll" @change="toggleSelectAll" />
-                </th>
+                <th class="checkbox-col"><input type="checkbox" v-model="selectAll" @change="toggleSelectAll"></th>
                 <th class="id-col">序号</th>
-                <th class="name-col">门店名称</th>
-                <th class="sort-col">排序</th>
-                <th class="time-col">创立时间</th>
+                <th class="title-col">标题</th>
+                <th class="time-col">创建时间</th>
                 <th class="action-col">操作</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(store, index) in storeList" :key="store.id">
-                <td><input type="checkbox" v-model="selectedStores" :value="store.id" /></td>
+              <tr v-for="(news, index) in newsList" :key="news.id">
+                <td><input type="checkbox" v-model="selectedNews" :value="news.id"></td>
                 <td>{{ index + 1 }}</td>
-                <td>{{ store.name }}</td>
-                <td>{{ store.sort_order }}</td>
-                <td>{{ formatDate(store.createTime) }}</td>
+                <td>{{ news.title }}</td>
+                <td>{{ formatDate(news.createTime) }}</td>
                 <td>
-                  <button @click="openEditDialog(store)" class="edit-button">编辑</button>
+                  <button @click="openEditDialog(news)" class="edit-button">编辑</button>
                 </td>
               </tr>
             </tbody>
@@ -51,7 +47,7 @@
       <div v-if="showEditDialog" class="edit-dialog-overlay">
         <div class="edit-dialog">
           <div class="dialog-header">
-            <h2>{{ editingStore.id ? '编辑门店' : '新增门店' }}</h2>
+            <h2>{{ editingNews.id ? '编辑新闻' : '新增新闻' }}</h2>
             <button class="close-button" @click="closeEditDialog">×</button>
           </div>
 
@@ -59,63 +55,38 @@
             <div class="form-container">
               <div class="form-left">
                 <div class="form-group">
-                  <label>门店名称</label>
-                  <input v-model="editingStore.name" type="text" placeholder="请输入门店名称" />
+                  <label>标题</label>
+                  <input v-model="editingNews.title" type="text">
                 </div>
 
                 <div class="form-group">
-                  <label>门店创立时间</label>
-                  <input
-                    v-model="editingStore.createTime"
-                    type="datetime-local"
-                    :max="new Date().toISOString().slice(0, 16)"
-                  />
-                </div>
-
-                <div class="form-group">
-                  <label>简短介绍</label>
-                  <textarea
-                    v-model="editingStore.brief"
-                    rows="3"
-                    placeholder="请输入简短介绍"
-                  ></textarea>
+                  <label>摘要</label>
+                  <textarea v-model="editingNews.summary" rows="3"></textarea>
                 </div>
 
                 <div class="form-group">
                   <label>封面图片</label>
                   <div class="image-upload">
-                    <input
-                      type="file"
-                      @change="handleCoverImageChange"
-                      accept="image/*"
-                      id="cover-upload"
-                    />
+                    <input type="file" @change="handleCoverImageChange" accept="image/*" id="cover-upload">
                     <label for="cover-upload" class="upload-button">选择图片</label>
-                    <span class="file-name" v-if="!editingStore.cover_image">未选择文件</span>
-                    <span class="file-name" v-else>
-                      已选择:
-                      {{ (editingStore.cover_image || editingStore.coverImage).split('/').pop() }}
-                    </span>
+                    <span class="file-name" v-if="!editingNews.coverImage">未选择文件</span>
+                    <span class="file-name" v-else>已选择: {{ editingNews.coverImage.split('/').pop() }}</span>
                   </div>
-                  <img
-                    v-if="editingStore.cover_image"
-                    :src="editingStore.cover_image"
-                    class="cover-preview"
-                  />
+                  <img v-if="editingNews.coverImage" :src="editingNews.coverImage" class="cover-preview">
                 </div>
 
                 <div class="form-group">
-                  <label>排序权重</label>
-                  <input v-model="editingStore.sort_order" type="number" min="0" />
+                  <label>排序</label>
+                  <input v-model="editingNews.sort" type="number" min="0">
                 </div>
               </div>
 
               <div class="form-right">
                 <div class="form-group">
-                  <label>详细内容</label>
+                  <label>内容</label>
                   <div class="quill-editor-container">
                     <quill-editor
-                      v-model:content="editingStore.detail_content"
+                      v-model:content="editingNews.content"
                       contentType="html"
                       :options="editorOptions"
                       @ready="onEditorReady"
@@ -127,7 +98,7 @@
           </div>
 
           <div class="dialog-footer">
-            <button @click="saveStore" class="save-button">保存</button>
+            <button @click="saveNews" class="save-button">保存</button>
             <button @click="closeEditDialog" class="cancel-button">取消</button>
           </div>
         </div>
@@ -143,21 +114,20 @@ import '@vueup/vue-quill/dist/vue-quill.snow.css'
 
 export default {
   components: {
-    QuillEditor,
+    QuillEditor
   },
   setup() {
-    const storeList = ref([])
-    const selectedStores = ref([])
+    const newsList = ref([])
+    const selectedNews = ref([])
     const selectAll = ref(false)
     const showEditDialog = ref(false)
-    const editingStore = ref({
+    const editingNews = ref({
       id: null,
-      name: '',
-      cover_image: '',
-      brief: '',
-      detail_content: '',
-      sort_order: 0,
-      createTime: '',
+      title: '',
+      summary: '',
+      coverImage: '',
+      content: '',
+      sort: 0
     })
 
     // Quill 编辑器配置
@@ -167,26 +137,26 @@ export default {
           container: [
             ['bold', 'italic', 'underline', 'strike'],
             ['blockquote', 'code-block'],
-            [{ header: 1 }, { header: 2 }],
-            [{ list: 'ordered' }, { list: 'bullet' }],
-            [{ script: 'sub' }, { script: 'super' }],
-            [{ indent: '-1' }, { indent: '+1' }],
-            [{ direction: 'rtl' }],
-            [{ size: ['small', false, 'large', 'huge'] }],
-            [{ header: [1, 2, 3, 4, 5, 6, false] }],
-            [{ color: [] }, { background: [] }],
-            [{ font: [] }],
-            [{ align: [] }],
+            [{ 'header': 1 }, { 'header': 2 }],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            [{ 'script': 'sub'}, { 'script': 'super' }],
+            [{ 'indent': '-1'}, { 'indent': '+1' }],
+            [{ 'direction': 'rtl' }],
+            [{ 'size': ['small', false, 'large', 'huge'] }],
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+            [{ 'color': [] }, { 'background': [] }],
+            [{ 'font': [] }],
+            [{ 'align': [] }],
             ['clean'],
-            ['link', 'image', 'video'],
+            ['link', 'image', 'video']
           ],
           handlers: {
-            image: imageHandler,
-          },
-        },
+            image: imageHandler
+          }
+        }
       },
-      placeholder: '请输入门店详细内容...',
-      theme: 'snow',
+      placeholder: '请输入新闻内容...',
+      theme: 'snow'
     }
 
     let quillInstance = null
@@ -206,9 +176,9 @@ export default {
           const formData = new FormData()
           formData.append('file', file)
 
-          const response = await fetch('/api/upload?type=dirStorePhoto', {
+          const response = await fetch('/api/upload?type=newsPhoto', {
             method: 'POST',
-            body: formData,
+            body: formData
           })
 
           if (!response.ok) {
@@ -223,7 +193,7 @@ export default {
           quillInstance.setSelection(range.index + 1)
         } catch (error) {
           console.error('图片上传失败:', error)
-          alert('图片上传失败: ' + error.message)
+          alert('图片上传失败')
         }
       }
     }
@@ -232,111 +202,83 @@ export default {
       quillInstance = editor
     }
 
-    // 加载门店列表
-    async function loadStoreList() {
+    async function loadNewsList() {
       try {
-        const response = await fetch('/api/stores/list')
+        const response = await fetch('/api/news/public/list')
         const data = await response.json()
         if (data.code === 200) {
-          storeList.value = data.data
+          newsList.value = data.data.records
         } else {
-          console.error('获取门店列表失败:', data.msg)
+          console.error('获取新闻列表失败:', data.msg)
         }
       } catch (error) {
-        console.error('获取门店列表出错:', error)
+        console.error('获取新闻列表出错:', error)
       }
     }
 
-    // 删除选中的门店
     async function deleteSelected() {
-      if (selectedStores.value.length === 0) {
-        alert('请至少选择一家门店')
+      if (selectedNews.value.length === 0) {
+        alert('请至少选择一条新闻')
         return
       }
 
-      if (!confirm(`确定要删除选中的 ${selectedStores.value.length} 家门店吗？`)) {
+      if (!confirm(`确定要删除选中的 ${selectedNews.value.length} 条新闻吗？`)) {
         return
       }
 
       try {
-        for (const id of selectedStores.value) {
-          const response = await fetch(`/api/stores/delete/${id}`, {
-            method: 'DELETE',
+        for (const id of selectedNews.value) {
+          const response = await fetch(`/api/news/${id}`, {
+            method: 'DELETE'
           })
           const data = await response.json()
           if (data.code !== 200) {
-            throw new Error(data.msg || `删除门店 ${id} 失败`)
+            throw new Error(`删除新闻 ${id} 失败`)
           }
         }
 
         alert('删除成功')
-        loadStoreList()
-        selectedStores.value = []
+        loadNewsList()
+        selectedNews.value = []
       } catch (error) {
-        console.error('删除门店出错:', error)
-        alert('删除门店失败: ' + error.message)
+        console.error('删除新闻出错:', error)
+        alert('删除新闻失败')
       }
     }
 
-    // 全选/取消全选
     function toggleSelectAll() {
       if (selectAll.value) {
-        selectedStores.value = storeList.value.map((store) => store.id)
+        selectedNews.value = newsList.value.map(news => news.id)
       } else {
-        selectedStores.value = []
+        selectedNews.value = []
       }
     }
 
-    // 格式化日期显示
     function formatDate(dateString) {
-      if (!dateString) return ''
       const date = new Date(dateString)
-      return date
-        .toLocaleString('zh-CN', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-        })
-        .replace(/\//g, '-')
+      return date.toLocaleString()
     }
 
-    // 将日期转换为datetime-local格式
-    function formatDateTimeLocal(isoString) {
-      if (!isoString) return ''
-      const date = new Date(isoString)
-      return date.toISOString().slice(0, 16)
-    }
-
-    // 打开编辑对话框
-    function openEditDialog(store = null) {
-      if (store) {
-        editingStore.value = {
-          ...store,
-          cover_image: store.coverImage || '',
-          createTime: formatDateTimeLocal(store.createTime),
-        }
+    function openEditDialog(news = null) {
+      if (news) {
+        editingNews.value = { ...news }
       } else {
-        editingStore.value = {
+        editingNews.value = {
           id: null,
-          name: '',
-          cover_image: '',
-          brief: '',
-          detail_content: '',
-          sort_order: 0,
-          createTime: formatDateTimeLocal(new Date().toISOString()),
+          title: '',
+          summary: '',
+          coverImage: '',
+          content: '',
+          sort: 0
         }
       }
       showEditDialog.value = true
     }
 
-    // 关闭编辑对话框
     function closeEditDialog() {
       showEditDialog.value = false
     }
 
-    // 处理封面图片上传
     async function handleCoverImageChange(event) {
       const file = event.target.files[0]
       if (!file) return
@@ -345,9 +287,9 @@ export default {
         const formData = new FormData()
         formData.append('file', file)
 
-        const response = await fetch('/api/upload?type=dirStorePhoto', {
+        const response = await fetch('/api/upload?type=newsPhoto', {
           method: 'POST',
-          body: formData,
+          body: formData
         })
 
         if (!response.ok) {
@@ -355,76 +297,50 @@ export default {
         }
 
         const data = await response.json()
-        editingStore.value.cover_image = data.url
+        editingNews.value.coverImage = data.url
       } catch (error) {
         console.error('封面图片上传失败:', error)
-        alert('封面图片上传失败: ' + error.message)
+        alert('封面图片上传失败')
       }
     }
 
-    // 保存门店
-    async function saveStore() {
-      // 验证必填字段
-      if (!editingStore.value.name) {
-        alert('请输入门店名称')
-        return
-      }
-
-      if (!editingStore.value.createTime) {
-        alert('请选择门店创立时间')
-        return
-      }
-
+    async function saveNews() {
       try {
-        // 准备请求数据
-        const requestData = {
-          name: editingStore.value.name,
-          coverImage: editingStore.value.cover_image || '',
-          brief: editingStore.value.brief || '',
-          detailContent: editingStore.value.detail_content || '',
-          sortOrder: editingStore.value.sort_order || 0,
-          createTime: new Date(editingStore.value.createTime).toISOString(),
-        }
+        const method = editingNews.value.id ? 'PUT' : 'POST'
+        const url = '/api/news'
 
-        // 如果有ID，表示是编辑现有门店
-        if (editingStore.value.id) {
-          requestData.id = editingStore.value.id
-        }
-
-        const response = await fetch('/api/stores/save', {
-          method: 'POST',
+        const response = await fetch(url, {
+          method,
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
           },
-          body: JSON.stringify(requestData),
+          body: JSON.stringify(editingNews.value)
         })
 
         const data = await response.json()
-
-        if (data.code === 200) {
+        if (data.code == 200) {
           alert('保存成功')
           closeEditDialog()
-          loadStoreList()
+          loadNewsList()
         } else {
-          throw new Error(data.msg || `保存失败，错误码: ${data.code}`)
+          throw new Error(data.msg || '保存失败')
         }
       } catch (error) {
-        console.error('保存门店出错:', error)
-        alert('保存门店失败: ' + error.message)
+        console.error('保存新闻出错:', error)
+        alert('保存新闻失败: ' + error.message)
       }
     }
 
-    // 初始化加载门店列表
     onMounted(() => {
-      loadStoreList()
+      loadNewsList()
     })
 
     return {
-      storeList,
-      selectedStores,
+      newsList,
+      selectedNews,
       selectAll,
       showEditDialog,
-      editingStore,
+      editingNews,
       editorOptions,
       deleteSelected,
       toggleSelectAll,
@@ -432,10 +348,10 @@ export default {
       openEditDialog,
       closeEditDialog,
       handleCoverImageChange,
-      saveStore,
-      onEditorReady,
+      saveNews,
+      onEditorReady
     }
-  },
+  }
 }
 </script>
 
@@ -454,14 +370,14 @@ body {
 }
 
 /* 主容器 */
-.store-management-container {
+.news-management-container {
   width: 100%;
   padding: 20px;
   background-color: #f5f7fa;
   min-height: 100vh;
 }
 
-.store-management {
+.news-management {
   max-width: 1400px;
   margin: 0 auto;
   background-color: white;
@@ -470,7 +386,7 @@ body {
   padding: 30px;
 }
 
-.store-management h1 {
+.news-management h1 {
   font-size: 24px;
   margin-bottom: 25px;
   color: #333;
@@ -478,13 +394,13 @@ body {
   border-bottom: 1px solid #eee;
 }
 
-/* 门店列表 */
-.store-list-container {
+/* 新闻列表 */
+.news-list-container {
   width: 100%;
   overflow-x: auto;
 }
 
-.store-actions {
+.news-actions {
   display: flex;
   gap: 12px;
   margin-bottom: 20px;
@@ -502,8 +418,7 @@ table {
   min-width: 1000px;
 }
 
-th,
-td {
+th, td {
   padding: 12px 15px;
   text-align: left;
   border-bottom: 1px solid #eee;
@@ -530,12 +445,8 @@ tr:hover {
   width: 80px;
 }
 
-.name-col {
-  min-width: 200px;
-}
-
-.sort-col {
-  width: 80px;
+.title-col {
+  min-width: 250px;
 }
 
 .time-col {
@@ -674,9 +585,8 @@ button {
   color: #555;
 }
 
-.form-group input[type='text'],
-.form-group input[type='number'],
-.form-group input[type='datetime-local'],
+.form-group input[type="text"],
+.form-group input[type="number"],
 .form-group textarea {
   width: 100%;
   padding: 10px;
@@ -685,7 +595,7 @@ button {
   font-size: 14px;
 }
 
-.form-group input[type='number'] {
+.form-group input[type="number"] {
   width: 80px;
 }
 
@@ -745,7 +655,7 @@ button {
 
 /* 对话框按钮 */
 .save-button {
-  background-color: #4caf50;
+  background-color: #4CAF50;
   color: white;
   padding: 10px 20px;
   margin-right: 10px;
@@ -771,8 +681,7 @@ button {
     flex-direction: column;
   }
 
-  .form-left,
-  .form-right {
+  .form-left, .form-right {
     min-width: 100%;
   }
 
@@ -782,7 +691,7 @@ button {
 }
 
 @media (max-width: 768px) {
-  .store-management {
+  .news-management {
     padding: 15px;
   }
 
