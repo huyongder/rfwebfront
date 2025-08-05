@@ -224,7 +224,7 @@ export default {
           formData.append('type', 'goodCasePhoto')
 
           const { data } = await axios.post('/api/upload?type=goodCasePhoto', formData, {
-            headers: { 'Content-Type': 'multipart/form-data' },
+            headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${localStorage.getItem('token')}` },
           })
 
           if (data.url) {
@@ -287,7 +287,13 @@ export default {
 
       try {
         loading.value = true
-        const deleteRequests = selectedCases.value.map((id) => axios.delete(`/api/goodCase/${id}`))
+        const deleteRequests = selectedCases.value.map(id =>
+          axios.delete(`/api/goodCase/${id}`, {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+          })
+        );
 
         const results = await Promise.all(deleteRequests)
         const hasError = results.some((result) => result.data.code !== 200)
@@ -354,7 +360,7 @@ export default {
         formData.append('file', file)
 
         const { data } = await axios.post('/api/upload?type=goodCasePhoto', formData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
+          headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${localStorage.getItem('token')}` },
         })
         console.log(data)
 
@@ -390,7 +396,7 @@ export default {
         const url = '/api/goodCase'
         console.log(editingCase.value)
         const { data } = await axios[method](url, editingCase.value, {
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('token')}` },
         })
         console.log(data)
         if (data.code === 200) {

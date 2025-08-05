@@ -3,133 +3,86 @@
  * @Author: huimeng
  * @Date: 2025-03-13 15:47:35
  * @LastEditors: huimeng
- * @LastEditTime: 2025-05-28 13:46:34
+ * @LastEditTime: 2025-08-02 15:03:23
 -->
+
+
 <template>
-  <el-form
-    :model="form"
-    :rules="rules"
-    ref="formRef"
-    class="login-container"
-    @submit.prevent="handleSubmit"
-  >
-    <h3 class="title">系统登录</h3>
-
-    <!-- 用户名 -->
-    <el-form-item prop="username">
-      <el-input
-        v-model="form.username"
-        placeholder="请输入用户名"
-        prefix-icon="el-icon-user"
-        :maxlength="20"
-      >
-        <template #suffix>
-          <el-tooltip content="用户名格式：字母+数字，6-20位" placement="top">
-            <i class="el-icon-question"></i>
-          </el-tooltip>
-        </template>
-      </el-input>
-    </el-form-item>
-
-    <!-- 密码 -->
-    <el-form-item prop="password">
-      <el-input
-        :type="showPwd ? 'text' : 'password'"
-        v-model="form.password"
-        placeholder="请输入密码"
-        prefix-icon="el-icon-lock"
-        :maxlength="16"
-        show-password
-      >
-        <template #suffix>
-          <el-button
-            link
-            @click="showPwd = !showPwd"
-            :icon="showPwd ? 'el-icon-view' : 'el-icon-lock'"
-          ></el-button>
-        </template>
-      </el-input>
-    </el-form-item>
-
-    <!-- 登录按钮 -->
-    <el-form-item>
-      <el-button type="primary" :loading="loading" :disabled="loading" @click="handleSubmit">
-        登录
-      </el-button>
-    </el-form-item>
-
-    <!-- 错误提示 -->
-    <el-alert
-      v-if="errorMsg"
-      :title="errorMsg"
-      type="error"
-      show-icon
-      :closable="false"
-      class="error-alert"
-    ></el-alert>
-  </el-form>
+  <div class="login-container">
+    <div class="login-card">
+      <h2 class="login-title">荣锋装饰后台管理系统</h2>
+      <form @submit.prevent="handleLogin" class="login-form">
+        <div class="form-group">
+          <input
+            v-model="form.username"
+            type="text"
+            required
+            placeholder="用户名"
+            class="form-input"
+          />
+        </div>
+        <div class="form-group">
+          <input
+            v-model="form.password"
+            type="password"
+            required
+            placeholder="密码"
+            class="form-input"
+          />
+        </div>
+        <button
+          type="submit"
+          :disabled="loading"
+          class="login-button"
+        >
+          {{ loading ? '登录中...' : '登 录' }}
+        </button>
+        <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+      </form>
+    </div>
+  </div>
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref } from 'vue'
+import axios from 'axios'
 import { useAuthStore } from '@/stores/auth'
-import { useRouter } from 'vue-router'
-import { ElMessage } from 'element-plus'
-import { onMounted } from 'vue'
+
+const form = ref({
+  username: '',
+  password: ''
+})
+
+const loading = ref(false)
+const errorMessage = ref('')
 
 const authStore = useAuthStore()
-const router = useRouter()
-const formRef = ref(null)
 
-// 表单数据（移除验证码字段）
-const form = reactive({
-  username: '',
-  password: '',
-})
+const handleLogin = async () => {
+  loading.value = true
+  errorMessage.value = ''
 
-// 验证规则（移除验证码校验）
-const rules = reactive({
-  username: [
-    { required: true, message: '请输入用户名', trigger: 'blur' },
-    { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' },
-    { pattern: /^[a-zA-Z0-9]+$/, message: '只能包含字母和数字', trigger: 'blur' },
-  ],
-  password: [
-    { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: 6, max: 16, message: '长度在 6 到 16 个字符', trigger: 'blur' },
-  ],
-})
-
-// 状态管理
-const loading = ref(false)
-const errorMsg = ref('')
-const showPwd = ref(false)
-
-// 生命周期钩子
-onMounted(() => {
-  if (authStore.token) {
-    router.push('/dashboard')
-  }
-})
-
-// 提交方法
-const handleSubmit = async () => {
   try {
-    await formRef.value.validate();
-    loading.value = true;
-    await authStore.login(form); // 等待登录接口完成
-    ElMessage.success('登录成功');
-    router.push('/dashboard'); // 确保在登录成功后跳转
-  } catch (error) {
-    // 错误类型判断
-    if (error.response?.status === 400) {
-      errorMsg.value = '用户名或密码格式错误'
-    } else if (error.response?.status === 401) {
-      errorMsg.value = '用户名或密码错误'
+    const response = await axios.post('/api/auth/login', {
+      username: form.value.username,
+      password: form.value.password
+    }, {headers: { 'Content-Type': 'application/json'}})
+
+    if (response.data.code === 200) {
+      authStore.loginSuccess({
+        token: response.data.data.token,
+        username: response.data.data.username,
+        role: response.data.data.role
+      })
     } else {
-      errorMsg.value = '登录失败，请稍后重试'
+      errorMessage.value = response.data.msg
     }
-    console.error('登录错误:', error)
+  } catch (error) {
+    if (error.response && error.response.data.code === 500) {
+      errorMessage.value = error.response.data.msg
+    } else {
+      errorMessage.value = '登录失败，请检查网络连接'
+    }
   } finally {
     loading.value = false
   }
@@ -138,22 +91,103 @@ const handleSubmit = async () => {
 
 <style scoped>
 .login-container {
-  max-width: 450px;
-  margin: 100px auto;
-  padding: 40px;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
-.title {
-  text-align: center;
-  margin-bottom: 30px;
-  color: #409eff;
-}
-
-.error-alert {
-  margin-top: 20px;
+.login-card {
   width: 100%;
+  max-width: 480px;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.login-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #333;
+  font-size: 1.8rem;
+  font-weight: 500;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-input {
+  padding: 16px 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  transition: all 0.3s;
+  height: 56px;
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #409eff;
+  box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2);
+}
+
+.login-button {
+  padding: 16px;
+  background-color: #409eff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  height: 56px;
+  letter-spacing: 1px;
+}
+
+.login-button:hover {
+  background-color: #66b1ff;
+  transform: translateY(-2px);
+}
+
+.login-button:disabled {
+  background-color: #a0cfff;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.error-message {
+  color: #f56c6c;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 480px) {
+  .login-card {
+    padding: 2rem 1.5rem;
+    max-width: 90%;
+  }
+
+  .login-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .form-input, .login-button {
+    height: 52px;
+    font-size: 1rem;
+  }
 }
 </style>

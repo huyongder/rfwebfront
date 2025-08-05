@@ -9,6 +9,8 @@
 import SizeviewNav from '@/components/NavComp/SizeviewNav.vue'
 import HeaderBanner from '@/components/HeaderBanner.vue';
 import FooterComp from '@/components/FooterComp.vue';
+// 导入图片资源
+import shouxianImg from '@/assets/about/branches/shouxian.jpg'
 
 export default {
   components: {
@@ -16,11 +18,16 @@ export default {
     HeaderBanner,
     FooterComp
   },
+  data() {
+    return {
+      shouxianImg // 将图片作为响应式数据
+    }
+  }
 }
 </script>
 
 <template>
-  <HeaderBanner  />
+  <HeaderBanner />
   <SizeviewNav />
   <br />
   <div class="title">寿县分公司</div>
@@ -28,7 +35,7 @@ export default {
     <p>地址： 寿县瑶海大市场4栋4-5层</p>
     <p>电话： 0564-2753666(占地3000平米)</p>
   </div>
-  <img src="/src/public/about/branches/shouxian.jpg" alt="shouxian" class="shouxian" />
+  <img :src="shouxianImg" alt="寿县分公司图片" class="shouxian" />
   <div class="navigation">
     <router-link to="/about/branches/jinzhai" class="nav-link">上一篇：金寨分公司</router-link>
     <router-link to="/about/branches/huoshan" class="nav-link">下一篇：霍山分公司</router-link>
@@ -43,16 +50,18 @@ export default {
   text-align: center;
 }
 .address {
-  width: fit-content; /* 根据内容自适应宽度 */
-  margin-left: 30%; /* 左侧留白30%实现偏左 */
+  width: fit-content;
+  margin-left: 30%;
   padding: 20px;
-  text-align: left; /* 内容左对齐 */
-  transform: translateX(-10%); /* 微调居中位置 */
+  text-align: left;
+  transform: translateX(-10%);
 }
 .shouxian {
   width: fit-content;
   display: block;
   margin: 0 auto;
+  max-width: 100%;
+  height: auto;
 }
 
 .navigation {
@@ -62,14 +71,6 @@ export default {
   padding: 10px;
   width: fit-content;
   margin-left: 350px;
-}
-.nav-p {
-  color: #000;
-  text-decoration: none;
-  font-size: 13px;
-  padding: 1px 10px;
-  border-radius: 4px;
-  margin-bottom: 10px;
 }
 
 .nav-link {

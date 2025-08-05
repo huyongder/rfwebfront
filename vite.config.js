@@ -3,7 +3,7 @@
  * @Author: huimeng
  * @Date: 2025-01-14 16:21:37
  * @LastEditors: huimeng
- * @LastEditTime: 2025-07-04 13:53:27
+ * @LastEditTime: 2025-08-04 14:39:34
  */
 import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
@@ -22,19 +22,13 @@ export default defineConfig({
     proxy: {
       // 代理所有以/api开头的请求
       '/api': {
-        target: 'http://localhost:8080', // 后端服务器地址
+        target: 'http://101.132.134.239:8080', // 后端服务器地址
         changeOrigin: true, // 允许跨域
         secure: false, // 关闭SSL验证（开发环境使用）
       },
-      // 代理认证相关请求
-      '/auth': {
-        target: 'http://localhost',
-        changeOrigin: true,
-        // 不需要重写路径，保持/auth前缀
-      },
       // 代理静态文件请求
       '/uploads': {
-        target: 'http://localhost',
+        target: 'http://101.132.134.239:8080',
         changeOrigin: true,
       },
     },

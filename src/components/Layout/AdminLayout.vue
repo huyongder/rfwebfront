@@ -3,7 +3,7 @@
  * @Author: huimeng
  * @Date: 2025-07-11 14:29:10
  * @LastEditors: huimeng
- * @LastEditTime: 2025-07-25 15:46:25
+ * @LastEditTime: 2025-07-29 08:31:33
 -->
 
 <template>
@@ -12,41 +12,54 @@
       <h2>管理菜单</h2>
       <nav>
         <ul>
-          <li>
-            <router-link to="/admin">控制面板</router-link>
+          <!-- 控制面板 - 权限1、2和管理员可见 -->
+          <li v-if="authStore.hasRole(['ADMIN', 'PERMISSION1', 'PERMISSION2'])">
+            <router-link to="/admin">展示页</router-link>
           </li>
-          <li>
+
+          <!-- 以下菜单项仅管理员可见 -->
+          <li v-if="authStore.hasRole('ADMIN')">
             <router-link to="/admin/largePhoto">首页大图管理</router-link>
           </li>
-          <li>
-            <router-link to="/admin/manNews">新闻管理</router-link>
+          <li v-if="authStore.hasRole('ADMIN')">
+            <router-link to="/admin/manNews">新闻页管理</router-link>
           </li>
-          <li>
-            <router-link to="/admin/manstores">直营门店</router-link>
+          <li v-if="authStore.hasRole('ADMIN')">
+            <router-link to="/admin/manstores">直营门店管理</router-link>
           </li>
-          <li>
-            <router-link to="/admin/manDesigners">设计大咖</router-link>
+          <li v-if="authStore.hasRole('ADMIN')">
+            <router-link to="/admin/manDesigners">设计师管理</router-link>
           </li>
-          <li>
-            <router-link to="/admin/manBuild">工地实拍</router-link>
+          <li v-if="authStore.hasRole('ADMIN')">
+            <router-link to="/admin/manBuild">工地实拍管理</router-link>
           </li>
-          <li>
-            <router-link to="/admin/manGoodCase">优秀案例</router-link>
+          <li v-if="authStore.hasRole('ADMIN')">
+            <router-link to="/admin/manGoodCase">优秀案例管理</router-link>
           </li>
-          <li>
-            <router-link to="/admin/manComplaint">投诉中心</router-link>
+          <li v-if="authStore.hasRole('ADMIN')">
+            <router-link to="/admin/manComplaint">投诉建议管理</router-link>
           </li>
-          <li>
-            <router-link to="/admin/manDepartment">部门管理</router-link>
+
+          <!-- 以下菜单项权限1和管理员可见 -->
+          <li v-if="authStore.hasRole(['ADMIN', 'PERMISSION1'])">
+            <router-link to="/admin/mandepartment">部门管理</router-link>
           </li>
-          <li>
+          <li v-if="authStore.hasRole(['ADMIN', 'PERMISSION1'])">
             <router-link to="/admin/manReward">奖惩管理</router-link>
           </li>
-          <li>
+
+          <!-- 奖惩查询 - 权限1、2和管理员可见 -->
+          <li v-if="authStore.hasRole(['ADMIN', 'PERMISSION1', 'PERMISSION2'])">
             <router-link to="/admin/manSelectReward">奖惩查询</router-link>
           </li>
         </ul>
       </nav>
+
+      <!-- 用户信息和登出按钮 -->
+      <div class="user-info">
+        <div class="user-name">{{ authStore.username }}</div>
+        <button @click="authStore.logout" class="logout-btn">登出</button>
+      </div>
     </div>
     <div class="main-content">
       <router-view />
@@ -54,10 +67,10 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'AdminLayout',
-}
+<script setup>
+import { useAuthStore } from '@/stores/auth'
+
+const authStore = useAuthStore()
 </script>
 
 <style scoped>
@@ -71,10 +84,12 @@ export default {
   top: 0;
   left: 0;
   width: 180px;
-  height: 100vh; /* 确保高度占满屏幕 */
+  height: 100vh;
   background: #2c3e50;
   padding: 20px;
-  z-index: 1000; /* 确保菜单栏在顶层 */
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar h2 {
@@ -85,6 +100,7 @@ export default {
 .sidebar ul {
   list-style: none;
   padding: 0;
+  flex-grow: 1;
 }
 
 .sidebar li {
@@ -110,8 +126,37 @@ export default {
 }
 
 .main-content {
-  margin-left: 220px; /* 与侧边栏宽度一致 */
+  margin-left: 220px;
   flex: 1;
   overflow: auto;
+}
+
+.user-info {
+  margin-top: 50px;
+  padding: 15px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  text-align: center;
+}
+
+.user-name {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #42b983;
+}
+
+.logout-btn {
+  width: 100%;
+  padding: 8px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.logout-btn:hover {
+  background-color: #c0392b;
 }
 </style>

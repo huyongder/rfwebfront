@@ -173,7 +173,12 @@ export default {
         });
 
         const ids = this.selectedComplaints.map(item => item.complaintId);
-        await axios.post('/api/complaints/batch-delete', { ids });
+        await axios.post('/api/complaints/batch-delete', ids , {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
         ElMessage.success('批量删除成功');
         this.selectedComplaints = [];
         this.fetchComplaints();
@@ -186,7 +191,12 @@ export default {
 
     async updateStatus(complaintId) {
       try {
-        await axios.post(`/api/complaints/update-status/${complaintId}`);
+        await axios.post(`/api/complaints/update-status/${complaintId}`,null, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+
         ElMessage.success('状态更新成功');
         this.fetchComplaints();
       } catch (error) {
@@ -202,7 +212,11 @@ export default {
           type: 'warning'
         });
 
-        await axios.post(`/api/complaints/delete/${complaintId}`);
+        await axios.delete(`/api/complaints/delete/${complaintId}`,{
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
         ElMessage.success('删除成功');
         this.fetchComplaints();
       } catch (error) {

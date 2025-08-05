@@ -109,7 +109,7 @@ export default {
             pageNum: 1,
             pageSize: 1000
           }
-        });
+        },);
         builds.value = response.data.records;
       } catch (error) {
         console.error('获取工地列表失败:', error);
@@ -130,7 +130,11 @@ export default {
       formData.append('type', 'buildPhoto');
 
       try {
-        const response = await axios.post('/api/upload', formData);
+        const response = await axios.post('/api/upload', formData,{
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
         imageUrl.value = response.data.url;
         newBuild.value.coverImage = response.data.url;
       } catch (error) {
@@ -144,7 +148,11 @@ export default {
       formData.append('type', 'buildVideos');
 
       try {
-        const response = await axios.post('/api/build/upload', formData);
+        const response = await axios.post('/api/build/upload', formData, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
         videoUrl.value = response.data.url;
         newBuild.value.videoPath = response.data.url;
       } catch (error) {
@@ -154,7 +162,11 @@ export default {
 
     const addBuild = async () => {
       try {
-        await axios.post('/api/build/add', newBuild.value);
+        await axios.post('/api/build/add', newBuild.value,{
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
         fetchBuilds();
         resetForm();
         alert('添加成功');
@@ -197,7 +209,11 @@ export default {
           const imageFormData = new FormData();
           imageFormData.append('file', editImageFile.value);
           imageFormData.append('type', 'buildPhoto');
-          const imageResponse = await axios.post('/api/upload', imageFormData);
+          const imageResponse = await axios.post('/api/upload', imageFormData,{
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+          });
           editingBuild.value.coverImage = imageResponse.data.url;
         }
 
@@ -206,12 +222,20 @@ export default {
           const videoFormData = new FormData();
           videoFormData.append('file', editVideoFile.value);
           videoFormData.append('type', 'buildVideo');
-          const videoResponse = await axios.post('/api/build/upload', videoFormData);
+          const videoResponse = await axios.post('/api/build/upload', videoFormData,{
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+          });
           editingBuild.value.videoPath = videoResponse.data.url;
         }
 
         // 更新工地信息
-        await axios.post('/api/build/update', editingBuild.value);
+        await axios.post('/api/build/update', editingBuild.value, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
 
         fetchBuilds();
         cancelEdit();
@@ -232,7 +256,11 @@ export default {
     const deleteBuild = async (id) => {
       if (confirm('确定要删除这个工地吗？')) {
         try {
-          await axios.delete(`/api/build/delete/${id}`);
+          await axios.delete(`/api/build/delete/${id}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          });
           fetchBuilds();
           alert('删除成功');
         } catch (error) {

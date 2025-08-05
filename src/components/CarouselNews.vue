@@ -4,9 +4,16 @@
     <div v-if="loading" class="loading">数据加载中...</div>
 
     <!-- 主内容区域 -->
-    <div v-else class="carousel-wrapper" @mouseenter="pauseAutoPlay" @mouseleave="resumeAutoPlay">
-      <!-- 左侧图片 -->
-      <div class="left-panel">
+    <div v-else
+         class="carousel-wrapper"
+         @mouseenter="pauseAutoPlay"
+         @mouseleave="resumeAutoPlay"
+         @touchstart="handleTouchStart"
+         @touchmove="handleTouchMove"
+         @touchend="handleTouchEnd">
+
+      <!-- 左侧图片 - 只在非移动端显示 -->
+      <div class="left-panel" v-if="!isMobile">
         <div class="image-container">
           <img :src="currentItem.coverImage" class="carousel-image" @error="handleImageError" />
           <div class="image-overlay">
@@ -56,6 +63,37 @@ const loading = ref(true)
 const currentIndex = ref(0)
 const autoPlayTimer = ref(null)
 const newsData = ref([])
+const isMobile = ref(false)
+
+// 检测移动设备
+const checkIsMobile = () => {
+  isMobile.value = window.innerWidth <= 768
+}
+
+// 触摸滑动相关变量
+const touchStartX = ref(0)
+const touchEndX = ref(0)
+
+// 触摸开始事件
+const handleTouchStart = (e) => {
+  touchStartX.value = e.touches[0].clientX
+}
+
+// 触摸移动事件
+const handleTouchMove = (e) => {
+  touchEndX.value = e.touches[0].clientX
+}
+
+// 触摸结束事件
+const handleTouchEnd = () => {
+  if (touchStartX.value - touchEndX.value > 50) {
+    // 向左滑动，切换到下一项
+    nextSlide()
+  } else if (touchEndX.value - touchStartX.value > 50) {
+    // 向右滑动，切换到上一项
+    prevSlide()
+  }
+}
 
 // 获取新闻数据
 const fetchNewsData = async () => {
@@ -149,9 +187,15 @@ const nextSlide = () => {
   currentIndex.value = (currentIndex.value + 1) % newsData.value.length
 }
 
+const prevSlide = () => {
+  currentIndex.value = (currentIndex.value - 1 + newsData.value.length) % newsData.value.length
+}
+
 // 自动播放控制
 const startAutoPlay = () => {
-  autoPlayTimer.value = setInterval(nextSlide, 3000)
+  if (!isMobile.value) { // 移动端不自动播放
+    autoPlayTimer.value = setInterval(nextSlide, 3000)
+  }
 }
 
 const pauseAutoPlay = () => clearInterval(autoPlayTimer.value)
@@ -159,11 +203,36 @@ const resumeAutoPlay = () => startAutoPlay()
 
 // 生命周期
 onMounted(() => {
+  checkIsMobile()
+  window.addEventListener('resize', checkIsMobile)
+
   fetchNewsData().then(() => {
     startAutoPlay()
   })
+
+  if (isMobile.value) {
+    const wrapper = document.querySelector('.carousel-wrapper')
+    if (wrapper) {
+      wrapper.addEventListener('touchstart', handleTouchStart)
+      wrapper.addEventListener('touchmove', handleTouchMove)
+      wrapper.addEventListener('touchend', handleTouchEnd)
+    }
+  }
 })
-onBeforeUnmount(pauseAutoPlay)
+
+onBeforeUnmount(() => {
+  pauseAutoPlay()
+  window.removeEventListener('resize', checkIsMobile)
+
+  if (isMobile.value) {
+    const wrapper = document.querySelector('.carousel-wrapper')
+    if (wrapper) {
+      wrapper.removeEventListener('touchstart', handleTouchStart)
+      wrapper.removeEventListener('touchmove', handleTouchMove)
+      wrapper.removeEventListener('touchend', handleTouchEnd)
+    }
+  }
+})
 </script>
 
 <style scoped>
@@ -353,5 +422,86 @@ onBeforeUnmount(pauseAutoPlay)
   height: 100%;
   font-size: 18px;
   color: #666;
+}
+
+/* 移动端样式 */
+@media screen and (max-width: 768px) {
+  .carousel-container {
+    width: 100%;
+    height: auto;
+    margin: 10px 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .carousel-wrapper {
+    flex-direction: column;
+  }
+
+  .left-panel {
+    display: none;
+  }
+
+  .right-panel {
+    width: 100%;
+    padding: 0;
+  }
+
+  .news-item {
+    height: auto;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .item-content {
+    gap: 10px;
+  }
+
+  .date-badge {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+  }
+
+  .date-badge .day {
+    font-size: 18px;
+  }
+
+  .news-item.active {
+    transform: none;
+    box-shadow: none;
+    background: #f5f5f5;
+  }
+
+  .text-content h4 {
+    font-size: 16px;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+
+  .summary {
+    font-size: 13px;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+  }
+
+  .news-item:hover {
+    transform: none;
+  }
+
+  .news-item:active {
+    background: #eee;
+  }
+
+  .date-badge {
+    border: none;
+    box-shadow: none;
+    background: #f0f0f0;
+  }
+
+  .news-item.active .date-badge {
+    background: #e74c3c;
+    color: white;
+  }
 }
 </style>

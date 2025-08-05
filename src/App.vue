@@ -26,7 +26,7 @@ export default defineComponent({
       },
       {
         title: '集团规模',
-        subTitle: 'Group size',
+        subTitle: 'GROUP SIZE',
         link: '/about/headquarters',
         subMenu: [
           { title: '集团总部', link: '/about/headquarters' },
@@ -39,7 +39,7 @@ export default defineComponent({
       },
       {
         title: '设计案例',
-        subTitle: 'Design case',
+        subTitle: 'DWSIGN CASE',
         link: '/design/excellent-cases',
         subMenu: [
           { title: '优秀案例', link: '/design/excellent-cases' },
@@ -50,7 +50,7 @@ export default defineComponent({
       },
       {
         title: '品牌传播',
-        subTitle: 'Brand Spreading',
+        subTitle: 'BRAND SPREADING',
         link: '/brand/cctv',
         subMenu: [
           { title: '强势登录央视', link: '/brand/cctv' },
@@ -63,7 +63,7 @@ export default defineComponent({
       },
       {
         title: '招贤纳士',
-        subTitle: 'Talents Wanted',
+        subTitle: 'TALENTS WANTED',
         link: '/careers/boss',
         subMenu: [
           { title: 'BOSS直聘', link: '/careers/boss' },
@@ -73,7 +73,7 @@ export default defineComponent({
       },
       {
         title: '投诉与建议',
-        subTitle: 'Suggestions',
+        subTitle: 'SUGGESTIONS',
         link: '/contact/complaints',
         subMenu: [
           { title: '投诉中心', link: '/contact/complaints' },

@@ -9,19 +9,13 @@
     <div class="main-content">
       <!-- 集团标志 -->
       <div class="brand-block" @click="$router.push('/')">
-        <img src="/src/static/index/logo2.png" alt="集团标志" class="logo" />
+        <img src="/src/public/index/logo2.png" alt="集团标志" class="logo" />
       </div>
-
-      <!-- 代理信息 - 居中 -->
-      <div class="agent-info" v-show="!isMobile">
-        <img src="/src/static/index/logo3.png" alt="集团信息" class="agent-logo" />
-      </div>
-
       <!-- 右侧内容容器 -->
       <div class="right-content" v-show="!isMobile">
         <!-- 服务热线 -->
         <div class="hotline-block">
-          <img src="/src/static/index/redPhone.png" class="hotline-icon" alt="热线图标" />
+          <img src="/src/public/index/redPhone.png" class="hotline-icon" alt="热线图标" />
           <div class="hotline-text">
             <p class="hotline-title">全国服务热线</p>
             <p class="hotline-number">400-606-8788</p>
@@ -30,7 +24,7 @@
 
         <!-- 公众号 -->
         <div class="qr-block" v-show="isMobile">
-          <img src="/src/static/index/qr.png" alt="公众号" class="qr-code" />
+          <img src="/src/public/index/qr.png" alt="公众号" class="qr-code" />
           <p class="qr-text">扫码关注公众号</p>
         </div>
       </div>
@@ -39,7 +33,7 @@
     <HeaderComp :navLists = "navLists"/>
     <!-- 大图 -->
     <div class="banner-image">
-      <img src="/src/static/index/largePhoto.jpg" alt="banner" />
+      <img src="/src/public/index/largePhoto.jpg" alt="banner" />
     </div>
   </div>
 </template>

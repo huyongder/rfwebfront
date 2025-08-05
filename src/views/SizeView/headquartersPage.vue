@@ -1,24 +1,87 @@
 <script setup lang="ts">
+import { ref, onMounted, onBeforeUnmount } from 'vue' // 添加这行导入
 import SizeviewNav from '@/components/NavComp/SizeviewNav.vue'
 import HeaderBanner from '@/components/HeaderBanner.vue';
 import FooterComp from '@/components/FooterComp.vue';
 
-const imageSources = [
-  '/src/public/about/headquartersPage/luan1.png',
-  '/src/public/about/headquartersPage/luan2.gif',
-  '/src/public/about/headquartersPage/luan3.gif',
-  '/src/public/about/headquartersPage/luan4.gif',
-  '/src/public/about/headquartersPage/luan5.jpg',
-  '/src/public/about/headquartersPage/luan7.jpg',
-  '/src/public/about/headquartersPage/luan8.jpg',
-  '/src/public/about/headquartersPage/luan9.jpg',
-  '/src/public/about/headquartersPage/luan10.jpg',
-  '/src/public/about/headquartersPage/luan11.jpg',
-  '/src/public/about/headquartersPage/luan12.jpg',
-  '/src/public/about/headquartersPage/luan13.jpg',
-  '/src/public/about/headquartersPage/luan14.jpg',
-  '/src/public/about/headquartersPage/luan15.jpg',
-]
+// 1. 手动导入所有图片
+import luan1 from '@/assets/about/headquartersPage/luan1.png'
+import luan2 from '@/assets/about/headquartersPage/luan2.gif'
+import luan3 from '@/assets/about/headquartersPage/luan3.gif'
+import luan4 from '@/assets/about/headquartersPage/luan4.gif'
+import luan5 from '@/assets/about/headquartersPage/luan5.jpg'
+import luan7 from '@/assets/about/headquartersPage/luan7.jpg'
+import luan8 from '@/assets/about/headquartersPage/luan8.jpg'
+import luan9 from '@/assets/about/headquartersPage/luan9.jpg'
+import luan10 from '@/assets/about/headquartersPage/luan10.jpg'
+import luan11 from '@/assets/about/headquartersPage/luan11.jpg'
+import luan12 from '@/assets/about/headquartersPage/luan12.jpg'
+import luan13 from '@/assets/about/headquartersPage/luan13.jpg'
+import luan14 from '@/assets/about/headquartersPage/luan14.jpg'
+import luan15 from '@/assets/about/headquartersPage/luan15.jpg'
+
+// 2. 图片数据管理
+const images = ref([
+  { src: luan1, isLoaded: false },
+  { src: luan2, isLoaded: false },
+  { src: luan3, isLoaded: false },
+  { src: luan4, isLoaded: false },
+  { src: luan5, isLoaded: false },
+  { src: luan7, isLoaded: false },
+  { src: luan8, isLoaded: false },
+  { src: luan9, isLoaded: false },
+  { src: luan10, isLoaded: false },
+  { src: luan11, isLoaded: false },
+  { src: luan12, isLoaded: false },
+  { src: luan13, isLoaded: false },
+  { src: luan14, isLoaded: false },
+  { src: luan15, isLoaded: false },
+])
+
+// 3. 懒加载相关配置
+const placeholder = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIHZpZXdCb3g9IjAgMCAxIDEiPjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiNlZWVlZWUiLz48L3N2Zz4='
+const imageRefs = ref<HTMLImageElement[]>([])
+const observer = ref<IntersectionObserver | null>(null)
+
+// 4. 图片加载处理
+const handleImageLoad = (index: number) => {
+  images.value[index].isLoaded = true
+  const imgElement = imageRefs.value[index]
+  if (imgElement) {
+    imgElement.classList.add('loaded')
+  }
+}
+
+// 5. 初始化懒加载观察器
+onMounted(() => {
+  observer.value = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const img = entry.target as HTMLImageElement
+          const index = imageRefs.value.indexOf(img)
+          if (index !== -1 && !images.value[index].isLoaded) {
+            images.value[index].isLoaded = true
+          }
+          observer.value?.unobserve(img)
+        }
+      })
+    },
+    {
+      rootMargin: '200px',
+      threshold: 0.01,
+    },
+  )
+
+  imageRefs.value.forEach((img) => {
+    observer.value?.observe(img)
+  })
+})
+
+// 6. 清理观察器
+onBeforeUnmount(() => {
+  observer.value?.disconnect()
+})
 </script>
 
 <template>
@@ -31,11 +94,16 @@ const imageSources = [
   <br />
   <div class="vertical-images">
     <img
-      v-for="(src, index) in imageSources"
+      v-for="(image, index) in images"
       :key="index"
-      :src="src"
-      :alt="'honor' + (index + 1)"
-      class="image"
+      :src="image.isLoaded ? image.src : placeholder"
+      :alt="'办公区图片 ' + (index + 1)"
+      width="1200"
+      height="900"
+      loading="lazy"
+      @load="handleImageLoad(index)"
+      ref="imageRefs"
+      class="lazy-image"
     />
   </div>
   <FooterComp />
@@ -43,7 +111,7 @@ const imageSources = [
 
 <style scoped>
 h2 {
-  text-align: center; /* 标题居中 */
+  text-align: center;
   font-size: 24px;
 }
 
@@ -55,10 +123,16 @@ h2 {
   margin-top: 20px;
 }
 
-.image {
-  width: 1200px; /* 设置图片宽度 */
-  height: 900px; /* 设置图片高度 */
-  object-fit: cover; /* 保持图片比例，裁剪多余部分 */
-  margin-bottom: 20px; /* 图片之间的间距 */
+.lazy-image {
+  width: 1200px;
+  height: 900px;
+  object-fit: cover;
+  margin-bottom: 20px;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.lazy-image.loaded {
+  opacity: 1;
 }
 </style>

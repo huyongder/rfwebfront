@@ -174,7 +174,8 @@ export default {
     // 加载设计师列表
     async function loadDesignerList() {
       try {
-        const response = await fetch('/api/designers/list')
+        const response = await fetch('/api/designers/list',{
+        })
         const data = await response.json()
         console.log('获取设计师列表成功:', data)
         if (data.code === 200) {
@@ -205,7 +206,8 @@ export default {
       try {
         for (const id of selectedDesigners.value) {
           const response = await fetch(`/api/designers/${id}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers:{authorization: `Bearer ${localStorage.getItem('token')}`}
           })
           const data = await response.json()
           if (data.code !== 200) {
@@ -280,6 +282,7 @@ export default {
 
         const response = await fetch('/api/upload?type=designerPhoto', {
           method: 'POST',
+          headers:{authorization: `Bearer ${localStorage.getItem('token')}`,},
           body: formData
         })
 
@@ -314,7 +317,8 @@ export default {
         const response = await fetch(url, {
           method,
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+             authorization: `Bearer ${localStorage.getItem('token')}`,
           },
           body: JSON.stringify(payload)
         })

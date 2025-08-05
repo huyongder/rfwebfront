@@ -289,7 +289,8 @@ const fetchData = async () => {
     }
 
     const res = await axios.get('/api/reward-punishment/list', {
-      params: queryParams.value
+      params: queryParams.value,
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('token')}` }
     })
     tableData.value = res.data.data.list
     total.value = res.data.data.total
@@ -305,7 +306,11 @@ const fetchData = async () => {
 
 const fetchDepartments = async () => {
   try {
-    const res = await axios.get('/api/department')
+    const res = await axios.get('/api/department', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
     departments.value = res.data.data
   } catch (error) {
     console.log(error)
@@ -373,7 +378,11 @@ const handleEdit = (row) => {
 
 const handleDelete = async (id) => {
   try {
-    await axios.delete(`/api/reward-punishment/${id}`)
+    await axios.delete(`/api/reward-punishment/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
     ElMessage.success('删除成功')
     fetchData()
   } catch (error) {
@@ -385,9 +394,17 @@ const handleDelete = async (id) => {
 const submitForm = async () => {
   try {
     if (form.value.id) {
-      await axios.put('/api/reward-punishment', form.value)
+      await axios.put('/api/reward-punishment', form.value, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
     } else {
-      await axios.post('/api/reward-punishment', form.value)
+      await axios.post('/api/reward-punishment', form.value, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
     }
     ElMessage.success('操作成功')
     dialogVisible.value = false

@@ -177,6 +177,7 @@ const fetchData = async () => {
 
     const res = await axios.get('/api/reward-punishment/list', {
       params: queryParams.value,
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
     })
     tableData.value = res.data.data.list
     total.value = res.data.data.total
@@ -192,7 +193,9 @@ const fetchData = async () => {
 
 const fetchDepartments = async () => {
   try {
-    const res = await axios.get('/api/department')
+    const res = await axios.get('/api/department', {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    })
     departments.value = res.data.data
   } catch (error) {
     console.log(error)

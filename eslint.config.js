@@ -1,19 +1,41 @@
-import js from '@eslint/js'
-import pluginVue from 'eslint-plugin-vue'
-import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
+/*
+ * @Descripttion:
+ * @Author: huimeng
+ * @Date: 2025-01-14 16:21:37
+ * @LastEditors: huimeng
+ * @LastEditTime: 2025-08-03 09:08:00
+ */
+import js from '@eslint/js';
+import babelParser from '@babel/eslint-parser';
 
 export default [
-  {
-    name: 'app/files-to-lint',
-    files: ['**/*.{js,mjs,jsx,vue}'],
-  },
-
-  {
-    name: 'app/files-to-ignore',
-    ignores: ['**/dist/**', '**/dist-ssr/**', '**/coverage/**'],
-  },
-
   js.configs.recommended,
-  ...pluginVue.configs['flat/essential'],
-  skipFormatting,
+  {
+    files: ['**/*.js', '**/*.jsx'],
+    languageOptions: {
+      parser: babelParser,
+      parserOptions: {
+        requireConfigFile: false,
+        babelOptions: {
+          presets: ['@babel/preset-env'],
+        },
+      },
+    },
+    rules: {
+      'vue/multi-word-component-names': 'off',
+      'vue/html-self-closing': [
+        'error',
+        {
+          html: {
+            void: 'always',
+            normal: 'never',
+            component: 'always',
+          },
+        },
+      ],
+    },
+  },
+  {
+    ignores: ['dist/**', 'node_modules/**'],
+  },
 ]

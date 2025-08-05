@@ -1,9 +1,9 @@
 <!--
- * @Descripttion: 
+ * @Descripttion:
  * @Author: huimeng
  * @Date: 2025-01-17 14:12:20
  * @LastEditors: huimeng
- * @LastEditTime: 2025-05-25 16:53:32
+ * @LastEditTime: 2025-08-02 15:13:13
 -->
 <script setup lang="ts">
 import OverviewNav from '@/components/NavComp/OverviewNav.vue'
@@ -23,8 +23,8 @@ import HeaderBanner from '@/components/HeaderBanner.vue';
       </p>
     </div>
     <div class="company-page-img">
-      <img src="@/static/overView/companyPhotos/hfcompany.png" alt="hfcompany" />
-      <img src="@/static/overView/companyPhotos/jsanjiao.png" alt="jsanjiao" />
+      <img src="/src/public/hfcompany.png" alt="hfcompany" />
+      <img src="/src/public/jsanjiao.png" alt="jsanjiao" />
     </div>
   </div>
   <FooterComp />

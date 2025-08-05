@@ -9,11 +9,7 @@
     <!-- 轮播主体 -->
     <div v-else class="swiper-container">
       <div class="swiper-wrapper">
-        <div
-          v-for="(photo, index) in photos"
-          :key="index"
-          class="swiper-slide"
-        >
+        <div v-for="(photo, index) in photos" :key="index" class="swiper-slide">
           <img
             :src="photo.url"
             :alt="photo.filename"
@@ -76,7 +72,7 @@ export default {
         },
         observer: true,
         observeParents: true,
-        speed: 800
+        speed: 800,
       })
     }
 
@@ -112,9 +108,9 @@ export default {
     return {
       photos,
       loading,
-      handleImageLoad
+      handleImageLoad,
     }
-  }
+  },
 }
 </script>
 
@@ -128,7 +124,8 @@ export default {
   margin: 0 auto;
 }
 
-.loading, .empty {
+.loading,
+.empty {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -194,7 +191,7 @@ export default {
 .custom-prev:hover,
 .custom-next:hover {
   opacity: 1;
-  background: rgba(255,255,255,0.1) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
 }
 
 .custom-prev {
@@ -219,3 +216,7 @@ export default {
   }
 }
 </style>
+
+
+
+

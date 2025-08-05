@@ -3,7 +3,7 @@
  * @Author: huimeng
  * @Date: 2025-01-14 16:21:37
  * @LastEditors: huimeng
- * @LastEditTime: 2025-07-25 15:56:21
+ * @LastEditTime: 2025-07-29 09:20:18
  */
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
@@ -42,8 +42,6 @@ import afterSalesPage from '@/views/SuggestionView/after-salesPage.vue'
 import PageViewer from '@/components/PageViewer.vue'
 import RichTextEditor from '@/components/RichTextEditor.vue'
 import testSide from '@/components/NavComp/testSide.vue'
-import LoginPage from '@/views/Login/LoginPage.vue'
-import DashboardPage from '@/views/Login/Dashboard/DashboardPage.vue'
 import designersPage from '@/views/DesignCaseView/designersPage.vue'
 import designersDetailPage from '@/views/DesignCaseView/designersDetailPage.vue'
 import CarouselNewsPage from '@/components/CarouselNews.vue'
@@ -56,6 +54,7 @@ import storesPage from '@/views/SizeView/storesPage.vue'
 import storesDetailPage from '@/views/SizeView/storesDetailPage.vue'
 import AdminLayout from '@/components/Layout/AdminLayout.vue'
 import DashboardDialog from '@/views/Admin/DashboardDialog.vue'
+import LoginPage from '@/views/Login/LoginPage.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -68,11 +67,6 @@ const router = createRouter({
       path: '/test',
       name: 'test',
       component: CarouselNewsPage,
-    },
-    {
-      path: '/dashboard',
-      name: 'dashboard',
-      component: DashboardPage,
     },
     {
       path: '/about/news',
@@ -267,11 +261,6 @@ const router = createRouter({
       name: 'testSide',
       component: testSide,
     },
-    {
-      path: '/login',
-      name: 'login',
-      component: LoginPage,
-    },
 
     // designer page
     {
@@ -310,77 +299,119 @@ const router = createRouter({
       component: contactPage,
     },
 
+    //-----------------------登录界面路由--------------------------
+    {
+      path: '/login',
+      name: 'login',
+      component: LoginPage,
+    },
+
+
     //-----------------------管理界面路由--------------------------
 
     {
       path: '/admin',
       component: AdminLayout,
+      meta: { requiresAuth: true, allowedRoles: ['ADMIN', 'PERMISSION1', 'PERMISSION2'] },
       children: [
         {
           path: '',
           name: 'AdminDashboard',
           component: DashboardDialog,
-          meta: { title: '展示页' },
+          meta: {
+            title: '展示页',
+            allowedRoles: ['ADMIN', 'PERMISSION1', 'PERMISSION2']
+          },
         },
         {
           path: 'largePhoto',
           name: 'LargePhotoDialog',
           component: () => import('@/views/Admin/LargePhotoDialog.vue'),
-          meta: { title: '首页大图管理' },
+          meta: {
+            title: '首页大图管理',
+            allowedRoles: ['ADMIN']
+          },
         },
         {
           path: 'manNews',
           name: 'NewsDialog',
           component: () => import('@/views/Admin/NewsDialog.vue'),
-          meta: { title: '新闻页管理' },
+          meta: {
+            title: '新闻页管理',
+            allowedRoles: ['ADMIN']
+           },
         },
         {
           path: 'manstores',
           name: 'StoreDialog',
           component: () => import('@/views/Admin/StoreDialog.vue'),
-          meta: { title: '直营门店管理' },
+          meta: {
+            title: '直营门店管理',
+            allowedRoles: ['ADMIN']
+          }
         },
         {
           path: 'manDesigners',
           name: 'DesignersDialog',
           component: () => import('@/views/Admin/DesignerDialog.vue'),
-          meta: { title: '设计师管理' },
+          meta: {
+            title: '设计师管理',
+            allowedRoles: ['ADMIN']
+          }
         },
         {
           path: 'manBuild',
           name: 'BuildDialog',
           component: () => import('@/views/Admin/BuildDialog.vue'),
-          meta: { title: '工地实拍管理' },
+          meta: {
+            title: '工地实拍管理',
+            allowedRoles: ['ADMIN']
+          }
         },
         {
           path: 'manGoodCase',
           name: 'GoodCaseDialog',
           component: () => import('@/views/Admin/GoodCaseDialog.vue'),
-          meta: { title: '优秀案例管理' },
+          meta: {
+            title: '优秀案例管理',
+            allowedRoles: ['ADMIN']
+          }
         },
         {
           path: 'manComplaint',
           name: 'ComplaintDialog',
           component: () => import('@/views/Admin/ComplaintDialog.vue'),
-          meta: { title: '投诉建议管理' },
+          meta: {
+            title: '投诉建议管理',
+            allowedRoles: ['ADMIN']
+          }
         },
         {
           path: 'mandepartment',
           name: 'DepartmentDialog',
           component: () => import('@/views/Admin/DepartmentDialog.vue'),
-          meta: { title: '部门管理' },
+          meta: {
+            title: '部门管理',
+            allowedRoles: ['ADMIN', 'PERMISSION1']
+          }
         },
         {
           path: 'manReward',
           name: 'RewardDialog',
           component: () => import('@/views/Admin/RewardDialog.vue'),
-          meta: { title: '奖惩管理' },
+          meta: {
+            title: '奖惩管理',
+            allowedRoles: ['ADMIN', 'PERMISSION1']
+          }
         },
         {
           path: 'manSelectReward',
           name: 'SelectReward',
           component: () => import('@/views/Admin/SelectReward.vue'),
-          meta: { title: '奖惩查询' },
+          meta: {
+            title: '奖惩查询',
+            allowedRoles: ['ADMIN', 'PERMISSION1', 'PERMISSION2']
+          }
         },
       ],
     },
@@ -389,27 +420,59 @@ const router = createRouter({
 
 const whiteList = [
   '/login',
-  '/about/',
-  '/contact',
-  '/brands',
-  '/team',
   '/',
-  '/news',
-  '/contact',
+  '/about/news',
+  '/about/company',
+  '/about/advantages',
+  '/about/culture',
+  '/about/structure',
+  '/about/certificates',
+  '/about/honors',
+  '/about/headquarters',
+  '/about/branches',
+  '/about/brands',
   '/about/stores',
-  '/about/designers',
+  '/about/team',
+  '/about/DesignCenter',
+  '/design/excellent-cases',
+  '/design/site-photos',
+  '/design/designers',
+  '/design/competitions',
+  '/brand/cctv',
+  '/brand/ads',
+  '/brand/2019-event',
+  '/brand/2020-event',
+  '/brand/2022-event',
+  '/brand/2023-event',
+  '/careers/boss',
+  '/careers/headquarters_recruit',
+  '/careers/branches',
+  '/contact/complaints',
+  '/contact/after-sales',
+  '/contact',
+  // 动态路由也需要加入白名单
+  '/about/news/:id',
+  '/about/stores/:id',
+  '/design/designers/:id',
+  '/design/excellent-cases/:id',
+  '/design/site-photos/:id'
 ]
 // ===== 全局前置守卫 =====
 router.beforeEach((to, from, next) => {
   const store = useAuthStore() // Pinia 状态管理
 
-  // 1. 白名单内路由直接放行
-  if (whiteList.some((path) => to.path.startsWith(path))) {
-    next()
-    return
+  if (to.path.startsWith('/api/')) {
+    return next()
   }
 
-  // 2. 需要登录的路由：检查用户是否已登录
+  const isWhiteListed = whiteList.some(path =>
+    to.path === path || to.path.startsWith(path + '/')
+  )
+
+  // 白名单内路由直接放行
+  if (isWhiteListed) return next()
+
+  // 需要登录的路由：检查用户是否已登录
   if (!store.token) {
     // 未登录则跳转到登录页，并携带重定向路径
     next({
@@ -419,7 +482,7 @@ router.beforeEach((to, from, next) => {
     return
   }
 
-  // 3. 登录后访问其他路由：直接放行
+  // 登录后访问其他路由：直接放行
   next()
 })
 
@@ -427,5 +490,7 @@ router.beforeEach((to, from, next) => {
 router.onError((error) => {
   console.error('[路由错误]:', error)
 })
+
+
 
 export default router

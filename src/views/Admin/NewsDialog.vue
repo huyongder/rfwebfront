@@ -3,7 +3,7 @@
  * @Author: huimeng
  * @Date: 2025-07-11 10:11:10
  * @LastEditors: huimeng
- * @LastEditTime: 2025-07-16 15:10:52
+ * @LastEditTime: 2025-07-29 09:58:05
 -->
 <template>
   <div class="news-management-container">
@@ -163,6 +163,7 @@ export default {
 
     // 图片上传处理
     function imageHandler() {
+      const token  = localStorage.getItem('token')
       const input = document.createElement('input')
       input.setAttribute('type', 'file')
       input.setAttribute('accept', 'image/*')
@@ -178,6 +179,9 @@ export default {
 
           const response = await fetch('/api/upload?type=newsPhoto', {
             method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${token}`
+            },
             body: formData
           })
 
@@ -229,6 +233,9 @@ export default {
       try {
         for (const id of selectedNews.value) {
           const response = await fetch(`/api/news/${id}`, {
+            headers: {
+              authorization: `Bearer ${localStorage.getItem('token')}`
+            },
             method: 'DELETE'
           })
           const data = await response.json()
@@ -288,6 +295,9 @@ export default {
         formData.append('file', file)
 
         const response = await fetch('/api/upload?type=newsPhoto', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
           method: 'POST',
           body: formData
         })
@@ -312,7 +322,8 @@ export default {
         const response = await fetch(url, {
           method,
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
           },
           body: JSON.stringify(editingNews.value)
         })

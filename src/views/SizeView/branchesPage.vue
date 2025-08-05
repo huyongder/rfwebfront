@@ -3,12 +3,20 @@
  * @Author: huimeng
  * @Date: 2025-02-17 08:26:53
  * @LastEditors: huimeng
- * @LastEditTime: 2025-05-26 10:41:15
+ * @LastEditTime: 2025-08-05 08:50:26
 -->
 <script lang="ts">
 import SizeviewNav from '@/components/NavComp/SizeviewNav.vue'
 import HeaderBanner from '@/components/HeaderBanner.vue';
 import FooterComp from '@/components/FooterComp.vue';
+
+import jinzhaiImg from '@/assets/about/branches/jinzhai.jpg'
+import shouxianImg from '@/assets/about/branches/shouxian.jpg'
+import huoshanImg from '@/assets/about/branches/huoshan.jpg'
+import huoqiuImg from '@/assets/about/branches/huoqiu.jpg'
+import shuchengImg from '@/assets/about/branches/shucheng.jpg'
+import yejiImg from '@/assets/about/branches/yeji.jpg'
+
 export default {
   name: 'BrancesPage',
   components: {
@@ -21,7 +29,7 @@ export default {
     return {
       images: [
         {
-          src: '/src/public/about/branches/jinzhai.jpg',
+          src: jinzhaiImg, // 使用导入的变量
           alt: 'Image jinzhai',
           caption1: '金寨分公司',
           caption2: '地址： 金寨县莲花山路堃茂大厦A座1-2层',
@@ -29,7 +37,7 @@ export default {
           link: '/about/branches/jinzhai',
         },
         {
-          src: '/src/public/about/branches/shouxian.jpg',
+          src: shouxianImg,
           alt: 'Image shouxian',
           caption1: '寿县分公司',
           caption2: '地址： 寿县瑶海大市场4栋4-5层',
@@ -37,7 +45,7 @@ export default {
           link: '/about/branches/shouxian',
         },
         {
-          src: '/src/public/about/branches/huoshan.jpg',
+          src: huoshanImg,
           alt: 'Image huoshan',
           caption1: '霍山分公司',
           caption2: '地址： 霍山县华强文旅城2号楼2-3层',
@@ -45,7 +53,7 @@ export default {
           link: '/about/branches/huoshan',
         },
         {
-          src: '/src/public/about/branches/huoqiu.jpg',
+          src: huoqiuImg,
           alt: 'Image huoqiu',
           caption1: '霍邱分公司',
           caption2: '地址： 霍邱县苏润城市广场S4号楼5层',
@@ -53,7 +61,7 @@ export default {
           link: '/about/branches/huoqiu',
         },
         {
-          src: '/src/public/about/branches/shucheng.jpg',
+          src: shuchengImg,
           alt: 'Image shucheng',
           caption1: '舒城分公司',
           caption2: '地址： 舒城梅河东路华盛集团5-6层',
@@ -61,7 +69,7 @@ export default {
           link: '/about/branches/shucheng',
         },
         {
-          src: '/src/public/about/branches/yeji.jpg',
+          src: yejiImg,
           alt: 'Image yeji',
           caption1: '叶集分公司',
           caption2: '地址： 叶集区金叶大道金叶新城3-4层',
@@ -106,18 +114,18 @@ export default {
 .container {
   padding: 20px;
   font-family: Arial, sans-serif;
-  display: flex; /* 使用 Flexbox 布局 */
-  justify-content: space-between; /* 左右两侧对齐 */
-  align-items: center; /* 垂直居中 */
-  border-bottom: 1px solid #e0e0e0; /* 添加浅色横线 */
-  padding-bottom: 15px; /* 为横线留出间距 */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 15px;
 }
 
 .title {
   font-size: 28px;
   font-weight: bold;
   color: #333;
-  margin-left : 350px;
+  margin-left: 350px;
   margin-bottom: 0px;
 }
 
@@ -133,13 +141,13 @@ export default {
 }
 
 .link {
-  color: #007bff; /* 链接颜色 */
-  text-decoration: none; /* 去掉下划线 */
-  margin: 0 5px; /* 链接间距 */
+  color: #007bff;
+  text-decoration: none;
+  margin: 0 5px;
 }
 
 .link:hover {
-  text-decoration: underline; /* 鼠标悬停时显示下划线 */
+  text-decoration: underline;
 }
 
 .gallery {
@@ -148,24 +156,23 @@ export default {
   gap: 20px;
   justify-content: center;
   padding: 20px;
-  max-width: 15;
   max-width: 1250px;
-  margin: 0 auto; /* 水平居中 */
+  margin: 0 auto;
 }
 
 .gallery-item {
-  display: block; /* 使a标签表现为块级元素 */
+  display: block;
   width: 371px;
   text-align: center;
-  text-decoration: none; /* 移除下划线 */
-  transition: all 0.3s ease; /* 添加过渡动画 */
+  text-decoration: none;
+  transition: all 0.3s ease;
   position: relative;
   top: 0;
   background-color: #fff;
 }
 
 .gallery-item:hover {
-  transform: translateY(-5px); /* 上移效果 */
+  transform: translateY(-5px);
 }
 
 .image {
@@ -184,13 +191,13 @@ export default {
 }
 
 .first-line {
-  font-weight: bold; /* 第一行加粗 */
-  transition: color 0.3s ease; /* 颜色过渡 */
+  font-weight: bold;
+  transition: color 0.3s ease;
   font-size: 16px;
 }
 
 .gallery-item:hover .first-line {
-  color: red; /* 悬停时第一行变红 */
+  color: red;
 }
 
 .caption p {

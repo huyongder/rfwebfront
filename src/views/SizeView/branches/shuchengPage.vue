@@ -1,7 +1,9 @@
 <script lang="ts">
 import SizeviewNav from '@/components/NavComp/SizeviewNav.vue'
 import HeaderBanner from '@/components/HeaderBanner.vue'
-import FooterComp from '@/components/FooterComp.vue';
+import FooterComp from '@/components/FooterComp.vue'
+// 导入图片资源
+import shuchengImg from '@/assets/about/branches/shucheng.jpg'
 
 export default {
   components: {
@@ -9,6 +11,11 @@ export default {
     HeaderBanner,
     FooterComp
   },
+  data() {
+    return {
+      shuchengImg // 将图片作为响应式数据
+    }
+  }
 }
 </script>
 
@@ -21,7 +28,7 @@ export default {
     <p>地址： 舒城梅河东路华盛集团5-6层</p>
     <p>电话： 0564-7225888 (占地3000平米)</p>
   </div>
-  <img src="/src/public/about/branches/shucheng.jpg" alt="shucheng" class="shucheng" />
+  <img :src="shuchengImg" alt="舒城分公司图片" class="shucheng" />
   <div class="navigation">
     <router-link to="/about/branches/huoqiu" class="nav-link">上一篇：霍邱分公司</router-link>
     <router-link to="/about/branches/yeji" class="nav-link">下一篇：叶集分公司</router-link>
@@ -36,16 +43,18 @@ export default {
   text-align: center;
 }
 .address {
-  width: fit-content; /* 根据内容自适应宽度 */
-  margin-left: 30%; /* 左侧留白30%实现偏左 */
+  width: fit-content;
+  margin-left: 30%;
   padding: 20px;
-  text-align: left; /* 内容左对齐 */
-  transform: translateX(-10%); /* 微调居中位置 */
+  text-align: left;
+  transform: translateX(-10%);
 }
 .shucheng {
   width: fit-content;
   display: block;
   margin: 0 auto;
+  max-width: 100%;
+  height: auto;
 }
 
 .navigation {
@@ -55,14 +64,6 @@ export default {
   padding: 10px;
   width: fit-content;
   margin-left: 350px;
-}
-.nav-p {
-  color: #000;
-  text-decoration: none;
-  font-size: 13px;
-  padding: 1px 10px;
-  border-radius: 4px;
-  margin-bottom: 10px;
 }
 
 .nav-link {

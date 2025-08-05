@@ -3,7 +3,7 @@
  * @Author: huimeng
  * @Date: 2025-07-12 09:42:35
  * @LastEditors: huimeng
- * @LastEditTime: 2025-07-12 11:10:26
+ * @LastEditTime: 2025-07-29 09:53:34
 -->
 <template>
   <div class="photo-manager">
@@ -115,6 +115,7 @@ const handleFileChange = async (event) => {
     const response = await axios.post(API_BASE_URL, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
+         authorization: `Bearer ${localStorage.getItem('token')}`
       },
     })
 
@@ -141,8 +142,10 @@ const deletePhoto = async (filename, index) => {
   if (!confirm('确定要删除这张图片吗？')) return
 
   try {
+    const token = localStorage.getItem('token');
     await axios.delete(`${API_BASE_URL}/${filename}`, {
       params: { type: PHOTO_TYPE },
+      headers: { Authorization: `Bearer ${token}` }
     })
     photos.value.splice(index, 1)
     deleteSuccess.value = '删除成功'

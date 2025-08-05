@@ -3,12 +3,14 @@
  * @Author: huimeng
  * @Date: 2025-02-17 14:42:36
  * @LastEditors: huimeng
- * @LastEditTime: 2025-05-26 10:48:07
+ * @LastEditTime: 2025-08-05 08:56:02
 -->
 <script lang="ts">
 import SizeviewNav from '@/components/NavComp/SizeviewNav.vue'
 import HeaderBanner from '@/components/HeaderBanner.vue';
 import FooterComp from '@/components/FooterComp.vue';
+// 导入图片
+import huoqiuImg from '@/assets/about/branches/huoqiu.jpg'
 
 export default {
   components: {
@@ -16,6 +18,11 @@ export default {
     HeaderBanner,
     FooterComp,
   },
+  data() {
+    return {
+      huoqiuImg // 将图片作为组件数据
+    }
+  }
 }
 </script>
 
@@ -28,7 +35,7 @@ export default {
     <p>地址： 霍邱县苏润城市广场S4号楼5层</p>
     <p>电话： 0564-7280888(占地3000平米)</p>
   </div>
-  <img src="/src/public/about/branches/huoqiu.jpg" alt="huoqiu" class="huoqiu" />
+  <img :src="huoqiuImg" alt="huoqiu" class="huoqiu" />
   <div class="navigation">
     <router-link to="/about/branches/huoshan" class="nav-link">下一篇：霍山分公司</router-link>
     <router-link to="/about/branches/shucheng" class="nav-link">下一篇：舒城分公司</router-link>
@@ -53,6 +60,8 @@ export default {
   width: fit-content;
   display: block;
   margin: 0 auto;
+  max-width: 100%; /* 确保图片不会超出容器 */
+  height: auto; /* 保持图片比例 */
 }
 
 .navigation {

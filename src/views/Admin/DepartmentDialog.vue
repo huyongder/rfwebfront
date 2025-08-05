@@ -62,7 +62,11 @@ const form = ref({
 
 const fetchData = async () => {
   try {
-    const res = await axios.get('/api/department')
+    const res = await axios.get('/api/department',{
+      headers: {
+        Authorization: localStorage.getItem('token')
+      }}
+    )
     tableData.value = res.data.data
   } catch (error) {
     console.error('获取部门列表失败:', error)
@@ -84,7 +88,11 @@ const handleEdit = (row) => {
 
 const handleDelete = async (id) => {
   try {
-    await axios.delete(`/api/department/${id}`)
+    await axios.delete(`/api/department/${id}`,{
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    })
     ElMessage.success('删除成功')
     fetchData()
   } catch (error) {
@@ -96,9 +104,17 @@ const handleDelete = async (id) => {
 const submitForm = async () => {
   try {
     if (form.value.id) {
-      await axios.put('/api/department', form.value)
+      await axios.put('/api/department', form.value,{
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
     } else {
-      await axios.post('/api/department', form.value)
+      await axios.post('/api/department', form.value,{
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
     }
     ElMessage.success('操作成功')
     dialogVisible.value = false

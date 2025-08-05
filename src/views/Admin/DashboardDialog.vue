@@ -1,12 +1,12 @@
 <template>
   <div class="welcome-container">
-    <!-- 第二行：大标题 -->
+    <!-- 第一行：大标题 -->
     <h1 class="title">荣锋装饰网站后台管理界面</h1>
 
     <!-- 装饰分隔线 -->
     <div class="divider"></div>
 
-    <!-- 第三行：副标题 -->
+    <!-- 第二行：副标题 -->
     <h2 class="subtitle">荣锋装饰集团人事部 · 荣锋装饰集团品牌督查部</h2>
   </div>
 </template>

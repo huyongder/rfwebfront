@@ -3,7 +3,7 @@
  * @Author: huimeng
  * @Date: 2025-05-26 14:55:01
  * @LastEditors: huimeng
- * @LastEditTime: 2025-07-22 09:06:36
+ * @LastEditTime: 2025-07-29 10:42:03
 -->
 <template>
   <div class="store-management-container">
@@ -208,6 +208,9 @@ export default {
 
           const response = await fetch('/api/upload?type=dirStorePhoto', {
             method: 'POST',
+            headers: {
+              authorization: 'Bearer ' + localStorage.getItem('token')
+            },
             body: formData,
           })
 
@@ -235,7 +238,9 @@ export default {
     // 加载门店列表
     async function loadStoreList() {
       try {
-        const response = await fetch('/api/stores/list')
+        const response = await fetch('/api/stores/list',{
+          method: 'GET',
+        })
         const data = await response.json()
         if (data.code === 200) {
           storeList.value = data.data
@@ -262,6 +267,7 @@ export default {
         for (const id of selectedStores.value) {
           const response = await fetch(`/api/stores/delete/${id}`, {
             method: 'DELETE',
+            headers: { authorization: `Bearer ${localStorage.getItem('token')}` },
           })
           const data = await response.json()
           if (data.code !== 200) {
@@ -347,9 +353,11 @@ export default {
 
         const response = await fetch('/api/upload?type=dirStorePhoto', {
           method: 'POST',
+          headers: {
+            authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
           body: formData,
         })
-
         if (!response.ok) {
           throw new Error('上传失败')
         }
@@ -395,6 +403,7 @@ export default {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            authorization: `Bearer ${localStorage.getItem('token')}`,
           },
           body: JSON.stringify(requestData),
         })
