@@ -3,7 +3,7 @@
  * @Author: huimeng
  * @Date: 2025-01-17 14:12:20
  * @LastEditors: huimeng
- * @LastEditTime: 2025-08-02 15:13:13
+ * @LastEditTime: 2025-08-07 11:05:19
 -->
 <script setup lang="ts">
 import OverviewNav from '@/components/NavComp/OverviewNav.vue'
@@ -31,38 +31,41 @@ import HeaderBanner from '@/components/HeaderBanner.vue';
 </template>
 
 <style scoped>
-/* 包裹整个页面内容，使其撑满视窗高度 */
+/* 基础样式 - 同时适用于PC和移动端 */
 .company-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* 设置页面最小高度为视窗高度 */
+  min-height: 100vh;
   margin: 0 auto;
-  padding: 0 20%; /* 左右各留20%的空白 */
 }
 
-/* 主内容区域，自动撑开剩余空间 */
 .company-page {
-  flex: 1; /* 占据可用的剩余空间 */
-  margin-bottom: 20px; /* 添加底部间距 */
-  text-align: justify; /* 文本两端对齐 */
+  flex: 1;
+  margin-bottom: 20px;
+  text-align: justify;
   text-indent: 2em;
+  line-height: 1.6; /* 增加行高提高可读性 */
 }
 
 .company-page-img {
-  text-align: center; /* 使图片居中 */
+  text-align: center;
+  margin-bottom: 30px;
 }
 
 .company-page-img img {
   max-width: 100%;
   height: auto;
+  margin-bottom: 15px; /* 图片间添加间距 */
 }
+
 .divider {
   border: 0;
-  height: 2px; /* 横线的高度 */
-  background-color: #b1b3b1; /* 横线的颜色 */
-  width: 100vw; /* 横线占满整个宽度 */
-  margin: 10px 0; /* 上下间距 */
+  height: 2px;
+  background-color: #b1b3b1;
+  width: 100%;
+  margin: 10px 0;
 }
+
 .footer {
   background-color: #ffffff;
   padding: 20px;
@@ -96,5 +99,45 @@ ul li {
 
 .links a:hover {
   text-decoration: underline;
+}
+
+/* PC端特定样式 */
+@media (min-width: 769px) {
+  .company-container {
+    padding: 0 20%; /* 宽屏时左右留白20% */
+  }
+
+  .company-page {
+    font-size: 16px; /* PC端标准字体大小 */
+  }
+}
+
+/* 移动端特定样式 */
+@media (max-width: 768px) {
+  .company-container {
+    padding: 0 5%; /* 移动端减少左右留白 */
+  }
+
+  .company-page {
+    text-indent: 1em; /* 移动端减少缩进 */
+    font-size: 14px; /* 移动端稍小字体 */
+    padding: 0 10px; /* 添加内边距防止文字贴边 */
+  }
+
+  .company-page-img img {
+    margin-bottom: 10px; /* 移动端减少图片间距 */
+  }
+
+  .footer {
+    padding: 15px 10px; /* 移动端调整页脚内边距 */
+  }
+}
+
+/* 超小屏幕设备优化 (可选) */
+@media (max-width: 480px) {
+  .company-page {
+    font-size: 13px; /* 更小字体 */
+    line-height: 1.5; /* 调整行高 */
+  }
 }
 </style>

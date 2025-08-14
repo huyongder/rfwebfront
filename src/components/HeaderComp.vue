@@ -1,15 +1,15 @@
 <template>
   <nav class="main-nav">
     <div class="nav-container">
-      <!-- 移动端汉堡菜单按钮 -->
-      <div class="mobile-menu-btn" @click="toggleMobileMenu">
+      <!-- 移动端悬浮菜单按钮 -->
+      <div v-if="isMobile" class="mobile-menu-btn" @click="toggleMobileMenu">
         <span></span>
         <span></span>
         <span></span>
       </div>
 
       <!-- 桌面导航 -->
-      <ul class="nav-wrap">
+      <ul v-if="!isMobile" class="nav-wrap">
         <li
           v-for="(item, index) in navLists"
           :key="index"
@@ -35,43 +35,41 @@
         </li>
       </ul>
 
-      <!-- 移动端菜单 -->
-      <div class="mobile-menu" :class="{ 'active': isMobileMenuOpen }">
-        <div class="mobile-menu-content">
-          <ul>
-            <li
-              v-for="(item, index) in navLists"
-              :key="index"
-              class="mobile-nav-item"
+      <!-- 移动端菜单 - 简化版 -->
+      <div v-if="isMobile" class="mobile-menu" :class="{ 'active': isMobileMenuOpen }">
+        <ul>
+          <li
+            v-for="(item, index) in navLists"
+            :key="index"
+            class="mobile-nav-item"
+          >
+            <router-link
+              :to="item.link"
+              class="mobile-nav-link"
+              @click="closeMobileMenu"
             >
-              <router-link
-                :to="item.link"
-                class="mobile-nav-link"
-                @click="closeMobileMenu"
-              >
-                {{ item.title }}
-                <span v-if="item.subTitle">{{ item.subTitle }}</span>
-              </router-link>
+              {{ item.title }}
+              <span v-if="item.subTitle">{{ item.subTitle }}</span>
+            </router-link>
 
-              <!-- 移动端子菜单 -->
-              <ul v-if="item.subMenu?.length" class="mobile-sub-menu">
-                <li
-                  v-for="(subItem, subIndex) in item.subMenu"
-                  :key="subIndex"
-                  class="mobile-sub-menu-item"
+            <!-- 移动端子菜单 -->
+            <ul v-if="item.subMenu?.length" class="mobile-sub-menu">
+              <li
+                v-for="(subItem, subIndex) in item.subMenu"
+                :key="subIndex"
+                class="mobile-sub-menu-item"
+              >
+                <router-link
+                  :to="subItem.link"
+                  class="mobile-sub-menu-link"
+                  @click="closeMobileMenu"
                 >
-                  <router-link
-                    :to="subItem.link"
-                    class="mobile-sub-menu-link"
-                    @click="closeMobileMenu"
-                  >
-                    {{ subItem.title }}
-                  </router-link>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </div>
+                  {{ subItem.title }}
+                </router-link>
+              </li>
+            </ul>
+          </li>
+        </ul>
       </div>
     </div>
   </nav>
@@ -97,6 +95,9 @@ export default defineComponent({
 
     const checkScreenSize = () => {
       isMobile.value = window.innerWidth <= 768
+      if (!isMobile.value) {
+        isMobileMenuOpen.value = false
+      }
     }
 
     onMounted(() => {
@@ -110,6 +111,7 @@ export default defineComponent({
 
     return {
       navLists,
+      isMobile,
       isMobileMenuOpen,
       toggleMobileMenu,
       closeMobileMenu
@@ -170,10 +172,10 @@ ul, li {
 }
 
 .nav-link b {
-  font-size: 14px; /* 设置字体大小为 14px */
-  font-weight: normal; /* 移除默认的粗体效果 */
-  opacity: 0.8; /* 稍微降低透明度，使主标题更突出 */
-  margin-top: 4px; /*调整与主标题的间距 */
+  font-size: 14px;
+  font-weight: normal;
+  opacity: 0.8;
+  margin-top: 4px;
 }
 
 /* 悬停效果 */
@@ -189,9 +191,9 @@ ul, li {
 .sub-menu {
   position: absolute;
   top: 100%;
-  left: 50%;                   /* 居中关键属性 */
-  transform: translateX(-50%); /* 居中关键属性 */
-  width: 150px;               /* 与导航项同宽 */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150px;
   min-width: 130px;
   background: #00000029;
   backdrop-filter: blur(8px);
@@ -206,13 +208,13 @@ ul, li {
 .nav-item:hover .sub-menu {
   opacity: 1;
   visibility: visible;
-  transform: translate(-50%, 3px); /* 调整居中后的下落动画 */
+  transform: translate(-50%, 3px);
 }
 
 /* 子菜单项 */
 .sub-menu-item {
   transition: all 0.25s ease;
-  margin: 2px 5px;
+  margin: 1px 5px;
   border-radius: 3px;
 }
 
@@ -227,7 +229,7 @@ ul, li {
   color: rgba(255, 255, 255, 0.95);
   font-size: 14px;
   font-weight: 500;
-  text-align: center;          /* 文字居中 */
+  text-align: center;
   text-decoration: none;
   transition: all 0.25s ease;
 }
@@ -246,100 +248,114 @@ p, b {
 
 /* 移动端样式 */
 @media (max-width: 768px) {
-  .nav-wrap {
-    display: none;
+  .main-nav {
+    background: transparent;
+    height: auto;
+  }
+
+  .nav-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: auto;
+    height: auto;
+    z-index: 1000;
   }
 
   .mobile-menu-btn {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    width: 30px;
-    height: 24px;
-    position: absolute;
-    right: 20px;
-    top: 17px;
+    width: 40px;
+    height: 40px;
+    background: #E6212A;
+    border-radius: 50%;
+    padding: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     z-index: 1001;
   }
 
   .mobile-menu-btn span {
     display: block;
-    width: 100%;
-    height: 3px;
+    width: 20px;
+    height: 2px;
     background: white;
+    margin: 0 auto;
     transition: all 0.3s ease;
   }
 
   .mobile-menu {
     position: fixed;
-    top: 0;
-    right: -100%;
-    width: 70%;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.9);
-    backdrop-filter: blur(10px);
-    transition: right 0.3s ease;
+    top: 70px;
+    right: 20px;
+    width: 200px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
     z-index: 1000;
+    max-height: calc(100vh - 90px);
     overflow-y: auto;
   }
 
   .mobile-menu.active {
-    right: 0;
-  }
-
-  .mobile-menu-content {
-    padding: 70px 20px 20px;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
   }
 
   .mobile-nav-item {
-    margin-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .mobile-nav-item:last-child {
+    border-bottom: none;
   }
 
   .mobile-nav-link {
     display: block;
     padding: 12px 15px;
-    color: white;
-    font-size: 16px;
+    color: #333;
+    font-size: 15px;
     text-decoration: none;
-    border-radius: 4px;
-    transition: background 0.3s;
+    transition: background 0.2s;
   }
 
   .mobile-nav-link span {
     display: block;
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.7);
+    color: #666;
     margin-top: 4px;
   }
 
   .mobile-nav-link:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: #f5f5f5;
   }
 
   .mobile-sub-menu {
-    margin-top: 5px;
-    padding-left: 15px;
-    border-left: 2px solid rgba(255, 255, 255, 0.1);
+    background: #f9f9f9;
   }
 
   .mobile-sub-menu-item {
-    margin-bottom: 5px;
+    border-top: 1px solid #eee;
   }
 
   .mobile-sub-menu-link {
     display: block;
-    padding: 8px 15px;
-    color: rgba(255, 255, 255, 0.8);
+    padding: 10px 15px 10px 25px;
+    color: #555;
     font-size: 14px;
     text-decoration: none;
-    border-radius: 4px;
-    transition: background 0.3s;
+    transition: background 0.2s;
   }
 
   .mobile-sub-menu-link:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
+    background: #f0f0f0;
+    color: #E6212A;
   }
 }
 

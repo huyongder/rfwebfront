@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue' // 添加这行导入
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import SizeviewNav from '@/components/NavComp/SizeviewNav.vue'
 import HeaderBanner from '@/components/HeaderBanner.vue';
 import FooterComp from '@/components/FooterComp.vue';
@@ -110,6 +110,7 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
+/* PC端保持原有样式完全不变 */
 h2 {
   text-align: center;
   font-size: 24px;
@@ -134,5 +135,25 @@ h2 {
 
 .lazy-image.loaded {
   opacity: 1;
+}
+
+/* 仅针对手机端的适配 */
+@media (max-width: 768px) {
+  h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .vertical-images {
+    padding: 0 15px;
+    box-sizing: border-box;
+  }
+
+  .lazy-image {
+    width: 100%;
+    height: auto;
+    max-height: 70vh;
+    margin-bottom: 15px;
+  }
 }
 </style>

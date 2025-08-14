@@ -9,7 +9,6 @@
         <source :src="videoPath" type="video/mp4" />
       </video>
     </div>
-    <h1 class="title">test</h1>
     <button @click="downloadVideo" class="download-button">下载视频</button>
 
     <div class="pagination">

@@ -3,7 +3,7 @@
  * @Author: huimeng
  * @Date: 2025-05-26 14:55:01
  * @LastEditors: huimeng
- * @LastEditTime: 2025-07-29 10:42:03
+ * @LastEditTime: 2025-08-06 10:29:23
 -->
 <template>
   <div class="store-management-container">
@@ -114,11 +114,12 @@
                 <div class="form-group">
                   <label>详细内容</label>
                   <div class="quill-editor-container">
-                    <quill-editor
-                      v-model:content="editingStore.detail_content"
-                      contentType="html"
-                      :options="editorOptions"
-                      @ready="onEditorReady"
+                    <RichTextEditor
+                      v-model="editingStore.detail_content"
+                      :maxImageWidth="1100"
+                      :image-upload-path="'/api/upload?type=dirStorePhoto'"
+                      :video-upload-path="'/api/upload?type=dirStoreVideo'"
+                      placeholder="请输入门店详细内容..."
                     />
                   </div>
                 </div>
@@ -138,12 +139,11 @@
 
 <script>
 import { ref, onMounted } from 'vue'
-import { QuillEditor } from '@vueup/vue-quill'
-import '@vueup/vue-quill/dist/vue-quill.snow.css'
+import RichTextEditor from '@/utils/RichTextEditor.vue'
 
 export default {
   components: {
-    QuillEditor,
+    RichTextEditor
   },
   setup() {
     const storeList = ref([])
@@ -159,81 +159,6 @@ export default {
       sort_order: 0,
       createTime: '',
     })
-
-    // Quill 编辑器配置
-    const editorOptions = {
-      modules: {
-        toolbar: {
-          container: [
-            ['bold', 'italic', 'underline', 'strike'],
-            ['blockquote', 'code-block'],
-            [{ header: 1 }, { header: 2 }],
-            [{ list: 'ordered' }, { list: 'bullet' }],
-            [{ script: 'sub' }, { script: 'super' }],
-            [{ indent: '-1' }, { indent: '+1' }],
-            [{ direction: 'rtl' }],
-            [{ size: ['small', false, 'large', 'huge'] }],
-            [{ header: [1, 2, 3, 4, 5, 6, false] }],
-            [{ color: [] }, { background: [] }],
-            [{ font: [] }],
-            [{ align: [] }],
-            ['clean'],
-            ['link', 'image', 'video'],
-          ],
-          handlers: {
-            image: imageHandler,
-          },
-        },
-      },
-      placeholder: '请输入门店详细内容...',
-      theme: 'snow',
-    }
-
-    let quillInstance = null
-
-    // 图片上传处理
-    function imageHandler() {
-      const input = document.createElement('input')
-      input.setAttribute('type', 'file')
-      input.setAttribute('accept', 'image/*')
-      input.click()
-
-      input.onchange = async () => {
-        const file = input.files[0]
-        if (!file) return
-
-        try {
-          const formData = new FormData()
-          formData.append('file', file)
-
-          const response = await fetch('/api/upload?type=dirStorePhoto', {
-            method: 'POST',
-            headers: {
-              authorization: 'Bearer ' + localStorage.getItem('token')
-            },
-            body: formData,
-          })
-
-          if (!response.ok) {
-            throw new Error('上传失败')
-          }
-
-          const data = await response.json()
-          const imageUrl = data.url
-
-          const range = quillInstance.getSelection()
-          quillInstance.insertEmbed(range.index, 'image', imageUrl)
-          quillInstance.setSelection(range.index + 1)
-        } catch (error) {
-          console.error('图片上传失败:', error)
-          alert('图片上传失败: ' + error.message)
-        }
-      }
-    }
-
-    function onEditorReady(editor) {
-      quillInstance = editor
-    }
 
     // 加载门店列表
     async function loadStoreList() {
@@ -322,6 +247,7 @@ export default {
           ...store,
           cover_image: store.coverImage || '',
           createTime: formatDateTimeLocal(store.createTime),
+          detail_content: store.detailContent || ''
         }
       } else {
         editingStore.value = {
@@ -434,7 +360,6 @@ export default {
       selectAll,
       showEditDialog,
       editingStore,
-      editorOptions,
       deleteSelected,
       toggleSelectAll,
       formatDate,
@@ -442,7 +367,6 @@ export default {
       closeEditDialog,
       handleCoverImageChange,
       saveStore,
-      onEditorReady,
     }
   },
 }
@@ -738,18 +662,13 @@ button {
   margin-top: 10px;
 }
 
-/* 富文本编辑器 */
+/* 富文本编辑器容器 */
 .quill-editor-container {
   height: 500px;
   display: flex;
   flex-direction: column;
   border: 1px solid #ddd;
   border-radius: 4px;
-}
-
-.quill-editor {
-  flex: 1;
-  min-height: 0;
 }
 
 /* 对话框按钮 */

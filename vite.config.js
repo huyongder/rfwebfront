@@ -22,13 +22,13 @@ export default defineConfig({
     proxy: {
       // 代理所有以/api开头的请求
       '/api': {
-        target: 'http://101.132.134.239:8080', // 后端服务器地址
+        target: 'http://localhost:8080', // 后端服务器地址
         changeOrigin: true, // 允许跨域
         secure: false, // 关闭SSL验证（开发环境使用）
       },
       // 代理静态文件请求
       '/uploads': {
-        target: 'http://101.132.134.239:8080',
+        target: 'http://localhost:8080',
         changeOrigin: true,
       },
     },

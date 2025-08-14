@@ -3,7 +3,7 @@
  * @Author: huimeng
  * @Date: 2025-02-19 16:21:10
  * @LastEditors: huimeng
- * @LastEditTime: 2025-02-20 08:23:06
+ * @LastEditTime: 2025-08-07 17:11:46
 -->
 
 <script lang="ts">
@@ -109,6 +109,7 @@ export default {
 </template>
 
 <style scoped>
+/* 原有PC端样式保持不变 */
 .title {
   font-size: 20px;
   font-weight: bold;
@@ -116,13 +117,63 @@ export default {
   margin-bottom: 20px;
   text-align: center;
 }
+
 .image-container {
-  text-align: center; /* 让 img 作为 inline-block 元素居中 */
+  text-align: center;
 }
 
 .text-containe {
   text-indent: 2em;
   width: 1200px;
   margin: 0 auto;
+}
+
+/* 新增移动端适配样式 */
+@media only screen and (max-width: 768px) {
+  .title {
+    font-size: 18px;
+    padding: 0 15px;
+    margin-bottom: 15px;
+    line-height: 1.4;
+  }
+
+  .text-containe {
+    width: 100%;
+    padding: 0 15px;
+    box-sizing: border-box;
+    font-size: 15px;
+    line-height: 1.8;
+    margin: 15px auto;
+    text-align: justify;
+  }
+
+  .image-container {
+    margin: 10px 0;
+  }
+
+  .competitionsPhotos {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* 小屏幕手机优化 (小于480px) */
+@media only screen and (max-width: 480px) {
+  .title {
+    font-size: 16px;
+    padding: 0 10px;
+    margin-bottom: 12px;
+  }
+
+  .text-containe {
+    font-size: 14px;
+    padding: 0 10px;
+    line-height: 1.7;
+    margin: 12px auto;
+  }
+
+  .image-container {
+    margin: 8px 0;
+  }
 }
 </style>

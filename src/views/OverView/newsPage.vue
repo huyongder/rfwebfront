@@ -192,9 +192,9 @@ export default defineComponent({
 }
 
 .content-wrapper {
-  width: 1000px; /* 固定父容器宽度 */
+  width: 1000px;
   margin: 0 auto;
-  padding: 30px 0; /* 清除左右内边距 */
+  padding: 30px 0;
 }
 
 .breadcrumb-bar {
@@ -213,8 +213,8 @@ export default defineComponent({
 }
 
 .news-item {
-  width: 1000px; /* 精确匹配父容器宽度 */
-  margin: 0 auto 20px; /* 垂直间距保持20px */
+  width: 1000px;
+  margin: 0 auto 20px;
   transition: transform 0.3s ease;
 }
 
@@ -227,16 +227,15 @@ export default defineComponent({
   border-radius: 0;
   border: none;
   background: #fff;
-  box-shadow: none !important; /* 移除默认阴影 */
+  box-shadow: none !important;
 }
 
 .card-inner {
   display: flex;
   height: 145px;
-  width: 100%; /* 确保内部元素继承宽度 */
+  width: 100%;
 }
 
-/* 图片样式 */
 .image-wrapper {
   flex: 0 0 300px;
   height: 145px;
@@ -265,7 +264,6 @@ export default defineComponent({
   color: #ccc;
 }
 
-/* 内容区域 */
 .content-main {
   flex: 1;
   padding: 15px 25px;
@@ -290,7 +288,6 @@ export default defineComponent({
   justify-content: center;
 }
 
-/* 日期样式 */
 .date-wrapper {
   text-align: center;
   line-height: 1.3;
@@ -311,7 +308,6 @@ export default defineComponent({
   font-weight: 600;
 }
 
-/* 标题区域 */
 .title-header {
   display: flex;
   justify-content: space-between;
@@ -328,6 +324,10 @@ export default defineComponent({
   transition: color 0.3s ease;
 }
 
+.title-link {
+  text-decoration: none;
+}
+
 .title-divider {
   border-bottom: 1px dashed #ddd;
   margin: 10px 0;
@@ -338,12 +338,11 @@ export default defineComponent({
   font-size: 13px;
   line-height: 1.8;
   display: -webkit-box;
-
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-/* 按钮样式 */
 .detail-btn {
   color: #333 !important;
   padding: 0;
@@ -354,7 +353,6 @@ export default defineComponent({
   color: #c7000b !important;
 }
 
-/* 交互效果 */
 .title-hover {
   color: #c7000b !important;
 }
@@ -363,7 +361,6 @@ export default defineComponent({
   border-color: #c7000b !important;
 }
 
-/* 分页样式 */
 .pagination-container {
   width: 100%;
   margin: 20px 0 0;
@@ -375,11 +372,40 @@ export default defineComponent({
 :deep(.el-pagination) {
   display: flex;
   justify-content: center;
-  flex-wrap: wrap; /* 防止页码过多换行问题 */
+  flex-wrap: wrap;
 }
 
-/* 响应式 */
-@media (max-width: 768px) {
+:deep(.el-pagination.is-background .btn-prev),
+:deep(.el-pagination.is-background .btn-next),
+:deep(.el-pagination.is-background .number) {
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+
+:deep(.el-pagination.is-background .number.active) {
+  background-color: #c7000b;
+  color: #fff;
+  border-color: #c7000b;
+}
+
+/* 平板设备适配 (768px-1024px) */
+@media (max-width: 1024px) {
+  .content-wrapper {
+    width: 100%;
+    padding: 20px 15px;
+    box-sizing: border-box;
+  }
+
+  .breadcrumb-bar {
+    margin: 15px 0 20px;
+    padding: 0 10px;
+  }
+
+  .news-item {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
   .card-inner {
     flex-direction: column;
     height: auto;
@@ -387,7 +413,12 @@ export default defineComponent({
 
   .image-wrapper {
     width: 100%;
-    height: 180px;
+    height: 200px;
+    flex: none;
+  }
+
+  .content-main {
+    padding: 15px;
   }
 
   .layout-container {
@@ -402,6 +433,7 @@ export default defineComponent({
 
   .right-date {
     justify-content: flex-start;
+    margin-top: 10px;
   }
 
   .date-wrapper {
@@ -409,6 +441,118 @@ export default defineComponent({
     border-top: 1px solid #eee;
     padding: 10px 0 0;
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .year-month {
+    margin-bottom: 0;
+    font-size: 14px;
+  }
+
+  .day-red {
+    font-size: 22px;
+  }
+
+  .news-title {
+    font-size: 18px;
+  }
+
+  .news-summary {
+    font-size: 13px;
+    -webkit-line-clamp: 3;
+  }
+
+  .pagination-container {
+    padding: 15px 0;
+  }
+
+  :deep(.el-pagination) {
+    padding: 0 10px;
+  }
+}
+
+/* 手机设备适配 (小于768px) */
+@media (max-width: 768px) {
+  .content-wrapper {
+    padding: 15px 10px;
+  }
+
+  .breadcrumb-bar {
+    margin: 10px 0 15px;
+  }
+
+  .image-wrapper {
+    height: 180px;
+  }
+
+  .content-main {
+    padding: 12px;
+  }
+
+  .news-title {
+    font-size: 17px;
+  }
+
+  .title-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .meta-info {
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .detail-btn {
+    padding-left: 0;
+    font-size: 13px;
+  }
+
+  .year-month {
+    font-size: 13px;
+  }
+
+  .day-red {
+    font-size: 20px;
+  }
+
+  .news-summary {
+    font-size: 12px;
+  }
+
+  :deep(.el-pagination .btn-prev),
+  :deep(.el-pagination .btn-next),
+  :deep(.el-pagination .number) {
+    min-width: 30px;
+    height: 30px;
+    line-height: 30px;
+    margin: 0 2px;
+    font-size: 12px;
+  }
+}
+
+/* 小屏幕手机适配 (小于480px) */
+@media (max-width: 480px) {
+  .image-wrapper {
+    height: 150px;
+  }
+
+  .news-title {
+    font-size: 16px;
+  }
+
+  .day-red {
+    font-size: 18px;
+  }
+
+  :deep(.el-pagination .btn-prev),
+  :deep(.el-pagination .btn-next),
+  :deep(.el-pagination .number) {
+    min-width: 26px;
+    height: 26px;
+    line-height: 26px;
   }
 }
 </style>

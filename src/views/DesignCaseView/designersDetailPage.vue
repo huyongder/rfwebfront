@@ -28,7 +28,7 @@
 
             <div class="info-item">
               <span class="info-label">代表作品：</span>
-              <span class="info-value">{{ designer.works.join('，') || '暂无作品信息' }}</span>
+              <span class="info-value">{{ formatDisplayArray(designer.works) || '暂无作品信息' }}</span>
             </div>
 
             <div class="info-item">
@@ -41,7 +41,7 @@
               <div class="info-value">
                 <p v-if="designer.awards.length === 0">暂无获奖信息</p>
                 <ul v-else>
-                  <li v-for="(award, index) in designer.awards" :key="index">{{ award }}</li>
+                  <li v-for="(award, index) in designer.awards" :key="index">{{ cleanString(award) }}</li>
                 </ul>
               </div>
             </div>
@@ -73,17 +73,40 @@ const route = useRoute();
 const designer = ref(null);
 const error = ref(null);
 
+// 清理字符串中的特殊字符
+function cleanString(str) {
+  if (!str) return '';
+  // 去除前后的方括号、引号和空格
+  return str.toString()
+    .replace(/^\[|\]$/g, '')
+    .replace(/^"|"$/g, '')
+    .replace(/^'|'$/g, '')
+    .trim();
+}
+
+// 格式化数组显示
+function formatDisplayArray(arr) {
+  if (!arr || arr.length === 0) return '';
+  return arr.map(item => cleanString(item)).join('，');
+}
+
 function tryParseJSON(str) {
   if (!str) return [];
   try {
-    const parsed = JSON.parse(str);
+    // 先清理字符串
+    const cleanedStr = cleanString(str);
+    // 尝试解析为JSON
+    const parsed = JSON.parse(cleanedStr);
     if (typeof parsed === 'string') {
+      // 如果是字符串，再次尝试解析
       return tryParseJSON(parsed);
     }
+    // 确保返回的是数组
     return Array.isArray(parsed) ? parsed : [parsed];
   } catch (error) {
     console.error('Error parsing JSON:', error);
-    return [str]; // 如果解析失败，返回包含原始字符串的数组
+    // 如果解析失败，返回包含原始字符串的数组
+    return [str];
   }
 }
 
@@ -126,12 +149,12 @@ onMounted(async () => {
 }
 
 .left-section {
-  flex: 0 0 400px; /* 固定宽度 */
+  flex: 0 0 400px;
 }
 
 .right-section {
   flex: 1;
-  max-width: calc(100% - 460px); /* 总宽度减去左侧图片和间隙 */
+  max-width: calc(100% - 460px);
 }
 
 .avatar {
@@ -212,6 +235,8 @@ onMounted(async () => {
   font-size: 20px;
 }
 
+/* ========== 手机端适配 ========== */
+/* 平板设备 (1024px以下) */
 @media (max-width: 1024px) {
   .content {
     gap: 40px;
@@ -231,6 +256,7 @@ onMounted(async () => {
   }
 }
 
+/* 中等尺寸平板 (768px以下) */
 @media (max-width: 768px) {
   .designer-detail {
     padding: 30px 15px;
@@ -254,7 +280,86 @@ onMounted(async () => {
   .avatar {
     max-width: 100%;
     max-height: 400px;
-    margin: 0 auto;
+  }
+}
+
+/* 手机设备 (576px以下) */
+@media (max-width: 576px) {
+  .designer-detail-wrapper {
+    padding: 20px 0;
+  }
+
+  .designer-detail {
+    padding: 15px;
+  }
+
+  .name {
+    font-size: 24px;
+    padding-left: 10px;
+  }
+
+  .position {
+    font-size: 16px;
+    margin-left: 8px;
+  }
+
+  .divider-line {
+    margin: 15px 0;
+  }
+
+  .info-item {
+    margin-bottom: 15px;
+  }
+
+  .info-label,
+  .info-value {
+    font-size: 15px;
+  }
+
+  .info-value ul {
+    padding-left: 18px;
+  }
+}
+
+/* 小尺寸手机 (400px以下) */
+@media (max-width: 400px) {
+  .name {
+    font-size: 22px;
+  }
+
+  .position {
+    font-size: 14px;
+  }
+
+  .info-label,
+  .info-value {
+    font-size: 14px;
+  }
+
+  .info-value ul {
+    padding-left: 15px;
+  }
+
+  .info-item {
+    margin-bottom: 12px;
+  }
+}
+
+/* 超小尺寸手机 (360px以下) */
+@media (max-width: 360px) {
+  .name-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .position {
+    margin-left: 12px;
+    margin-top: 5px;
+  }
+
+  .info-label {
+    display: block;
+    margin-bottom: 5px;
   }
 }
 </style>

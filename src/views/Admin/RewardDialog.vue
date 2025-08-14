@@ -20,17 +20,18 @@
         </el-form-item>
         <el-form-item label="部门">
           <el-select
-            v-model="queryParams.departmentId"
+            v-model="queryParams.department"
             placeholder="请选择部门"
             clearable
+            filterable
             style="width: 200px"
             popper-class="department-select"
           >
             <el-option
               v-for="item in departments"
-              :key="item.id"
+              :key="item.name"
               :label="item.name"
-              :value="item.id"
+              :value="item.name"
             />
           </el-select>
         </el-form-item>
@@ -50,6 +51,7 @@
             v-model="queryParams.type"
             placeholder="请选择类型"
             clearable
+            filterable
             style="width: 120px"
           >
             <el-option label="奖励" :value="1" />
@@ -65,7 +67,7 @@
       <!-- 查询结果统计信息 -->
       <div class="search-result-info">
         <el-alert
-          :title="`共找到 ${total} 条记录，其中奖励 ${rewardCount} 条，惩罚 ${punishCount} 条`"
+          :title="`共找到 ${total} 条记录，其中当前页面奖励 ${rewardCount} 条，惩罚 ${punishCount} 条`"
           type="info"
           :closable="false"
           show-icon
@@ -79,19 +81,23 @@
         :row-style="{height: '60px'}"
         :header-cell-style="{background: '#f5f7fa', color: '#606266'}"
         :span-method="spanMethod"
-      >
-        <el-table-column prop="title" label="姓名" min-width="180" />
-        <el-table-column prop="departmentName" label="部门" min-width="180" />
-        <el-table-column prop="recordDate" label="日期" min-width="120" />
-        <el-table-column prop="type" label="类型" min-width="100">
+        >
+        <el-table-column prop="title" label="姓名" width="120" />
+        <el-table-column prop="departmentName" label="部门" width="150" />
+        <el-table-column prop="recordDate" label="奖惩日期" width="120" />
+        <el-table-column prop="type" label="类型" width="100">
           <template #default="scope">
             <el-tag :type="scope.row.type === 1 ? 'success' : 'danger'">
               {{ scope.row.type === 1 ? '奖励' : '惩罚' }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="createTime" label="创建时间" min-width="180" />
-        <el-table-column label="操作" min-width="180" fixed="right">
+        <el-table-column label="奖惩内容" min-width="300">
+          <template #default="scope">
+            <div v-html="scope.row.content"></div>  
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="180" fixed="right">
           <template #default="scope">
             <el-button size="small" @click="handleEdit(scope.row)">编辑</el-button>
             <el-button size="small" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
@@ -130,7 +136,7 @@
           <el-col :span="12">
             <el-form-item label="部门">
               <el-select
-                v-model="form.departmentId"
+                v-model="form.department"
                 placeholder="请选择部门"
                 style="width: 100%"
                 popper-class="department-select"
@@ -216,7 +222,7 @@ const queryParams = ref({
   pageNum: 1,
   pageSize: 10,
   title: '',
-  departmentId: null,
+  department: null,
   startDate: null,
   endDate: null,
   type: null
@@ -231,16 +237,13 @@ const form = ref({
   content: ''
 })
 
-// 添加计算属性，将departmentId映射为departmentName
+
 const tableDataWithDepartmentName = computed(() => {
-  return tableData.value.map(item => {
-    const department = departments.value.find(d => d.id === item.departmentId)
-    return {
-      ...item,
-      departmentName: department ? department.name : '未知部门'
-    }
-  })
-})
+  return tableData.value.map(item => ({
+    ...item,
+    departmentName: item.department || '未知部门' // 直接取department字段
+  }));
+});
 
 const dialogWidth = computed(() => {
   return windowWidth.value <= 768 ? '90%' : '60%'
@@ -270,7 +273,7 @@ const handleSpanData = (data) => {
       spanArr.value.push(1)
       pos = 0
     } else {
-      if (item.departmentId === data[index - 1].departmentId) {
+      if (item.department === data[index - 1].department) {
         spanArr.value[pos] += 1
         spanArr.value.push(0)
       } else {
@@ -329,7 +332,7 @@ const resetQuery = () => {
     pageNum: 1,
     pageSize: 10,
     title: '',
-    departmentId: null,
+    department: null,
     startDate: null,
     endDate: null,
     type: null
@@ -362,7 +365,7 @@ const handleAdd = () => {
   form.value = {
     id: null,
     title: '',
-    departmentId: null,
+    department: null,
     recordDate: new Date().toISOString().split('T')[0],
     type: 1,
     content: ''

@@ -3,7 +3,7 @@
  * @Author: huimeng
  * @Date: 2025-02-26 08:23:28
  * @LastEditors: huimeng
- * @LastEditTime: 2025-07-03 09:28:40
+ * @LastEditTime: 2025-08-07 16:03:12
 -->
 
 <template>
@@ -58,8 +58,15 @@
               :file-list="form.images"
               multiple
               :limit="3"
+              accept="image/*"
+              capture="camera"
             >
               <i class="el-icon-plus"></i>
+              <template #tip>
+                <div class="el-upload__tip">
+                  最多上传3张图片，每张不超过5MB
+                </div>
+              </template>
             </el-upload>
           </el-form-item>
 
@@ -114,7 +121,9 @@ export default {
 
     // 手机号验证规则
     const validatePhone = (rule, value, callback) => {
-      if (!/^1[3-9]\d{9}$/.test(value)) {
+      if (!value) {
+        callback(new Error('手机号不能为空'))
+      } else if (!/^1[3-9]\d{9}$/.test(value)) {
         callback(new Error('手机号格式不正确'))
       } else {
         callback()
@@ -134,8 +143,23 @@ export default {
 
     // 处理文件变化
     const handleFileChange = (file, fileList) => {
+      // 检查文件类型
+      const isImage = file.raw && file.raw.type.startsWith('image/')
+      if (!isImage) {
+        ElMessage.error('只能上传图片文件')
+        return false
+      }
+
+      // 检查文件大小 (限制5MB)
+      const isLt5M = file.raw.size / 1024 / 1024 < 5
+      if (!isLt5M) {
+        ElMessage.error('图片大小不能超过5MB')
+        return false
+      }
+
       form.value.images = fileList.slice(-3) // 限制最多3个文件
       isFormDirty.value = fileList.length > 0
+      return true
     }
 
     // 提交表单
@@ -147,7 +171,7 @@ export default {
         // 创建FormData对象用于文件上传
         const formData = new FormData()
 
-        // 构造投诉DTO对象，对应后端的ComplaintDTO
+        // 构造投诉DTO对象
         const complaintDTO = {
           name: form.value.name,
           phone: form.value.phone,
@@ -157,7 +181,6 @@ export default {
         }
 
         // 将DTO对象转为JSON Blob并添加到FormData
-        // 对应后端的@RequestPart("complaintDTO")
         formData.append(
           'complaintDTO',
           new Blob([JSON.stringify(complaintDTO)], {
@@ -166,30 +189,29 @@ export default {
         )
 
         // 添加上传的文件
-        // 对应后端的@RequestPart(value = "files", required = false)
         if (form.value.images && form.value.images.length > 0) {
           form.value.images.forEach((file) => {
-            formData.append('files', file.raw) // 添加原始文件对象
+            formData.append('files', file.raw)
           })
         }
 
         // 发送请求到后端
         const response = await axios.post('/api/complaints', formData, {
           headers: {
-            'Content-Type': 'multipart/form-data', // 必须设置multipart类型
+            'Content-Type': 'multipart/form-data',
           },
         })
 
         // 处理成功响应
         if (response.status === 200 || response.data.success == true) {
           ElMessage.success('提交成功！我们将尽快联系您')
-          formRef.value.resetFields() // 重置表单
-          form.value.images = [] // 清空已上传图片
-          isFormDirty.value = false // 重置表单修改标记
+          formRef.value.resetFields()
+          form.value.images = []
+          isFormDirty.value = false
         }
       } catch (error) {
         console.error('提交失败：', error)
-        ElMessage.error('提交失败，请检查表单')
+        ElMessage.error(error.response?.data?.message || '提交失败，请检查表单')
       }
     }
 
@@ -202,7 +224,7 @@ export default {
     const handleBeforeUnload = (event) => {
       if (isFormDirty.value) {
         event.preventDefault()
-        event.returnValue = '' // 用于兼容某些浏览器
+        event.returnValue = ''
       }
     }
 
@@ -223,26 +245,13 @@ export default {
 </script>
 
 <style scoped>
-/* 默认的布局（大屏幕） */
+/* 默认的布局（大屏幕 - PC端） */
 .suggestions-page {
   display: flex;
   min-height: 80vh;
   margin: 0;
   padding: 0;
-  flex-direction: row; /* 默认横向布局 */
-}
-
-/* 当屏幕宽度小于 768px 时，改为上下布局 */
-@media screen and (max-width: 768px) {
-  .suggestions-page {
-    flex-direction: column; /* 垂直排列 */
-  }
-  .suggestions-page-left,
-  .suggestions-page-right {
-    flex: none;
-    width: 100%; /* 左右部分宽度占满屏幕 */
-    padding: 10px; /* 调整内边距 */
-  }
+  flex-direction: row;
 }
 
 .suggestions-page-left {
@@ -250,11 +259,26 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px; /* 可以为左侧添加一些内边距 */
+}
+
+.suggestions-page-left-content {
+  width: 100%;
+  max-width: 678px;
+  padding: 20px;
+}
+
+.suggestions-page-left-content p {
+  margin-bottom: 15px;
+  line-height: 1.6;
+  font-size: 16px;
 }
 
 .suggestions-page-left-content img {
-  max-width: 100%; /* 确保图片不会超过容器宽度 */
+  width: 100%;
+  max-width: 678px;
+  height: auto;
+  display: block;
+  margin-top: 20px;
 }
 
 .suggestions-page-right {
@@ -266,14 +290,157 @@ export default {
 
 .complaint-form {
   width: 100%;
-  max-width: 600px;
+  max-width: 678px;
   background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px; /* 适当增加表单的内边距 */
+  padding: 30px;
+  border-radius: 4px;
 }
 
 .el-form-item {
-  margin-bottom: 20px;
+  margin-bottom: 22px;
+}
+
+.el-form-item:last-child {
+  margin-bottom: 0;
+}
+
+.el-upload__tip {
+  font-size: 12px;
+  color: #999;
+  margin-top: 8px;
+}
+
+/* 移动端适配 */
+@media screen and (max-width: 768px) {
+  .suggestions-page {
+    flex-direction: column;
+    width: 100vw;
+    overflow-x: hidden;
+    padding: 0;
+    margin: 0;
+  }
+
+  .suggestions-page-left,
+  .suggestions-page-right {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  .suggestions-page-left-content {
+    padding: 15px;
+    box-sizing: border-box;
+  }
+
+  .suggestions-page-left-content p {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+
+  .complaint-form {
+    padding: 15px;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0;
+  }
+
+  /* 表单元素重置 */
+  :deep(.el-form) {
+    width: 100%;
+  }
+
+  :deep(.el-form-item) {
+    display: block;
+    margin-bottom: 18px;
+  }
+
+  :deep(.el-form-item__label) {
+    width: 100% !important;
+    text-align: left !important;
+    float: none !important;
+    display: block;
+    margin-bottom: 6px;
+    padding: 0 !important;
+    line-height: 1.5;
+    font-size: 14px !important;
+  }
+
+  :deep(.el-form-item__content) {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+
+  :deep(.el-input),
+  :deep(.el-textarea),
+  :deep(.el-radio-group),
+  :deep(.el-upload) {
+    width: 100% !important;
+  }
+
+  :deep(.el-input__inner),
+  :deep(.el-textarea__inner) {
+    width: 100% !important;
+    max-width: 100% !important;
+    font-size: 14px !important;
+  }
+
+  /* 上传组件调整 */
+  :deep(.el-upload-list--picture-card) {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -5px;
+  }
+
+  :deep(.el-upload-list--picture-card .el-upload-list__item) {
+    width: calc(33.33% - 10px) !important;
+    height: calc(33.33vw - 10px) !important;
+    margin: 5px;
+  }
+
+  :deep(.el-upload--picture-card) {
+    width: calc(33.33% - 10px) !important;
+    height: calc(33.33vw - 10px) !important;
+    line-height: calc(33.33vw - 10px) !important;
+    margin: 5px;
+  }
+
+  :deep(.el-upload-list--picture-card .el-upload-list__item-thumbnail) {
+    object-fit: cover;
+  }
+
+  /* 单选按钮组调整 */
+  :deep(.el-radio-group) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  :deep(.el-radio) {
+    margin-bottom: 8px;
+    margin-right: 0 !important;
+  }
+
+  :deep(.el-radio:last-child) {
+    margin-bottom: 0;
+  }
+
+  :deep(.el-radio__label) {
+    font-size: 14px !important;
+  }
+
+  /* 解决iOS设备点击问题 */
+  :deep(.el-upload) {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :deep(.el-upload--picture-card) {
+    -webkit-touch-callout: none;
+  }
+
+  /* 全局宽度限制 */
+  * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
 }
 </style>

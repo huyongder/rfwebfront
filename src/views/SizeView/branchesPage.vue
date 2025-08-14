@@ -29,51 +29,51 @@ export default {
     return {
       images: [
         {
-          src: jinzhaiImg, // 使用导入的变量
-          alt: 'Image jinzhai',
+          src: jinzhaiImg,
+          alt: '金寨分公司',
           caption1: '金寨分公司',
-          caption2: '地址： 金寨县莲花山路堃茂大厦A座1-2层',
-          caption3: '电话： 0564-7222666 (占地3000平米)',
+          caption2: '地址：金寨县莲花山路堃茂大厦A座1-2层',
+          caption3: '电话：0564-7222666 (占地3000平米)',
           link: '/about/branches/jinzhai',
         },
         {
           src: shouxianImg,
-          alt: 'Image shouxian',
+          alt: '寿县分公司',
           caption1: '寿县分公司',
-          caption2: '地址： 寿县瑶海大市场4栋4-5层',
-          caption3: '电话： 0554-2753666 (占地3000平米)',
+          caption2: '地址：寿县瑶海大市场4栋4-5层',
+          caption3: '电话：0554-2753666 (占地3000平米)',
           link: '/about/branches/shouxian',
         },
         {
           src: huoshanImg,
-          alt: 'Image huoshan',
+          alt: '霍山分公司',
           caption1: '霍山分公司',
-          caption2: '地址： 霍山县华强文旅城2号楼2-3层',
-          caption3: '电话： 0564-7259888 (占地3000平米)',
+          caption2: '地址：霍山县华强文旅城2号楼2-3层',
+          caption3: '电话：0564-7259888 (占地3000平米)',
           link: '/about/branches/huoshan',
         },
         {
           src: huoqiuImg,
-          alt: 'Image huoqiu',
+          alt: '霍邱分公司',
           caption1: '霍邱分公司',
-          caption2: '地址： 霍邱县苏润城市广场S4号楼5层',
-          caption3: '电话： 0564-7280888 (占地3000平米)',
+          caption2: '地址：霍邱县苏润城市广场S4号楼5层',
+          caption3: '电话：0564-7280888 (占地3000平米)',
           link: '/about/branches/huoqiu',
         },
         {
           src: shuchengImg,
-          alt: 'Image shucheng',
+          alt: '舒城分公司',
           caption1: '舒城分公司',
-          caption2: '地址： 舒城梅河东路华盛集团5-6层',
-          caption3: '电话： 0564-7225888 (占地3000平米)',
+          caption2: '地址：舒城梅河东路华盛集团5-6层',
+          caption3: '电话：0564-7225888 (占地3000平米)',
           link: '/about/branches/shucheng',
         },
         {
           src: yejiImg,
-          alt: 'Image yeji',
+          alt: '叶集分公司',
           caption1: '叶集分公司',
-          caption2: '地址： 叶集区金叶大道金叶新城3-4层',
-          caption3: '电话： 0564-7280888 (占地3000平米)',
+          caption2: '地址：叶集区金叶大道金叶新城3-4层',
+          caption3: '电话：0564-7280888 (占地3000平米)',
           link: '/about/branches/yeji',
         },
       ],
@@ -111,6 +111,7 @@ export default {
 </template>
 
 <style scoped>
+/* PC端保持原有样式完全不变 */
 .container {
   padding: 20px;
   font-family: Arial, sans-serif;
@@ -202,5 +203,76 @@ export default {
 
 .caption p {
   margin: 5px 0;
+}
+
+/* 仅针对手机端的适配 */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px;
+  }
+
+  .title {
+    font-size: 22px;
+    margin-left: 0;
+    margin-bottom: 10px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .current-location {
+    width: 100%;
+    text-align: center;
+  }
+
+  .location-text {
+    margin-right: 0;
+    font-size: 12px;
+  }
+
+  .gallery {
+    padding: 10px;
+    gap: 15px;
+  }
+
+  .gallery-item {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 15px;
+  }
+
+  .image {
+    height: auto;
+    max-height: 200px;
+  }
+
+  .caption {
+    font-size: 14px;
+    padding: 0 10px;
+  }
+
+  .first-line {
+    font-size: 18px;
+  }
+}
+
+/* 小屏手机适配 */
+@media (max-width: 480px) {
+  .title {
+    font-size: 20px;
+  }
+
+  .gallery-item {
+    margin-bottom: 10px;
+  }
+
+  .caption {
+    font-size: 13px;
+  }
+
+  .first-line {
+    font-size: 16px;
+  }
 }
 </style>

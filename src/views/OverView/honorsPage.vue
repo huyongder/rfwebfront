@@ -1,9 +1,9 @@
 <!--
- * @Descripttion: 
+ * @Descripttion:
  * @Author: huimeng
  * @Date: 2025-02-11 11:15:59
  * @LastEditors: huimeng
- * @LastEditTime: 2025-08-03 09:56:33
+ * @LastEditTime: 2025-08-07 15:04:04
 -->
 <!-- eslint-disable -->
 <template>
@@ -16,8 +16,6 @@
         :key="index"
         :src="image.isLoaded ? image.src : placeholder"
         :alt="'荣誉图片 ' + (index + 1)"
-        :width="imageWidth"
-        :height="imageHeight"
         loading="lazy"
         @load="handleImageLoad(index)"
         ref="imageRefs"
@@ -69,8 +67,6 @@ const placeholder =
   'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIHZpZXdCb3g9IjAgMCAxIDEiPjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiNlZWVlZWUiLz48L3N2Zz4='
 const imageRefs = ref<HTMLImageElement[]>([])
 const observer = ref<IntersectionObserver | null>(null)
-const imageWidth = 800
-const imageHeight = 600
 
 // 4. 图片加载处理
 const handleImageLoad = (index: number) => {
@@ -90,7 +86,6 @@ onMounted(() => {
           const img = entry.target as HTMLImageElement
           const index = imageRefs.value.indexOf(img)
           if (index !== -1 && !images.value[index].isLoaded) {
-            // 实际图片已经通过src绑定，这里只需要触发加载状态
             images.value[index].isLoaded = true
           }
           observer.value?.unobserve(img)
@@ -103,7 +98,6 @@ onMounted(() => {
     },
   )
 
-  // 观察所有图片元素
   imageRefs.value.forEach((img) => {
     observer.value?.observe(img)
   })
@@ -135,11 +129,13 @@ onBeforeUnmount(() => {
 .lazy-image {
   width: 100%;
   height: auto;
-  object-fit: cover;
+  max-height: 400px;
+  object-fit: contain;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: all 0.5s ease;
+  transition: all 0.3s ease;
   opacity: 0;
+  background-color: #f5f5f5;
 }
 
 .lazy-image.loaded {
@@ -151,10 +147,41 @@ onBeforeUnmount(() => {
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-@media (max-width: 768px) {
+/* 平板设备适配 */
+@media (max-width: 1024px) {
   .vertical-images {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.2rem;
+  }
+}
+
+/* 手机端适配 */
+@media (max-width: 768px) {
+  .core-advantages {
+    padding: 1rem 0;
+  }
+
+  .vertical-images {
+    grid-template-columns: 1fr;
+    width: 95%;
     gap: 1rem;
+    padding: 0 10px;
+  }
+
+  .lazy-image {
+    max-height: none;
+    border-radius: 6px;
+  }
+}
+
+/* 小屏手机适配 */
+@media (max-width: 480px) {
+  .vertical-images {
+    gap: 0.8rem;
+  }
+
+  .lazy-image {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 }
 </style>

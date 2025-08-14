@@ -10,12 +10,14 @@
     <div v-else class="swiper-container">
       <div class="swiper-wrapper">
         <div v-for="(photo, index) in photos" :key="index" class="swiper-slide">
-          <img
-            :src="photo.url"
-            :alt="photo.filename"
-            class="carousel-image"
-            @load="handleImageLoad"
-          />
+          <div class="slide-content" @click="handleImageClick(photo.filename)">
+            <img
+              :src="photo.url"
+              :alt="photo.filename"
+              class="carousel-image"
+              @load="handleImageLoad"
+            />
+          </div>
         </div>
       </div>
       <!-- 自定义翻页按钮 -->
@@ -39,6 +41,8 @@ export default {
     const photos = ref([])
     const loading = ref(true)
     const swiperInstance = ref(null)
+    const touchStartX = ref(0)
+    const isClick = ref(true)
 
     // 获取图片数据
     const fetchPhotos = async () => {
@@ -54,13 +58,34 @@ export default {
       }
     }
 
+    // 处理图片点击事件
+    const handleImageClick = async (filename) => {
+      if (!isClick.value) return
+
+      try {
+        const response = await axios.get(`/api/photo-links/${filename}`)
+        if (response.data?.link) {
+          // PC端用新窗口打开
+          if (window.innerWidth > 768) {
+            window.open(response.data.link, '_blank')
+          }
+          // 移动端用当前窗口打开（避免被拦截）
+          else {
+            window.location.href = response.data.link
+          }
+        }
+      } catch (error) {
+        console.error('获取链接失败:', error)
+      }
+    }
+
     // 初始化轮播
     const initSwiper = () => {
       swiperInstance.value = new Swiper('.swiper-container', {
         modules: [Navigation, Autoplay],
         loop: true,
         slidesPerView: 1,
-        centeredSlides: false, // 关键修改：避免居中导致的偏移
+        centeredSlides: false,
         spaceBetween: 0,
         autoplay: {
           delay: 3000,
@@ -73,6 +98,15 @@ export default {
         observer: true,
         observeParents: true,
         speed: 800,
+        on: {
+          touchStart: (swiper, event) => {
+            touchStartX.value = event.changedTouches[0].screenX
+            isClick.value = true
+          },
+          touchMove: () => {
+            isClick.value = false
+          }
+        }
       })
     }
 
@@ -109,6 +143,7 @@ export default {
       photos,
       loading,
       handleImageLoad,
+      handleImageClick,
     }
   },
 }
@@ -142,7 +177,7 @@ export default {
 
 .swiper-wrapper {
   display: flex;
-  width: auto !important;
+  width: 100%;
   margin: 0 !important;
   padding: 0 !important;
 }
@@ -156,13 +191,19 @@ export default {
   padding: 0 !important;
 }
 
+.slide-content {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
 .carousel-image {
   width: 100%;
-  max-width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
   display: block;
+  cursor: pointer;
 }
 
 .custom-prev,
@@ -202,6 +243,7 @@ export default {
   right: 0;
 }
 
+/* 移动端适配 */
 @media (max-width: 768px) {
   .fullscreen-carousel {
     height: 200px;
@@ -214,9 +256,29 @@ export default {
     font-size: 24px;
     margin: 0 10px;
   }
+
+  .loading,
+  .empty {
+    font-size: 1rem;
+  }
+
+  .slide-content {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* 超小屏幕适配 */
+@media (max-width: 480px) {
+  .fullscreen-carousel {
+    height: 150px;
+  }
+
+  .custom-prev,
+  .custom-next {
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+    margin: 0 5px;
+  }
 }
 </style>
-
-
-
-

@@ -1,8 +1,8 @@
 <template>
   <div class="header-banner">
-    <!-- 欢迎条 -->
-    <div class="welcome-bar">
-      <p class="welcome-text">六安装饰装修公司——荣锋装饰集团欢迎您！</p>
+    <!-- 欢迎条 - 移动端隐藏 -->
+    <div class="welcome-bar" v-show="!isMobile">
+      <p class="welcome-text">安徽荣锋装饰集团欢迎您！</p>
     </div>
 
     <!-- 主要内容 -->
@@ -11,27 +11,29 @@
       <div class="brand-block" @click="$router.push('/')">
         <img src="/src/public/index/logo2.png" alt="集团标志" class="logo" />
       </div>
-      <!-- 右侧内容容器 -->
+
+      <!-- 右侧内容容器 - 移动端简化 -->
       <div class="right-content" v-show="!isMobile">
-        <!-- 服务热线 -->
+        <!-- 服务热线 - 移动端只显示图标 -->
         <div class="hotline-block">
           <img src="/src/public/index/redPhone.png" class="hotline-icon" alt="热线图标" />
-          <div class="hotline-text">
+          <div class="hotline-text" v-show="!isMobile">
             <p class="hotline-title">全国服务热线</p>
             <p class="hotline-number">400-606-8788</p>
           </div>
         </div>
 
-        <!-- 公众号 -->
-        <div class="qr-block" v-show="isMobile">
+        <!-- 公众号 - 移动端隐藏 -->
+        <div class="qr-block" v-show="!isMobile">
           <img src="/src/public/index/qr.png" alt="公众号" class="qr-code" />
           <p class="qr-text">扫码关注公众号</p>
         </div>
       </div>
     </div>
 
-    <HeaderComp :navLists = "navLists"/>
-    <!-- 大图 -->
+    <HeaderComp :navLists="navLists"/>
+
+    <!-- 大图 - 移动端高度压缩 -->
     <div class="banner-image">
       <img src="/src/public/index/largePhoto.jpg" alt="banner" />
     </div>
@@ -42,48 +44,44 @@
 import { defineComponent, inject, ref, onMounted } from 'vue';
 import HeaderComp from './HeaderComp.vue';
 
-
-
 export default defineComponent({
   components: {
     HeaderComp,
   },
-
   setup() {
     const navLists = inject('NavLists', []);
     const isMobile = ref(false);
+
     onMounted(() => {
-      isMobile.value = window.innerWidth <= 768;
-      window.addEventListener('resize', () => {
-        isMobile.value = window.innerWidth <= 768;
-      });
+      checkMobile();
+      window.addEventListener('resize', checkMobile);
     });
-    console.log('注入的导航数据:', navLists); // 查看控制台输出
+
+    const checkMobile = () => {
+      isMobile.value = window.innerWidth <= 768;
+    };
+
     return { navLists, isMobile };
   },
 });
-
 </script>
 
-
 <style scoped>
+/* 基础样式 */
 .header-banner {
   width: 100%;
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
-  margin: 0;
-  padding: 0;
 }
 
-/* 欢迎条样式 - 保持左侧偏移 */
+/* 欢迎条样式 */
 .welcome-bar {
-  width: 100%;
-  height: 34px;
+  height: 28px;
   background-color: #00000014;
   display: flex;
   align-items: center;
-  padding-left: 12%; /* 保持左侧偏移 */
+  padding-left: 12%;
 }
 
 .welcome-text {
@@ -101,71 +99,53 @@ export default defineComponent({
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 100%;
-  padding: 10px 0;
-  position: relative;
+  padding: 8px 0;
 }
 
 /* 品牌logo */
 .brand-block {
   cursor: pointer;
-  flex-shrink: 0;
 }
 .logo {
-  height: 60px;
-}
-
-/* 代理信息 - 居中 */
-.agent-info {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
-.agent-logo {
-  height: 60px;
+  height: 50px;
 }
 
 /* 右侧内容容器 */
 .right-content {
   display: flex;
   align-items: center;
-  gap: 30px;
-  margin-left: auto;
+  gap: 20px;
 }
 
 /* 热线电话 */
 .hotline-block {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .hotline-icon {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
 }
 
 .hotline-text {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-}
-
-.hotline-title,
-.hotline-number {
-  padding: 0;
-  margin: 0;
+  gap: 2px;
 }
 
 .hotline-title {
-  font-size: 18px;
+  font-size: 14px;
   color: #666;
+  margin: 0;
 }
 
 .hotline-number {
-  font-size: 18px;
+  font-size: 14px;
   font-weight: bold;
   color: #fa0505;
+  margin: 0;
 }
 
 /* 二维码区域 */
@@ -176,106 +156,36 @@ export default defineComponent({
 }
 
 .qr-code {
-  width: 68px;
-  height: 68px;
-  padding: 4px;
+  width: 50px;
+  height: 50px;
 }
 
 .qr-text {
-  font-size: 12px;
-  margin: 0;
-  padding: 0;
-  text-align: center;
+  font-size: 10px;
+  margin: 2px 0 0;
 }
 
 /* banner大图 */
 .banner-image {
   width: 100%;
-  min-width: unset;
-  max-width: none;
   overflow: hidden;
-  box-sizing: border-box;
-  display: block;
-  place-items: center;
-  margin: 0 auto;
 }
 
 .banner-image img {
-  width: auto;
+  width: 100%;
   height: auto;
-  max-height: 300px; /* 限制最大高度 */
-  object-fit: cover; /* 保持比例裁剪 */
+  max-height: 250px;
+  object-fit: cover;
 }
 
-/* 移动端适配 */
-@media (max-width: 768px) {
-  .welcome-bar {
-    padding-left: 20px; /* 移动端保持左侧偏移但减少距离 */
-  }
-
-  .welcome-text {
-    font-size: 12px;
-    white-space: nowrap;
-    text-align: center; /* 确保文本居中 */
-  }
-
-  .main-content {
-    width: 95%;
-    flex-wrap: wrap;
-    justify-content: center;
-    padding: 10px 0;
-  }
-
-  .brand-block {
-    order: 1;
-    margin-bottom: 10px;
-  }
-
-  .agent-info {
-    position: static;
-    order: 3;
-    transform: none;
-    width: 100%;
-    text-align: center;
-    margin-top: 10px;
+/* ================ 响应式设计 ================ */
+@media (max-width: 992px) {
+  .logo {
+    height: 45px;
   }
 
   .right-content {
-    order: 2;
-    margin-left: 0;
     gap: 15px;
-  }
-
-  .hotline-block {
-    gap: 5px;
-  }
-
-  .hotline-title, .hotline-number {
-    font-size: 14px;
-  }
-
-  .hotline-icon {
-    width: 30px;
-    height: 30px;
-  }
-
-  .qr-code {
-    width: 50px;
-    height: 50px;
-  }
-
-  .qr-text {
-    font-size: 10px;
-  }
-}
-
-@media (max-width: 480px) {
-  .right-content {
-    gap: 10px;
-  }
-
-  .hotline-text {
-    display: none;
   }
 
   .hotline-icon {
@@ -283,143 +193,70 @@ export default defineComponent({
     height: 25px;
   }
 
-  .qr-code {
-    width: 40px;
-    height: 40px;
-  }
-
-  .right-content {
-  display: flex;
-  align-items: center;
-  gap: 30px;
-  margin-left: auto;
-  flex-wrap: wrap; /* 新增：允许换行 */
-  justify-content: flex-end; /* 新增：右对齐 */
-}
-
-/* 修改后的移动端适配 */
-@media (max-width: 992px) { /* 新增中等屏幕适配 */
-  .right-content {
-    gap: 20px;
-  }
-
-  .hotline-title {
-    font-size: 16px;
-  }
-
+  .hotline-title,
   .hotline-number {
-    font-size: 16px;
+    font-size: 13px;
   }
 
   .qr-code {
-    width: 60px;
-    height: 60px;
+    width: 45px;
+    height: 45px;
   }
 }
 
 @media (max-width: 768px) {
+  .welcome-bar {
+    display: none;
+  }
+
   .main-content {
-    flex-wrap: wrap;
-    justify-content: space-between; /* 修改为两端对齐 */
-    padding: 10px 5%; /* 增加左右内边距 */
+    width: 95%;
+    padding: 5px 0;
   }
 
-  .brand-block {
-    order: 1;
-    margin-bottom: 0; /* 移除底部边距 */
-    flex: 0 0 auto;
-  }
-
-  .agent-info {
-    order: 3;
-    width: 100%;
-    margin: 10px 0;
-    text-align: center;
-    position: static;
-    transform: none;
-  }
-
-  .right-content {
-    order: 2;
-    margin-left: 0;
-    gap: 15px;
-    flex: 0 0 auto; /* 防止缩小 */
-    justify-content: flex-end; /* 保持右对齐 */
-  }
-
-  .hotline-block {
-    gap: 8px;
-    min-width: max-content; /* 新增：防止内容挤压 */
+  .logo {
+    height: 40px;
   }
 
   .hotline-text {
-    display: flex !important; /* 强制显示 */
-    flex-direction: column;
+    display: none !important;
   }
 
-  .hotline-title,
-  .hotline-number {
-    font-size: 14px;
-    white-space: nowrap; /* 防止文字换行 */
+  .banner-image img {
+    max-height: 180px;
   }
 
   .qr-block {
-    min-width: max-content; /* 新增：防止挤压 */
-  }
-
-  .qr-code {
-    width: 50px;
-    height: 50px;
+    display: none;
   }
 }
 
-@media (max-width: 576px) { /* 新增小屏幕适配 */
-  .right-content {
-    gap: 10px;
-    margin-top: 10px;
-    width: 100%;
-    justify-content: center; /* 小屏幕居中显示 */
+@media (max-width: 480px) {
+  .main-content {
+    justify-content: center;
   }
 
-  .hotline-block {
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
+  .logo {
+    height: 35px;
   }
 
-  .hotline-title {
-    font-size: 12px;
+  .hotline-icon {
+    width: 20px;
+    height: 20px;
   }
 
-  .hotline-number {
-    font-size: 14px;
-  }
-
-  .qr-block {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .qr-text {
-    display: block !important; /* 确保始终显示 */
+  .banner-image img {
+    max-height: 150px;
   }
 }
 
-@media (max-width: 400px) { /* 新增超小屏幕适配 */
-  .right-content {
-    flex-direction: column;
-    align-items: center;
+@media (max-width: 375px) {
+  .logo {
+    height: 30px;
   }
 
-  .hotline-block {
-    flex-direction: row;
-    margin-bottom: 5px;
+  .banner-image img {
+    max-height: 120px;
   }
-
-  .qr-block {
-    margin-top: 5px;
-  }
-}
 }
 </style>

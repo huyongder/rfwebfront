@@ -45,6 +45,7 @@ export default {
 </template>
 
 <style scoped>
+/* PC端样式 - 完全保持不变 */
 .title {
   font-size: 26px;
   text-align: center;
@@ -63,7 +64,6 @@ export default {
   max-width: 100%;
   height: auto;
 }
-
 .navigation {
   display: flex;
   flex-direction: column;
@@ -72,7 +72,6 @@ export default {
   width: fit-content;
   margin-left: 350px;
 }
-
 .nav-link {
   color: #000;
   text-decoration: none;
@@ -82,8 +81,41 @@ export default {
   transition: background-color 0.3s ease;
   margin-bottom: 10px;
 }
-
 .nav-link:hover {
   background-color: #e9ecef;
+}
+
+/* 仅添加手机端适配样式 */
+@media only screen and (max-width: 768px) {
+  .title {
+    font-size: 20px;
+  }
+
+  .address {
+    margin-left: 10%;
+    transform: translateX(0);
+    padding: 15px 10px;
+    width: 80%;
+  }
+
+  .shouxian {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  .navigation {
+    margin-left: 10%;
+    width: 80%;
+    align-items: center;
+  }
+
+  .nav-link {
+    font-size: 12px;
+    padding: 8px 15px;
+    margin-bottom: 8px;
+    width: 100%;
+    text-align: center;
+    background-color: #f8f9fa;
+  }
 }
 </style>

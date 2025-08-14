@@ -1,7 +1,7 @@
 <template>
   <div class="index-page">
     <div class="welcome-page">
-      <p class="welcome-text">六安装饰装修公司——荣锋装饰集团欢迎您！</p>
+      <p class="welcome-text">安徽荣锋装饰集团欢迎您！</p>
     </div>
 
     <div class="compact-layout">
@@ -42,6 +42,7 @@
   <HeaderComp />
   <CarouselComp />
 
+
   <div class="full-width-bg">
     <div class="service-container">
       <div class="service-item">
@@ -62,10 +63,12 @@
   <div class="AboutEnterpriseModule">
     <div class="MainContentContainer">
       <div class="ContentTextSection">
-        <div class="MainSectionHeader">
-          <h2 class="MainSectionTitle">集团简介</h2>
-          <p class="EnterpriseTagline">建材家居全品类代理/家装设计/监理施工一体化运营服务企业</p>
-        </div>
+        <nav class="news-section-header">
+          <div class="news-section-header__title-group">
+            <h2 class="news-section-header__main-title">集团简介</h2>
+            <span class="news-section-header__subtitle">建材家居全品类代理/家装设计/监理施工一体化运营服务企业</span>
+          </div>
+        </nav>
 
         <div class="CorporateProfileContent">
           <p class="ProfileTextParagraph">
@@ -77,16 +80,18 @@
       </div>
 
       <div class="VideoPresentation">
-        <div class="MainSectionHeader">
-          <h2 class="MainSectionTitle">集团概况</h2>
-          <p class="EnterpriseTagline">企业形象片</p>
-        </div>
+        <nav class="news-section-header">
+          <div class="news-section-header__title-group">
+            <h2 class="news-section-header__main-title">集团概况</h2>
+            <span class="news-section-header__subtitle">企业形象片</span>
+          </div>
+        </nav>
         <div class="VideoPlayerWrapper">
           <video
             src="/src/public/index/RF.mp4"
             controls
             class="EnterprisePromoVideo"
-            poster="http://localhost:8080/uploads/shipin.png"
+            poster="http://www.rongfengjt.com//uploads/shipin.png"
           >
             您的浏览器不支持视频播放
           </video>
@@ -95,21 +100,8 @@
     </div>
   </div>
 
-  <div class="full-width-bg">
-    <div class="service-container modified-layout">
-      <div class="service-item main-service">
-        <img src="/src/public/index/advantage5.png" alt="全国服务热线" />
-      </div>
-      <div class="service-item secondary-services">
-        <img src="/src/public/index/advantage6.png" alt="工程监督热线" />
-      </div>
-      <div class="service-item secondary-services">
-        <img src="/src/public/index/advantage7.png" alt="售后服务热线" />
-      </div>
-    </div>
-  </div>
 
-  <nav class="news-section-header">
+  <nav class="news-section-header-action">
     <div class="news-section-header__title-group">
       <h2 class="news-section-header__main-title">集团动态</h2>
       <span class="news-section-header__subtitle">掌握最新集团动态，带您走进荣锋集团</span>
@@ -196,6 +188,12 @@ export default defineComponent({
   flex: 0 0 auto;
 }
 
+.compact-logo {
+  height: auto;
+  max-height: 60px;
+  cursor: pointer;
+}
+
 /* 右侧组合区块 */
 .right-group {
   display: flex;
@@ -203,32 +201,31 @@ export default defineComponent({
   gap: 30px;
 }
 
-/* 热线区块 - 确保电话两行不变形 */
+/* 热线区块 */
 .hotline-block {
   display: flex;
   align-items: center;
   gap: 10px;
-  min-width: 180px; /* 防止内容挤压 */
+  min-width: 180px;
 }
 
 .hotline-icon {
   width: 40px;
   height: 40px;
-  flex-shrink: 0; /* 防止图标被压缩 */
+  flex-shrink: 0;
 }
 
 .hotline-text {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  flex-shrink: 0; /* 防止文字被压缩 */
 }
 
 .hotline-title,
 .hotline-number {
   padding: 0;
   margin: 0;
-  white-space: nowrap; /* 防止文字换行 */
+  white-space: nowrap;
 }
 
 .hotline-title {
@@ -247,39 +244,26 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex-shrink: 0; /* 防止二维码区块被压缩 */
 }
 
 .compact-qr {
   width: 68px;
   height: 68px;
   padding: 4px;
-  flex-shrink: 0;
 }
 
 .qr-text {
   font-size: 12px;
   margin: 0;
   padding: 0;
-  text-align: center;
-  white-space: nowrap;
 }
 
 /* 大图容器 */
-.index-largePhoto {
-  width: 100%;
-  max-width: 100%;
-  overflow: hidden;
-  box-sizing: border-box;
-  display: grid;
-  place-items: center;
-  margin: 0;
-}
-
 .index-largePhoto img {
-  max-width: 100%;
+  width: 100%;
   height: auto;
   display: block;
+  max-width: 100%;
 }
 
 /* 服务优势区块 */
@@ -308,7 +292,6 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   object-fit: contain;
-  image-rendering: -webkit-optimize-contrast;
 }
 
 /* 三张特殊图片布局 */
@@ -339,55 +322,12 @@ export default defineComponent({
   max-width: 1250px;
   margin: 0 auto;
   gap: 1rem;
-  padding: 0;
+  padding: 0 50px;
 }
 
 .ContentTextSection {
-  flex: 0, 0, 65%;
+  flex: 0 0 65%;
   min-width: 0;
-}
-
-.MainSectionHeader {
-  display: flex;
-  align-items: center;
-  padding: 15px 0;
-  position: relative;
-}
-
-.MainSectionTitle {
-  font-size: 25px;
-  font-weight: 600;
-  padding: 0 30px;
-  position: relative;
-}
-
-.MainSectionTitle::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 2px;
-  height: 1.2em;
-  background: #ff2d2d;
-  left: 0;
-}
-
-.EnterpriseTagline {
-  font-size: 14px;
-  color: #666;
-  margin-left: 20px;
-  white-space: nowrap;
-}
-
-.MainSectionHeader::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background: #808080;
-  transform: translateY(-35px);
 }
 
 .CorporateProfileContent {
@@ -401,7 +341,7 @@ export default defineComponent({
   margin: 0 1rem 1rem 1rem;
   padding-top: 5px;
   text-align: justify;
-  font-size: 14px;
+  font-size: 16px;
   text-indent: 2em;
 }
 
@@ -441,11 +381,11 @@ export default defineComponent({
 /* 新闻动态区块 */
 .news-section-header {
   --red-accent: #ff0000;
-  max-width: 1280px;
+  max-width: 1250px;
   margin: 0 auto;
   display: flex;
   align-items: center;
-  padding: 24px 50px;
+  padding: 24px 50px 24px 0;
   background: #ffffff;
 }
 
@@ -482,6 +422,15 @@ export default defineComponent({
   vertical-align: bottom;
 }
 
+.news-section-header-action {
+  --red-accent: #ff0000;
+  max-width: 1250px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  padding: 24px 50px 24px 50px;
+  background: #ffffff;
+}
 .news-section-header__action-link {
   color: var(--red-accent);
   font-size: 16px;
@@ -497,131 +446,159 @@ export default defineComponent({
   text-decoration: underline;
 }
 
-/* 响应式设计 */
-@media (max-width: 1200px) {
-  .compact-layout {
-    width: 85%;
-  }
-  .right-group {
-    gap: 20px;
-  }
-  .modified-layout {
-    justify-content: center;
-    padding-left: 0;
-  }
-  .secondary-services {
-    width: 260px;
-  }
+.news-section {
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 0 50px 24px;
+  background: #ffffff;
 }
 
-@media (max-width: 992px) {
-  .compact-layout {
-    width: 90%;
-  }
-  .right-group {
-    gap: 15px;
-  }
-  .compact-qr {
-    width: 60px;
-    height: 60px;
-  }
-  .secondary-services {
-    width: 240px;
-  }
+.news-wrapper {
+  width: 100%;
 }
 
+
+/* ================= 移动端专属适配 (max-width: 768px) ================= */
 @media (max-width: 768px) {
+  /* 1. 顶部欢迎栏调整 */
+  .welcome-page {
+    height: 28px;
+    justify-content: center; /* 居中显示 */
+  }
+  .welcome-text {
+    margin-left: 0;
+    font-size: 10px;
+  }
+
+  /* 2. 顶部LOGO和联系信息 */
   .compact-layout {
     width: 95%;
     flex-direction: column;
-    gap: 15px;
+    gap: 8px;
+    padding: 8px 0;
   }
-
-  .brand-block {
-    order: 1;
-    width: 100%;
-    text-align: center;
+  .compact-logo {
+    max-height: 45px;
   }
-
-  .right-group {
-    order: 2;
-    width: 100%;
-    justify-content: center;
-    gap: 30px;
-  }
-
-  .hotline-icon {
-    width: 35px;
-    height: 35px;
-  }
-
-  .hotline-title,
-  .hotline-number {
-    font-size: 16px;
-  }
-
-  .main-service {
-    width: 90%;
-    max-width: 350px;
-  }
-
-  .secondary-services {
+  .hotline-block,
+  .qr-block {
     display: none;
   }
 
-  .service-item {
+  /* 3. 大图保持比例 */
+  .index-largePhoto img {
     height: auto;
-    max-height: 80px;
+    max-height: 180px; /* 限制最大高度 */
+    object-fit: contain; /* 保持比例 */
   }
 
+  /* 4. 服务优势隐藏 */
+  .full-width-bg {
+    display: none;
+  }
+
+  /* 5. 集团简介模块 */
   .MainContentContainer {
     flex-direction: column;
-    padding: 0 1.5rem;
+    padding: 0 15px;
+    gap: 20px;
+  }
+  .ContentTextSection {
+    width: 100%;
+  }
+  .ProfileTextParagraph {
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0 0 1rem 0;
+    text-indent: 2em;
   }
 
+  /* 6. 视频模块 */
+  .VideoPresentation {
+    width: 100%;
+  }
   .VideoPlayerWrapper {
-    position: static;
-    margin-top: 2rem;
     width: 100%;
     height: auto;
+    aspect-ratio: 16/9; /* 保持视频比例 */
   }
 
-  .MainSectionTitle {
-    font-size: 1.75rem;
+  /* 7. 新闻标题统一对齐 */
+  .news-section-header,
+  .news-section-header-action {
+    padding: 15px !important; /* 统一内边距 */
+  }
+  .news-section-header__title-group {
+    padding-left: 15px; /* 调整竖线位置 */
+  }
+  .news-section-header__main-title {
+    display: block;
+    font-size: 20px;
+  }
+  .news-section-header__subtitle {
+    display: block;
+    margin-left: 0;
+    margin-top: 5px;
+    font-size: 12px;
+  }
+  .news-section-header__action-link {
+    margin-left: 0;
+    margin-top: 10px;
+    align-self: flex-start;
+  }
+
+  /* 8. 新闻轮播容器 */
+  .news-section {
+    padding: 0 15px 15px;
+  }
+  .news-wrapper {
+    padding: 0;
   }
 }
 
+/* ================= 超小屏幕适配 (max-width: 480px) ================= */
 @media (max-width: 480px) {
+  /* 1. 进一步缩小文字 */
   .welcome-text {
-    margin-left: 10px;
+    font-size: 9px;
+  }
+  .compact-logo {
+    max-height: 38px;
+  }
+
+  /* 2. 简介文字调整 */
+  .ProfileTextParagraph {
+    font-size: 13px;
+    text-indent: 1.5em;
+  }
+
+  /* 3. 标题调整 */
+  .news-section-header__main-title {
+    font-size: 18px;
+  }
+  .news-section-header__subtitle {
     font-size: 11px;
   }
 
-  .right-group {
-    flex-wrap: wrap;
-    gap: 15px;
-    justify-content: space-around;
+  /* 4. 查看更多链接 */
+  .news-section-header__action-link {
+    font-size: 14px;
+  }
+}
+
+/* ================= 极小屏幕适配 (max-width: 375px) ================= */
+@media (max-width: 375px) {
+  /* 1. 微调字号 */
+  .news-section-header__main-title {
+    font-size: 16px;
+  }
+  .ProfileTextParagraph {
+    font-size: 12px;
   }
 
-  .compact-qr {
-    width: 50px;
-    height: 50px;
-  }
-
-  .qr-text {
-    font-size: 11px;
-  }
-
-  .main-service {
-    width: 95%;
-  }
-
-  /* 确保电话两行在小屏幕上也不变形 */
-  .hotline-block {
-    min-width: auto;
-  }
-  .hotline-text {
-    min-width: 120px;
+  /* 2. 大图高度限制 */
+  .index-largePhoto img {
+    max-height: 150px;
   }
 }
 </style>

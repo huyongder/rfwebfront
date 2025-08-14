@@ -1,10 +1,3 @@
-<!--
- * @Descripttion:
- * @Author: huimeng
- * @Date: 2025-07-01 14:30:49
- * @LastEditors: huimeng
- * @LastEditTime: 2025-07-02 09:42:43
--->
 <template>
   <HeaderBanner />
   <SizeviewNav />
@@ -116,6 +109,7 @@ export default {
 </script>
 
 <style scoped>
+/* PC端样式 - 完全保持不变 */
 .stores-page {
   display: flex;
   justify-content: center;
@@ -124,8 +118,8 @@ export default {
 
 .container {
   width: 100%;
-  max-width: none; /* 移除最大宽度限制 */
-  padding: 0; /* 移除左右内边距 */
+  max-width: none;
+  padding: 0;
 }
 
 .page-title {
@@ -139,7 +133,7 @@ export default {
   flex-direction: column;
   gap: 0px;
   width: 100%;
-  padding: 0 5%; /* 添加少量内边距防止内容贴边 */
+  padding: 0 5%;
 }
 
 .store-card {
@@ -149,7 +143,7 @@ export default {
   transition: all 0.3s ease;
   width: 100%;
   margin: 0 auto;
-  max-width: 1400px; /* 设置一个较大的最大宽度 */
+  max-width: 1400px;
 }
 
 .store-card:hover {
@@ -168,16 +162,16 @@ export default {
   display: flex;
   align-items: center;
   width: 100%;
-  height: 200px; /* 增加高度 */
+  height: 200px;
 }
 
 .image-container {
-  width: 300px; /* 增加宽度 */
-  height: 180px; /* 增加高度 */
+  width: 300px;
+  height: 180px;
   overflow: hidden;
   border-radius: 4px;
   flex-shrink: 0;
-  margin-right: 40px; /* 增加右边距 */
+  margin-right: 40px;
 }
 
 .image-container img {
@@ -192,22 +186,22 @@ export default {
 }
 
 .text-content {
-  flex: 1; /* 保持弹性 */
-  min-width: 0; /* 允许内容收缩 */
+  flex: 1;
+  min-width: 0;
   padding: 0 10px;
   display: flex;
   flex-direction: column;
   height: 100%;
   justify-content: center;
-  min-width: 750px; /* 添加最小宽度 */
+  min-width: 750px;
 }
 
 h3 {
   margin: 0 0 10px;
   color: #333;
   transition: color 0.3s ease;
-  font-size: 1.3rem; /* 适中标题大小 */
-  white-space: nowrap; /* 防止标题换行 */
+  font-size: 1.3rem;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -218,7 +212,7 @@ h3 {
 
 .divider {
   border-top: 1px dashed #ddd;
-  margin: 8px 0; /* 减少分割线边距 */
+  margin: 8px 0;
   width: 100%;
 }
 
@@ -229,10 +223,10 @@ h3 {
   font-size: 0.95rem;
   display: -webkit-box;
   overflow: hidden;
-  -webkit-line-clamp: 2; /* 限制两行 */
-  line-clamp: 2; /* 标准属性 */
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
-  box-orient: vertical; /* 标准属性 */
+  box-orient: vertical;
 }
 
 .date-content {
@@ -242,7 +236,7 @@ h3 {
   justify-content: center;
   width: 80px;
   flex-shrink: 0;
-  height: 100%; /* 使用容器高度 */
+  height: 100%;
 }
 
 .create-time {
@@ -276,59 +270,138 @@ h3 {
   color: #f00;
 }
 
-/* 响应式调整 */
-@media (max-width: 1200px) {
-  .container {
-    max-width: 100%;
+/* 仅添加手机端适配样式 */
+@media only screen and (max-width: 768px) {
+  .stores-page {
+    padding: 0;
   }
 
-  .store-content {
-    height: 160px;
+  .page-title {
+    font-size: 1.3rem;
+    margin: 15px 0;
   }
 
-  .image-container {
-    width: 200px;
-    height: 140px;
+  .stores-list {
+    padding: 0;
+    gap: 15px;
   }
-}
 
-@media (max-width: 768px) {
+  .store-card {
+    width: 100%;
+    margin: 0 auto 15px;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
   .store-content {
     flex-direction: column;
     height: auto;
+    padding: 0;
   }
 
   .image-container {
     width: 100%;
     height: 180px;
-    margin-right: 0;
-    margin-bottom: 15px;
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .text-content {
+    padding: 15px;
+    width: 100%;
+    min-width: 100%;
+    box-sizing: border-box;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+    white-space: normal;
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+
+  .divider {
+    margin: 8px 0;
+  }
+
+  .introduction {
+    font-size: 0.85rem;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    margin-top: 8px;
+    line-height: 1.6;
   }
 
   .date-content {
-    align-self: flex-end;
-    margin-top: 15px;
+    position: relative;
+    width: 100%;
+    padding: 10px 15px;
+    background: #f8f8f8;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .create-time {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .year-month {
+    font-size: 12px;
+    color: #666;
+  }
+
+  .day {
+    font-size: 16px;
+    color: #c7000b;
+    font-weight: bold;
+  }
+
+  /* 交互状态调整 */
+  .store-card:hover {
+    transform: none;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+  }
+
+  .store-card.active {
+    border: 1px solid #c7000b;
+  }
+
+  /* 确保没有水平滚动 */
+  .container,
+  .stores-list,
+  .store-card {
+    max-width: 100%;
+    overflow: hidden;
   }
 }
 
-/* 响应式调整 */
-@media (max-width: 1200px) {
-  .text-content {
-    width: 65%; /* 中等屏幕稍宽一些 */
+/* 小屏幕手机优化 (小于480px) */
+@media only screen and (max-width: 480px) {
+  .image-container {
+    height: 150px;
   }
-}
 
-@media (max-width: 992px) {
   .text-content {
-    width: 70%; /* 小屏幕更宽一些 */
+    padding: 12px;
   }
-}
 
-@media (max-width: 768px) {
-  .text-content {
-    width: 100%; /* 移动端全宽 */
-    max-width: none;
-    padding: 0;
+  h3 {
+    font-size: 1rem;
+  }
+
+  .introduction {
+    font-size: 0.8rem;
+  }
+
+  .year-month {
+    font-size: 11px;
+  }
+
+  .day {
+    font-size: 14px;
   }
 }
 </style>

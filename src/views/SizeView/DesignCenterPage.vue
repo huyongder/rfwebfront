@@ -3,7 +3,7 @@
  * @Author: huimeng
  * @Date: 2025-02-19 08:20:06
  * @LastEditors: huimeng
- * @LastEditTime: 2025-06-27 13:55:41
+ * @LastEditTime: 2025-08-07 17:09:01
 -->
 
 <script lang="ts">
@@ -94,6 +94,7 @@ export default {
 </template>
 
 <style scoped>
+/* 原有PC端样式保持不变 */
 .container {
   padding: 15px;
   max-width: 1250px;
@@ -109,10 +110,6 @@ export default {
 .title {
   font-size: 28px;
   font-weight: bold;
-
-
-
-  
   color: #333;
   margin: 0;
 }
@@ -141,8 +138,8 @@ export default {
 
 .images {
   max-width: 1250px;
-  margin: 10px auto; /* 居中显示 */
-  text-align: center; /* 文字居中 */
+  margin: 10px auto;
+  text-align: center;
   display: grid;
 }
 
@@ -155,25 +152,93 @@ export default {
 }
 
 .team-image {
-  max-width: 100%; /* 图片最大宽度为容器宽度 */
-  height: auto; /* 高度自适应 */
-  display: block; /* 防止图片下方有空白间隙 */
-  margin: 0 auto; /* 图片居中 */
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
 }
 
 .small-text {
   font-size: 16px;
 }
+
 .fengAdress {
   margin: 0;
   margin-bottom: 10px;
 }
+
 .cangku {
   display: flex;
   padding: 0 25px;
   margin-left: 0;
 }
+
 .cangku-image {
   width: 600px;
+}
+
+/* 新增移动端适配样式 */
+@media only screen and (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 15px;
+  }
+
+  .title {
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+
+  .current-location {
+    font-size: 12px;
+  }
+
+  .images {
+    padding: 0 10px;
+  }
+
+  .subtitle {
+    font-size: 18px;
+    margin: 15px 0 10px;
+  }
+
+  .small-text {
+    font-size: 14px;
+  }
+
+  .fengAdress {
+    font-size: 14px;
+    padding: 0 15px;
+    margin-bottom: 15px;
+    line-height: 1.5;
+  }
+
+  .team-image {
+    margin-bottom: 5px;
+  }
+}
+
+/* 小屏幕手机优化 (小于480px) */
+@media only screen and (max-width: 480px) {
+  .title {
+    font-size: 20px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+  }
+
+  .small-text {
+    font-size: 12px;
+  }
+
+  .fengAdress {
+    font-size: 12px;
+  }
+
+  .team-image {
+    margin-bottom: 3px;
+  }
 }
 </style>

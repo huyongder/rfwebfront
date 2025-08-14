@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /$
+Allow: /about/news$
+Allow: /about/headquarters$
+Allow: /design/excellent-cases$
+Allow: /contact/complaints$
+Disallow: /
+Sitemap: http://www.rongfengjt.com/sitemap.xml

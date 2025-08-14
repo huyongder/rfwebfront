@@ -3,7 +3,7 @@
  * @Author: huimeng
  * @Date: 2025-02-19 08:17:08
  * @LastEditors: huimeng
- * @LastEditTime: 2025-06-26 16:55:41
+ * @LastEditTime: 2025-08-07 17:07:07
 -->
 <script lang="ts">
 import SizeviewNav from '@/components/NavComp/SizeviewNav.vue'
@@ -62,6 +62,7 @@ export default {
 </template>
 
 <style scoped>
+/* 原有PC端样式保持不变 */
 .container {
   padding: 15px;
   max-width: 1250px;
@@ -101,14 +102,14 @@ export default {
   color: #333;
   line-height: 1.5;
   max-width: 1250px;
-  margin: 0 auto; 
+  margin: 0 auto;
   text-indent: 2em;
 }
 
 .images {
   max-width: 1250px;
-  margin: 0 auto; /* 居中显示 */
-  text-align: center; /* 文字居中 */
+  margin: 0 auto;
+  text-align: center;
   display: grid;
 }
 
@@ -121,10 +122,10 @@ export default {
 }
 
 .team-image {
-  max-width: 100%; /* 图片最大宽度为容器宽度 */
-  height: auto; /* 高度自适应 */
-  display: block; /* 防止图片下方有空白间隙 */
-  margin: 0 auto; /* 图片居中 */
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
 }
 
 .cangku {
@@ -134,6 +135,69 @@ export default {
 }
 .cangku-image {
   width: 600px;
+}
 
+/* 新增移动端适配样式 */
+@media only screen and (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 15px;
+  }
+
+  .title {
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+
+  .current-location {
+    font-size: 12px;
+  }
+
+  .top {
+    padding: 0 15px;
+    font-size: 14px;
+    text-indent: 2em;
+    line-height: 1.8;
+  }
+
+  .images {
+    padding: 0 10px;
+  }
+
+  .subtitle {
+    font-size: 18px;
+    margin: 15px 0;
+  }
+
+  .team-image {
+    width: 100%;
+  }
+
+  .cangku {
+    flex-direction: column;
+    padding: 0;
+  }
+
+  .cangku-image {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+/* 小屏幕手机优化 (小于480px) */
+@media only screen and (max-width: 480px) {
+  .title {
+    font-size: 20px;
+  }
+
+  .top {
+    font-size: 13px;
+    padding: 0 10px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+  }
 }
 </style>

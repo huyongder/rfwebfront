@@ -3,7 +3,7 @@
  * @Author: huimeng
  * @Date: 2025-02-20 10:26:04
  * @LastEditors: huimeng
- * @LastEditTime: 2025-02-25 10:37:18
+ * @LastEditTime: 2025-08-07 15:43:38
 -->
 <script lang="ts">
 import BrandviewPage from '@/components/NavComp/BrandviewNav.vue'
@@ -54,5 +54,16 @@ export default {
 }
 .img {
   width: 678px;
+  max-width: 100%;
+  height: auto;
+}
+
+/* 移动端适配 */
+@media screen and (max-width: 768px) {
+  .img {
+    width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
+  }
 }
 </style>

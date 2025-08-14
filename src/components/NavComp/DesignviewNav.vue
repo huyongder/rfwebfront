@@ -57,16 +57,16 @@ export default {
 .nav-container {
   width: 100%;
   display: flex;
-  justify-content: center; /* 水平居中 */
-  background-color: red; /* 保持背景色一致 */
+  justify-content: center;
+  background-color: red;
 }
 
 .navbar {
   background-color: red;
   color: white;
   padding: 0 10px;
-  width: 1250px; /* 保持您设定的固定宽度 */
-  height: 50px;
+  width: 1250px;
+  height: auto; /* 改为自动高度以适应移动布局 */
   display: flex;
   align-items: center;
   box-sizing: border-box;
@@ -78,13 +78,15 @@ export default {
   margin: 0;
   display: flex;
   align-items: center;
+  flex-wrap: wrap; /* 添加换行 */
+  width: 100%;
 }
 
 .nav-item {
   margin-right: 20px;
   display: flex;
   align-items: center;
-  height: 100%;
+  height: 50px;
 }
 
 .nav-link {
@@ -100,6 +102,7 @@ export default {
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
+  white-space: nowrap; /* 防止文字换行 */
 }
 
 .main-title {
@@ -119,5 +122,61 @@ export default {
 
 .main-title {
   pointer-events: none;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .nav-container {
+    padding: 0 10px;
+  }
+
+  .navbar {
+    width: 100%;
+    padding: 10px 0;
+    height: auto;
+  }
+
+  .navbar ul {
+    justify-content: space-around; /* 均匀分布 */
+  }
+
+  .nav-item {
+    width: calc(50% - 10px); /* 两列布局，减去边距 */
+    margin: 5px;
+    height: 40px;
+    justify-content: center;
+  }
+
+  .nav-link {
+    width: 100%;
+    padding: 0 10px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    justify-content: center;
+  }
+
+  .main-title {
+    width: 100%;
+    font-size: 18px;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+}
+
+/* 小屏幕手机适配 */
+@media (max-width: 480px) {
+  .nav-item {
+    width: calc(50% - 10px); /* 保持两列布局 */
+  }
+
+  .nav-link {
+    font-size: 13px;
+    padding: 0 5px;
+  }
+
+  .main-title {
+    font-size: 16px;
+  }
 }
 </style>

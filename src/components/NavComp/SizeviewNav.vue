@@ -1,10 +1,3 @@
-<!--
- * @Descripttion: 集团规模标签栏
- * @Author: huimeng
- * @Date: 2025-02-14 10:03:47
- * @LastEditors: huimeng
- * @LastEditTime: 2025-05-25 17:31:13
--->
 <template>
   <div class="nav-container">
     <nav class="navbar">
@@ -48,11 +41,10 @@ export default {
     flattenedNavLists() {
       const flattened = []
       this.navLists.forEach((item) => {
-        // 主标题的 link 设为空字符串，防止 undefined 影响点击
         flattened.push({ title: item.title, link: '', isMain: true })
         if (item.subMenu) {
           item.subMenu.forEach((subItem) => {
-            flattened.push({ ...subItem, isMain: false }) // 确保子菜单 link 正常
+            flattened.push({ ...subItem, isMain: false })
           })
         }
       })
@@ -63,6 +55,7 @@ export default {
 </script>
 
 <style scoped>
+/* 新增的外层容器样式 */
 .nav-container {
   width: 100%;
   display: flex;
@@ -73,7 +66,9 @@ export default {
 .navbar {
   background-color: red;
   color: white;
-  height: 50px; /* 设定固定高度 */
+  padding: 0 10px;
+  width: 1250px;
+  height: auto; /* 改为自动高度以适应移动布局 */
   display: flex;
   align-items: center;
   box-sizing: border-box;
@@ -85,13 +80,15 @@ export default {
   margin: 0;
   display: flex;
   align-items: center;
-  height: 100%;
+  flex-wrap: wrap; /* 添加换行 */
+  width: 100%;
 }
 
 .nav-item {
+  margin-right: 20px;
   display: flex;
   align-items: center;
-  height: 100%;
+  height: 50px;
 }
 
 .nav-link {
@@ -99,7 +96,7 @@ export default {
   text-decoration: none;
   font-size: 16px;
   padding: 0 30px;
-  height: 100%;
+  height: 50px;
   line-height: 50px;
   border-radius: 5px;
   transition: background-color 0.3s;
@@ -107,16 +104,16 @@ export default {
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
+  white-space: nowrap; /* 防止文字换行 */
 }
 
-/* 主标题"集团规模" */
 .main-title {
   font-size: 20px;
   font-weight: bold;
-  pointer-events: none; /* 禁止主标题可点击 */
+  height: 50px;
+  line-height: 50px;
 }
 
-/* 禁止鼠标悬停时主标题变色 */
 .main-title:hover {
   background-color: transparent !important;
 }
@@ -125,32 +122,63 @@ export default {
   background-color: #cc0000;
 }
 
-/* 响应式设计 */
-@media (max-width: 1250px) {
-  .navbar {
-    width: 100%;
-    overflow-x: auto;
-    white-space: nowrap;
+.main-title {
+  pointer-events: none;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .nav-container {
     padding: 0 10px;
   }
-  
-  .navbar::-webkit-scrollbar {
-    display: none;
+
+  .navbar {
+    width: 100%;
+    padding: 10px 0;
+    height: auto;
   }
-  
+
+  .navbar ul {
+    justify-content: space-around; /* 均匀分布 */
+  }
+
+  .nav-item {
+    width: calc(50% - 10px); /* 两列布局，减去边距 */
+    margin: 5px;
+    height: 40px;
+    justify-content: center;
+  }
+
   .nav-link {
-    padding: 0 20px;
+    width: 100%;
+    padding: 0 10px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    justify-content: center;
+  }
+
+  .main-title {
+    width: 100%;
+    font-size: 18px;
+    text-align: center;
+    margin-bottom: 10px;
   }
 }
 
-@media (max-width: 768px) {
-  .nav-link {
-    padding: 0 15px;
-    font-size: 14px;
+/* 小屏幕手机适配 */
+@media (max-width: 480px) {
+  .nav-item {
+    width: calc(50% - 10px); /* 保持两列布局 */
   }
-  
+
+  .nav-link {
+    font-size: 13px;
+    padding: 0 5px;
+  }
+
   .main-title {
-    font-size: 18px;
+    font-size: 16px;
   }
 }
 </style>

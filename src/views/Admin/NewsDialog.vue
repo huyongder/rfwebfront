@@ -3,7 +3,7 @@
  * @Author: huimeng
  * @Date: 2025-07-11 10:11:10
  * @LastEditors: huimeng
- * @LastEditTime: 2025-07-29 09:58:05
+ * @LastEditTime: 2025-08-06 10:43:45
 -->
 <template>
   <div class="news-management-container">
@@ -85,11 +85,11 @@
                 <div class="form-group">
                   <label>内容</label>
                   <div class="quill-editor-container">
-                    <quill-editor
-                      v-model:content="editingNews.content"
-                      contentType="html"
-                      :options="editorOptions"
-                      @ready="onEditorReady"
+                    <RichTextEditor
+                      v-model="editingNews.content"
+                      :image-upload-path="'/api/upload?type=newsPhoto'"
+                      :video-upload-path="'/api/upload?type=newsVideo'"
+                      placeholder="请输入新闻内容..."
                     />
                   </div>
                 </div>
@@ -109,12 +109,11 @@
 
 <script>
 import { ref, onMounted } from 'vue'
-import { QuillEditor } from '@vueup/vue-quill'
-import '@vueup/vue-quill/dist/vue-quill.snow.css'
+import RichTextEditor from '@/utils/RichTextEditor.vue'
 
 export default {
   components: {
-    QuillEditor
+    RichTextEditor
   },
   setup() {
     const newsList = ref([])
@@ -129,82 +128,6 @@ export default {
       content: '',
       sort: 0
     })
-
-    // Quill 编辑器配置
-    const editorOptions = {
-      modules: {
-        toolbar: {
-          container: [
-            ['bold', 'italic', 'underline', 'strike'],
-            ['blockquote', 'code-block'],
-            [{ 'header': 1 }, { 'header': 2 }],
-            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-            [{ 'script': 'sub'}, { 'script': 'super' }],
-            [{ 'indent': '-1'}, { 'indent': '+1' }],
-            [{ 'direction': 'rtl' }],
-            [{ 'size': ['small', false, 'large', 'huge'] }],
-            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-            [{ 'color': [] }, { 'background': [] }],
-            [{ 'font': [] }],
-            [{ 'align': [] }],
-            ['clean'],
-            ['link', 'image', 'video']
-          ],
-          handlers: {
-            image: imageHandler
-          }
-        }
-      },
-      placeholder: '请输入新闻内容...',
-      theme: 'snow'
-    }
-
-    let quillInstance = null
-
-    // 图片上传处理
-    function imageHandler() {
-      const token  = localStorage.getItem('token')
-      const input = document.createElement('input')
-      input.setAttribute('type', 'file')
-      input.setAttribute('accept', 'image/*')
-      input.click()
-
-      input.onchange = async () => {
-        const file = input.files[0]
-        if (!file) return
-
-        try {
-          const formData = new FormData()
-          formData.append('file', file)
-
-          const response = await fetch('/api/upload?type=newsPhoto', {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${token}`
-            },
-            body: formData
-          })
-
-          if (!response.ok) {
-            throw new Error('上传失败')
-          }
-
-          const data = await response.json()
-          const imageUrl = data.url
-
-          const range = quillInstance.getSelection()
-          quillInstance.insertEmbed(range.index, 'image', imageUrl)
-          quillInstance.setSelection(range.index + 1)
-        } catch (error) {
-          console.error('图片上传失败:', error)
-          alert('图片上传失败')
-        }
-      }
-    }
-
-    function onEditorReady(editor) {
-      quillInstance = editor
-    }
 
     async function loadNewsList() {
       try {
@@ -352,15 +275,13 @@ export default {
       selectAll,
       showEditDialog,
       editingNews,
-      editorOptions,
       deleteSelected,
       toggleSelectAll,
       formatDate,
       openEditDialog,
       closeEditDialog,
       handleCoverImageChange,
-      saveNews,
-      onEditorReady
+      saveNews
     }
   }
 }
@@ -650,18 +571,13 @@ button {
   margin-top: 10px;
 }
 
-/* 富文本编辑器 */
+/* 富文本编辑器容器 */
 .quill-editor-container {
   height: 500px;
   display: flex;
   flex-direction: column;
   border: 1px solid #ddd;
   border-radius: 4px;
-}
-
-.quill-editor {
-  flex: 1;
-  min-height: 0;
 }
 
 /* 对话框按钮 */

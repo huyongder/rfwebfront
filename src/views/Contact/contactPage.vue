@@ -3,7 +3,7 @@
  * @Author: huimeng
  * @Date: 2025-06-30 16:37:01
  * @LastEditors: huimeng
- * @LastEditTime: 2025-07-01 10:32:02
+ * @LastEditTime: 2025-08-08 17:10:30
 -->
 <script>
 import HeaderBanner from '@/components/HeaderBanner.vue'
@@ -82,16 +82,28 @@ export default {
         <span class="hotline-number">400-606-8788</span>
       </div>
       <div class="hotline-item">
-        <span class="hotline-name">总部热线：</span>
-        <span class="hotline-number">0564-7228888/7286888</span>
+        <span class="hotline-name">合肥总部服务热线：</span>
+        <span class="hotline-number">0551-62339888</span>
       </div>
       <div class="hotline-item">
-        <span class="hotline-name">工程监督热线：</span>
+        <span class="hotline-name">合肥工程监督热线：</span>
+        <span class="hotline-number">0551-62111818</span>
+      </div>
+      <div class="hotline-item">
+        <span class="hotline-name">六安总部服务热线：</span>
+        <span class="hotline-number">0564-7228888</span>
+      </div>
+      <div class="hotline-item">
+        <span class="hotline-name">六安工程监督热线：</span>
         <span class="hotline-number">0564-5335555</span>
       </div>
       <div class="hotline-item">
         <span class="hotline-name">售后服务热线：</span>
         <span class="hotline-number">0564-3988988</span>
+      </div>
+      <div class="hotline-item">
+        <span class="hotline-name">六安总部招聘热线：</span>
+        <span class="hotline-number">0564-3222789</span>
       </div>
       <div class="image-map-container">
         <img src="/src/public/lxwm1.jpg" alt="联系图片" class="contact-image" />
@@ -139,26 +151,72 @@ export default {
 </template>
 
 <style scoped>
-/* 保持原有样式不变 */
+/* 基础样式 */
 .hotline-container {
   display: flex;
   flex-direction: column;
   margin-left: 20%;
 }
+
 .hotline-item {
   display: flex;
   flex-direction: row;
   font-size: 18px;
   margin-bottom: 10px;
+  align-items: baseline; /* 添加这行确保基线对齐 */
 }
+
+.hotline-name {
+  min-width: 180px; /* 给名称设置固定宽度 */
+  display: inline-block;
+}
+
+.hotline-number {
+  font-weight: bold;
+}
+
 .image-map-container {
   display: flex;
   flex-direction: row;
   margin-bottom: 40px;
 }
+
 .map {
   width: 50%;
-  height: auto; /* 改为固定高度确保地图显示 */
+  height: auto;
   padding-left: 5%;
+}
+
+/* 手机端适配 */
+@media only screen and (max-width: 768px) {
+  .hotline-container {
+    margin-left: 5%;
+    margin-right: 5%;
+    padding: 0 10px;
+  }
+
+  .hotline-item {
+    font-size: 14px;
+    /* 保持行布局，但调整间距 */
+    flex-wrap: wrap;
+  }
+
+  .hotline-name {
+    min-width: 120px; /* 手机端减小固定宽度 */
+  }
+
+  .image-map-container {
+    flex-direction: column;
+  }
+
+  .map,
+  .contact-image {
+    width: 100%;
+    padding-left: 0;
+  }
+
+  .contact-image {
+    margin-bottom: 15px;
+  }
 }
 </style>

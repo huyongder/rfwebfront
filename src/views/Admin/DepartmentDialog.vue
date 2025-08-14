@@ -13,7 +13,6 @@
       </template>
 
       <el-table :data="tableData" border style="width: 100%" class="department-table">
-        <el-table-column prop="code" label="部门编码" width="200" />
         <el-table-column prop="name" label="部门名称" width="250" />
         <el-table-column prop="createTime" label="创建时间" width="220" />
         <el-table-column prop="updateTime" label="更新时间" width="220" />
@@ -28,9 +27,6 @@
 
     <el-dialog v-model="dialogVisible" :title="dialogTitle" width="40%">
       <el-form :model="form" label-width="100px">
-        <el-form-item label="部门编码">
-          <el-input v-model="form.code" placeholder="请输入部门编码" />
-        </el-form-item>
         <el-form-item label="部门名称">
           <el-input v-model="form.name" placeholder="请输入部门名称" />
         </el-form-item>
@@ -56,7 +52,7 @@ const dialogVisible = ref(false)
 const dialogTitle = ref('')
 const form = ref({
   id: null,
-  code: '',
+  code: '',  // 保留code字段但始终为空
   name: ''
 })
 
@@ -76,13 +72,17 @@ const fetchData = async () => {
 
 const handleAdd = () => {
   dialogTitle.value = '新增部门'
-  form.value = { id: null, code: '', name: '' }
+  form.value = { id: null, code: '', name: '' }  // 初始化时code为空
   dialogVisible.value = true
 }
 
 const handleEdit = (row) => {
   dialogTitle.value = '编辑部门'
-  form.value = { ...row }
+  form.value = {
+    id: row.id,
+    code: '',  // 编辑时也保持code为空
+    name: row.name
+  }
   dialogVisible.value = true
 }
 
@@ -103,14 +103,19 @@ const handleDelete = async (id) => {
 
 const submitForm = async () => {
   try {
+    const payload = {
+      ...form.value,
+      code: ''  // 确保提交时code为空
+    }
+
     if (form.value.id) {
-      await axios.put('/api/department', form.value,{
+      await axios.put('/api/department', payload,{
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       })
     } else {
-      await axios.post('/api/department', form.value,{
+      await axios.post('/api/department', payload,{
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
@@ -131,6 +136,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
+/* 样式保持不变 */
 .department-container {
   padding: 20px;
 }

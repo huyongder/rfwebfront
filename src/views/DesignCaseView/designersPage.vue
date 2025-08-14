@@ -3,7 +3,7 @@
  * @Author: huimeng
  * @Date: 2025-04-11 09:16:20
  * @LastEditors: huimeng
- * @LastEditTime: 2025-07-03 09:27:12
+ * @LastEditTime: 2025-08-14 15:17:43
 -->
 <template>
   <HeaderBanner />
@@ -80,6 +80,7 @@ export default {
 </script>
 
 <style scoped>
+/* 原有PC端样式保持不变 */
 .design-team-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -89,30 +90,25 @@ export default {
 
 .text-group {
   display: flex;
-  align-items: center; /* 垂直居中 */
-  gap: 1.5rem; /* 元素间距 */
+  align-items: center;
+  gap: 1.5rem;
   margin-bottom: 1rem;
-  position: relative; /* 为竖线定位准备 */
 }
 
-/* 新增红色竖线样式 */
 .vertical-line {
-  width: 2px; /* 线宽 */
-  height: 30px; /* 线高度 */
-  background-color: #ff0000; /* 红色 */
-  flex-shrink: 0; /* 防止压缩 */
+  width: 2px;
+  height: 30px;
+  background-color: #ff0000;
+  flex-shrink: 0;
 }
 
 .chinese-text {
   font-size: 30px;
   font-weight: bold;
-  position: relative; /* 为竖线定位准备 */
-  padding-left: 1rem; /* 左侧留出竖线空间 */
 }
 
 .red-text {
   color: #ff0000;
-  padding-right: 0;
 }
 
 .black-text {
@@ -136,7 +132,6 @@ export default {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  text-align: center;
 }
 
 .designers-grid {
@@ -150,8 +145,8 @@ export default {
   position: relative;
   cursor: pointer;
   transition: transform 0.3s ease;
-  width: 280px; /* 固定宽度 */
-  height: 245px; /* 固定高度 */
+  width: 280px;
+  height: 245px;
 }
 
 .image-container {
@@ -168,10 +163,6 @@ export default {
   transition: transform 0.3s ease;
 }
 
-.designer-card:hover .designer-image {
-  transform: scale(1.1);
-}
-
 .name-overlay {
   position: absolute;
   bottom: 0;
@@ -181,43 +172,138 @@ export default {
   color: white;
   padding: 10px;
   text-align: center;
-  transition: all 0.3s ease;
+}
+
+/* 交互效果 */
+.designer-card:hover .designer-image {
+  transform: scale(1.1);
 }
 
 .designer-card:hover .name-overlay {
-  background-color: rgba(255, 0, 0, 0.7); /* 红色背景 */
+  background-color: rgba(255, 0, 0, 0.7);
 }
 
-/* 响应式调整 */
-@media (max-width: 1200px) {
+/* ========== 手机端适配 ========== */
+/* 平板设备 (992px以下) */
+@media (max-width: 992px) {
   .designers-grid {
     grid-template-columns: repeat(3, 1fr);
+    justify-items: center;
   }
 
   .designer-card {
     width: 100%;
-    height: 0;
-    padding-bottom: 87.5%; /* 245/280=0.875 */
+    height: auto; /* 修改这里 */
+    aspect-ratio: 280/245; /* 使用现代浏览器支持的宽高比属性 */
+    position: relative;
+  }
+  
+  .image-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .text-group {
+    gap: 1rem;
+  }
+
+  .chinese-text {
+    font-size: 26px;
+  }
+
+  .english-text {
+    font-size: 22px;
   }
 }
 
+/* 中等尺寸手机 (768px以下) */
 @media (max-width: 768px) {
+  .design-team-container {
+    padding: 1.5rem;
+  }
+
   .designers-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .designer-card {
-    padding-bottom: 87.5%;
+  .vertical-line {
+    height: 25px;
+  }
+
+  .chinese-text {
+    font-size: 22px;
+  }
+
+  .english-text {
+    font-size: 18px;
+  }
+
+  .slogan {
+    font-size: 12px;
+  }
+
+  .name-overlay {
+    padding: 8px;
+    font-size: 14px;
   }
 }
 
-@media (max-width: 480px) {
+/* 小尺寸手机 (576px以下) */
+@media (max-width: 576px) {
+  .design-team-container {
+    padding: 1rem;
+  }
+
+  .text-group {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .vertical-line {
+    display: none; /* 小屏幕隐藏竖线 */
+  }
+
   .designers-grid {
     grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .chinese-text {
+    font-size: 20px;
+    padding-left: 0;
+  }
+
+  .english-text {
+    font-size: 16px;
+    white-space: normal;
   }
 
   .designer-card {
-    padding-bottom: 87.5%;
+    max-width: 100%;
+  }
+
+  .name-overlay {
+    padding: 6px;
+    font-size: 13px;
+  }
+}
+
+/* 超小尺寸手机 (400px以下) */
+@media (max-width: 400px) {
+  .chinese-text {
+    font-size: 18px;
+  }
+
+  .english-text {
+    font-size: 14px;
+  }
+
+  .slogan {
+    margin: 12px 0;
   }
 }
 </style>

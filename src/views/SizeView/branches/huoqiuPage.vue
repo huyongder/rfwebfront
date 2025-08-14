@@ -3,7 +3,7 @@
  * @Author: huimeng
  * @Date: 2025-02-17 14:42:36
  * @LastEditors: huimeng
- * @LastEditTime: 2025-08-05 08:56:02
+ * @LastEditTime: 2025-08-09 10:01:30
 -->
 <script lang="ts">
 import SizeviewNav from '@/components/NavComp/SizeviewNav.vue'
@@ -32,7 +32,7 @@ export default {
   <br />
   <div class="title">霍邱分公司</div>
   <div class="address">
-    <p>地址： 霍邱县苏润城市广场S4号楼5层</p>
+    <p>地址： 霍邱县苏润城市广场S4号楼3层</p>
     <p>电话： 0564-7280888(占地3000平米)</p>
   </div>
   <img :src="huoqiuImg" alt="huoqiu" class="huoqiu" />
@@ -45,25 +45,25 @@ export default {
 </template>
 
 <style scoped>
+/* PC端样式 - 完全保持不变 */
 .title {
   font-size: 26px;
   text-align: center;
 }
 .address {
-  width: fit-content; /* 根据内容自适应宽度 */
-  margin-left: 30%; /* 左侧留白30%实现偏左 */
+  width: fit-content;
+  margin-left: 30%;
   padding: 20px;
-  text-align: left; /* 内容左对齐 */
-  transform: translateX(-10%); /* 微调居中位置 */
+  text-align: left;
+  transform: translateX(-10%);
 }
 .huoqiu {
   width: fit-content;
   display: block;
   margin: 0 auto;
-  max-width: 100%; /* 确保图片不会超出容器 */
-  height: auto; /* 保持图片比例 */
+  max-width: 100%;
+  height: auto;
 }
-
 .navigation {
   display: flex;
   flex-direction: column;
@@ -72,15 +72,6 @@ export default {
   width: fit-content;
   margin-left: 400px;
 }
-.nav-p {
-  color: #000;
-  text-decoration: none;
-  font-size: 13px;
-  padding: 1px 10px;
-  border-radius: 4px;
-  margin-bottom: 10px;
-}
-
 .nav-link {
   color: #000;
   text-decoration: none;
@@ -90,8 +81,41 @@ export default {
   transition: background-color 0.3s ease;
   margin-bottom: 10px;
 }
-
 .nav-link:hover {
   background-color: #e9ecef;
+}
+
+/* 仅添加手机端适配样式 */
+@media only screen and (max-width: 768px) {
+  .title {
+    font-size: 20px;
+  }
+
+  .address {
+    margin-left: 10%;
+    transform: translateX(0);
+    padding: 15px 10px;
+    width: 80%;
+  }
+
+  .huoqiu {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  .navigation {
+    margin-left: 10%;
+    width: 80%;
+    align-items: center;
+  }
+
+  .nav-link {
+    font-size: 12px;
+    padding: 8px 15px;
+    margin-bottom: 8px;
+    width: 100%;
+    text-align: center;
+    background-color: #f8f9fa;
+  }
 }
 </style>

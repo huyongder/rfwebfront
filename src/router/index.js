@@ -3,7 +3,7 @@
  * @Author: huimeng
  * @Date: 2025-01-14 16:21:37
  * @LastEditors: huimeng
- * @LastEditTime: 2025-07-29 09:20:18
+ * @LastEditTime: 2025-08-08 10:24:00
  */
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
@@ -418,6 +418,19 @@ const router = createRouter({
   ],
 })
 
+function isTokenExpired(token) {
+  if (!token) return true;
+
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    if (!payload.exp) return false; // 如果没有 exp 字段，认为永不过期（或由后端控制）
+
+    return Date.now() >= payload.exp * 1000;
+  } catch (e) {
+    console.error('Token 解析失败:', e);
+    return true; // 解析失败认为已过期
+  }
+}
 const whiteList = [
   '/login',
   '/',
@@ -465,15 +478,25 @@ router.beforeEach((to, from, next) => {
     return next()
   }
 
-  const isWhiteListed = whiteList.some(path =>
-    to.path === path || to.path.startsWith(path + '/')
-  )
+  const isWhiteListed = whiteList.some(path => {
+    // 处理动态路由（如 /about/news/:id）
+    if (path.includes(':')) {
+      const basePath = path.split('/:')[0]; // 提取基础路径（如 /about/news）
+      return to.path.startsWith(basePath);
+    }
+    return to.path === path || to.path.startsWith(path + '/');
+  });
 
   // 白名单内路由直接放行
   if (isWhiteListed) return next()
 
+  // 检查路由是否匹配（未定义的路由）
+  if (to.matched.length === 0) {
+    return next('/') // 未定义路由全部转到首页
+  }
+
   // 需要登录的路由：检查用户是否已登录
-  if (!store.token) {
+  if (!store.token || isTokenExpired(store.token)) {
     // 未登录则跳转到登录页，并携带重定向路径
     next({
       name: 'login',

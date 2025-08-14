@@ -1,6 +1,5 @@
 <!--
  * @Descripttion:代理品牌页面
-
  * @Author: huimeng
  * @Date: 2025-02-18 10:06:09
  * @LastEditors: huimeng
@@ -38,12 +37,13 @@ export default {
 </template>
 
 <style scoped>
+/* 原始PC端样式 - 完全未改动 */
 .container {
   margin-top: 20px;
   padding: auto;
   font-family: Arial, sans-serif;
-  border-bottom: 1px solid #e0e0e0; /* 添加浅色横线 */
-  padding-bottom: 15px; /* 为横线留出间距 */
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 15px;
 }
 .current-location {
   text-align: right;
@@ -62,5 +62,30 @@ export default {
   display: block;
   margin: 0 auto;
   padding: 20px 20%;
+}
+
+/* 新增的移动端适配样式 */
+@media only screen and (max-width: 768px) {
+  .container {
+    border-bottom-width: 0.5px;
+    padding-bottom: 10px;
+  }
+
+  .current-location {
+    text-align: center;
+    font-size: 12px;
+  }
+
+  .location-text {
+    margin-right: 0;
+    display: inline-block;
+  }
+
+  .brands-image {
+    width: 100%;
+    max-width: 100%;
+    padding: 10px 0;
+    box-sizing: border-box;
+  }
 }
 </style>
