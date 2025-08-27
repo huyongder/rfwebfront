@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onActivated } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 import DesignviewNav from '@/components/NavComp/DesignviewNav.vue'
@@ -51,6 +51,7 @@ export default {
     const pageSize = 12;
     const totalPages = ref(1);
     const hoverId = ref(null);
+    const scrollPosition = ref(0);
 
     const fetchBuildList = async () => {
       try {
@@ -58,12 +59,11 @@ export default {
           params: {
             pageNum: currentPage.value,
             pageSize: pageSize,
-            sortField: 'id',    // 排序字段
+            sortField: 'id',
             sortOrder: 'desc'
           }
         });
         buildList.value = response.data.records;
-        console.log(response.data.records);
         totalPages.value = response.data.pages;
       } catch (error) {
         console.error('获取工地列表失败:', error);
@@ -79,6 +79,11 @@ export default {
     };
 
     const goToDetail = (id) => {
+      // 保存当前滚动位置和页码
+      scrollPosition.value = window.scrollY || document.documentElement.scrollTop;
+      sessionStorage.setItem('buildListPage', currentPage.value.toString());
+      sessionStorage.setItem('buildListScroll', scrollPosition.value.toString());
+
       router.push(`/design/site-photos/${id}`);
     };
 
@@ -86,6 +91,8 @@ export default {
       if (currentPage.value > 1) {
         currentPage.value--;
         fetchBuildList();
+        // 滚动到顶部
+        window.scrollTo(0, 0);
       }
     };
 
@@ -93,11 +100,46 @@ export default {
       if (currentPage.value < totalPages.value) {
         currentPage.value++;
         fetchBuildList();
+        // 滚动到顶部
+        window.scrollTo(0, 0);
       }
     };
 
     onMounted(() => {
-      fetchBuildList();
+      // 检查是否有保存的页码
+      const savedPage = sessionStorage.getItem('buildListPage');
+      if (savedPage) {
+        currentPage.value = parseInt(savedPage);
+        sessionStorage.removeItem('buildListPage');
+      }
+
+      fetchBuildList().then(() => {
+        // 检查是否有保存的滚动位置
+        const savedScroll = sessionStorage.getItem('buildListScroll');
+        if (savedScroll) {
+          setTimeout(() => {
+            window.scrollTo(0, parseInt(savedScroll));
+            sessionStorage.removeItem('buildListScroll');
+          }, 100);
+        }
+      });
+    });
+
+    // 使用keep-alive时，组件激活时恢复状态
+    onActivated(() => {
+      const savedPage = sessionStorage.getItem('buildListPage');
+      if (savedPage) {
+        currentPage.value = parseInt(savedPage);
+        sessionStorage.removeItem('buildListPage');
+      }
+
+      const savedScroll = sessionStorage.getItem('buildListScroll');
+      if (savedScroll) {
+        setTimeout(() => {
+          window.scrollTo(0, parseInt(savedScroll));
+          sessionStorage.removeItem('buildListScroll');
+        }, 100);
+      }
     });
 
     return {

@@ -16,7 +16,7 @@ export const useAuthStore = defineStore('auth', () => {
   const username = ref(localStorage.getItem('username') || '')
   const role = ref(localStorage.getItem('role') || '')
   const isLoggedIn = ref(false)
-
+  
   // 登录成功处理
   const loginSuccess = (data) => {
     token.value = data.token

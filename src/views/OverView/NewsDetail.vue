@@ -40,17 +40,18 @@ const safeContent = computed(() => {
 
 const fetchDetail = async () => {
   try {
-    const res = await axios.get(`/api/news/public/${props.id}`)
-    if (res.data.code !== 200) throw new Error(res.data.msg)
+    const response = await fetch(`/api/news/public/${props.id}`)
+    if (!response.ok) throw new Error(`HTTP错误! 状态码: ${response.status}`)
 
-    const apiData = res.data.data
+    const { code, data, msg } = await response.json()
+    if (code !== 200) throw new Error(msg || '获取数据失败')
 
     newsDetail.value = {
-      title: apiData.title || '默认标题',
-      content: apiData.content,
-      coverImage: apiData.coverImage,
+      title: data.title || '默认标题',
+      content: data.content,
+      coverImage: data.coverImage,
       category: '科技动态',
-      createTime: apiData.createTime,
+      createTime: data.createTime,
     }
   } catch (error) {
     ElMessage.error(`加载失败: ${error.message}`)

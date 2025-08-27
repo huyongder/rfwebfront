@@ -55,10 +55,7 @@ export default defineComponent({
         subMenu: [
           { title: '强势登录央视', link: '/brand/cctv' },
           { title: '硬广投放', link: '/brand/ads' },
-          { title: '2019集团盛典', link: '/brand/2019-event' },
-          { title: '2020集团盛典', link: '/brand/2020-event' },
-          { title: '2022集团盛典', link: '/brand/2022-event' },
-          { title: '2023集团盛典', link: '/brand/2023-event' },
+          { title: '集团盛典', link: '/brand/2019-event' },
         ],
       },
       {

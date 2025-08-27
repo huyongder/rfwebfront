@@ -2,10 +2,13 @@
   <HeaderBanner />
   <DesignviewNav />
   <div class="detail-page">
+    <!-- 添加返回按钮 -->
+    <button @click="goBack" class="back-button">返回列表</button>
+
     <h1>{{ buildDetail.title }}</h1>
 
     <div class="video-container">
-      <video :key="videoPath" controls>
+      <video :key="videoPath" controls @error="handleVideoError">
         <source :src="videoPath" type="video/mp4" />
       </video>
     </div>
@@ -57,7 +60,7 @@ export default {
         videoPath.value = response.data.videoPath
         console.log('获取构建详情成功:', response.data)
         console.log('视频地址:', buildDetail.value.videoPath)
-        videoError.value = null // 重置错误状态
+        videoError.value = null
       } catch (error) {
         console.error('获取工地详情失败:', error)
       }
@@ -68,7 +71,7 @@ export default {
         const response = await axios.get('/api/build/list', {
           params: {
             pageNum: 1,
-            pageSize: 1000, // 获取所有数据用于翻页
+            pageSize: 1000,
           },
         })
         allBuilds.value = response.data.records
@@ -98,6 +101,12 @@ export default {
         router.push(`/design/site-photos/${allBuilds.value[currentIndex.value].id}`)
       }
     }
+
+    // 新增返回函数
+    const goBack = () => {
+      router.back()
+    }
+
     onBeforeRouteUpdate(async (to, from, next) => {
       await fetchBuildDetail(to.params.id)
       currentIndex.value = allBuilds.value.findIndex((item) => item.id === parseInt(to.params.id))
@@ -118,7 +127,8 @@ export default {
       prevItem,
       nextItem,
       handleVideoError,
-      videoPath
+      videoPath,
+      goBack
     }
   },
 }

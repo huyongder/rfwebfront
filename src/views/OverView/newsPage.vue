@@ -132,25 +132,28 @@ export default defineComponent({
     }
 
     const fetchData = async () => {
-      try {
-        const { data: response } = await axios.get('/api/news/public/list', {
-          params: {
-            pageNum: currentPage.value,
-            pageSize: pageSize.value,
-          },
-        })
-        console.log('收到响应：', response)
-        if (response.code === 200) {
-          newsList.value = response.data.records || []
-          total.value = response.data.total || 0
-        } else {
-          ElMessage.error(response.msg || '数据加载失败')
+        try {
+          // 使用fetch而不是axios，避免token相关问题
+          const response = await fetch(`/api/news/public/list?pageNum=${currentPage.value}&pageSize=${pageSize.value}`)
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`)
+          }
+
+          const responseData = await response.json()
+          console.log('收到响应：', responseData)
+
+          if (responseData.code === 200) {
+            newsList.value = responseData.data.records || []
+            total.value = responseData.data.total || 0
+          } else {
+            ElMessage.error(responseData.msg || '数据加载失败')
+          }
+        } catch (error) {
+          ElMessage.error('请求异常，请检查网络')
+          console.error('API错误详情:', error)
         }
-      } catch (error) {
-        ElMessage.error('请求异常，请检查网络')
-        console.error('API错误详情:', error)
       }
-    }
 
     const handlePageChange = (newPage) => {
       currentPage.value = newPage

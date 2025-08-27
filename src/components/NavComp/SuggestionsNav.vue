@@ -2,7 +2,15 @@
   <div class="nav-container">
     <nav class="navbar">
       <ul>
-        <li v-for="(item, index) in flattenedNavLists" :key="index" class="nav-item">
+        <li
+          v-for="(item, index) in flattenedNavLists"
+          :key="index"
+          class="nav-item"
+          :class="{
+            'main-title-item': item.isMain,
+            'sub-item': !item.isMain
+          }"
+        >
           <a
             class="nav-link"
             :class="{ 'main-title': item.isMain }"
@@ -52,7 +60,7 @@ export default {
 </script>
 
 <style scoped>
-/* 新增的外层容器样式 */
+/* ====================== PC端样式（完全保持不变） ====================== */
 .nav-container {
   width: 100%;
   display: flex;
@@ -65,7 +73,7 @@ export default {
   color: white;
   padding: 0 10px;
   width: 1250px;
-  height: auto; /* 改为自动高度以适应移动布局 */
+  height: auto;
   display: flex;
   align-items: center;
   box-sizing: border-box;
@@ -77,7 +85,7 @@ export default {
   margin: 0;
   display: flex;
   align-items: center;
-  flex-wrap: wrap; /* 添加换行 */
+  flex-wrap: wrap;
   width: 100%;
 }
 
@@ -101,7 +109,7 @@ export default {
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  white-space: nowrap; /* 防止文字换行 */
+  white-space: nowrap;
 }
 
 .main-title {
@@ -119,63 +127,78 @@ export default {
   background-color: #cc0000;
 }
 
-.main-title {
-  pointer-events: none;
-}
-
-/* 移动端适配 */
+/* ====================== 移动端优化（主标题单独一行 + 子标题三列） ====================== */
 @media (max-width: 768px) {
-  .nav-container {
-    padding: 0 10px;
-  }
-
   .navbar {
     width: 100%;
-    padding: 10px 0;
-    height: auto;
+    padding: 15px 10px;
   }
 
   .navbar ul {
-    justify-content: space-around; /* 均匀分布 */
+    /* 网格布局实现三列效果 */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    justify-items: center;
   }
 
-  .nav-item {
-    width: calc(50% - 10px); /* 两列布局，减去边距 */
-    margin: 5px;
-    height: 40px;
-    justify-content: center;
-  }
-
-  .nav-link {
+  /* 主标题独占一行 */
+  .main-title-item {
+    grid-column: 1 / -1;
     width: 100%;
-    padding: 0 10px;
-    height: 40px;
-    line-height: 40px;
-    font-size: 14px;
+    margin: 0 0 15px 0;
     justify-content: center;
+    height: auto;
   }
 
   .main-title {
     width: 100%;
-    font-size: 18px;
+    font-size: 22px;
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 10px 0;
+  }
+
+  /* 子标题卡片样式 */
+  .sub-item {
+    width: 100%;
+    height: 60px;
+    margin: 0;
+    justify-content: center;
+  }
+
+  .sub-item .nav-link {
+    width: 100%;
+    height: 100%;
+    padding: 0 10px;
+    font-size: 14px;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  .sub-item .nav-link:hover {
+    background-color: rgba(0, 0, 0, 0.25);
+    transform: translateY(-2px);
   }
 }
 
-/* 小屏幕手机适配 */
+/* 超小屏幕优化 */
 @media (max-width: 480px) {
-  .nav-item {
-    width: calc(50% - 10px); /* 保持两列布局 */
+  .navbar ul {
+    gap: 8px;
   }
 
-  .nav-link {
+  .sub-item .nav-link {
     font-size: 13px;
-    padding: 0 5px;
-  }
-
-  .main-title {
-    font-size: 16px;
+    min-height: 50px;
   }
 }
 </style>
